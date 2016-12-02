@@ -1,4 +1,4 @@
-# Puppet Spacewalk Module [![Build Status](https://travis-ci.org/CommanderK5/puppet-caddy.svg?branch=master)](https://travis-ci.org/CommanderK5/puppet-spacewalk)
+# Puppet Spacewalk Module [![Build Status](https://travis-ci.org/CommanderK5/puppet-caddy.svg?branch=master)](https://travis-ci.org/CommanderK5/puppet-caddy)
 
 #### Table of Contents
 

@@ -16,10 +16,10 @@ class caddy::config (
   }
 
   user {$caddy_user:
-    ensure => present,
-    shell  => '/sbin/nologin',
-    system => true,
-    home   => '/etc/ssl/caddy',
+    ensure     => present,
+    shell      => '/sbin/nologin',
+    system     => true,
+    home       => '/etc/ssl/caddy',
     managehome => true,
   }
 

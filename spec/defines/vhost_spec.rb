@@ -10,8 +10,9 @@ describe 'caddy::vhost', type: :define do
 
     let(:facts) do
       {
-        os: { family: 'RedHat', release: { major: '6' } },
-        caddy_user: 'caddy'
+        osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemmajrelease: '6'
       }
     end
     let(:title) { 'example1' }
@@ -43,8 +44,9 @@ describe 'caddy::vhost', type: :define do
 
     let(:facts) do
       {
-        os: { family: 'RedHat', release: { major: '6' } },
-        caddy_user: 'caddy'
+        osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemmajrelease: '6'
       }
     end
     let(:title) { 'example2' }

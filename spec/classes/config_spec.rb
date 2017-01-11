@@ -3,7 +3,10 @@ describe 'caddy::config' do
   context 'with default values for Redhat family release 6' do
     let(:pre_condition) { 'class { "caddy::package": install_path => "/usr/bin", caddy_features => "git"}' }
     let(:facts) do
-      { os: { family: 'RedHat', release: { major: '6' } } }
+      { osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemmajrelease: '6'
+      }
     end
     let(:params) do
       {
@@ -16,7 +19,6 @@ describe 'caddy::config' do
     it { is_expected.to contain_file('/etc/caddy') }
     it { is_expected.to contain_file('/etc/caddy/Caddyfile') }
     it { is_expected.to contain_file('/etc/caddy/config') }
-    it { is_expected.to contain_file('/etc/ssl/caddy') }
     it { is_expected.to contain_file('/var/log/caddy') }
     it { is_expected.to contain_user('caddy') }
     it { is_expected.to contain_group('caddy') }
@@ -25,7 +27,10 @@ describe 'caddy::config' do
   context 'with default values for Redhat family release 7' do
     let(:pre_condition) { 'class { "caddy::package": install_path => "/usr/bin", caddy_features => "git"}' }
     let(:facts) do
-      { os: { family: 'RedHat', release: { major: '7' } } }
+      { osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemmajrelease: '7'
+      }
     end
     let(:params) do
       {

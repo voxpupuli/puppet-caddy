@@ -19,7 +19,8 @@ class caddy::config (
     ensure => present,
     shell  => '/sbin/nologin',
     system => true,
-    home   => 'etc/ssl/caddy',
+    home   => '/etc/ssl/caddy',
+    managehome => true,
   }
 
   file {$caddy_log_dir:
@@ -56,15 +57,7 @@ class caddy::config (
     require => User[$caddy_user],
   }
 
-  file {'/etc/ssl/caddy':
-    ensure  => directory,
-    owner   => $caddy_user,
-    group   => $caddy_user,
-    mode    => '0755',
-    require => User[$caddy_user],
-  }
-
-  case $facts['os']['release']['major'] {
+  case $::operatingsystemmajrelease {
     '7': {
       file {'/etc/systemd/system/caddy.service':
         ensure  => file,

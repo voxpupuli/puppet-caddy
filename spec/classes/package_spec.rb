@@ -2,7 +2,10 @@ require 'spec_helper'
 describe 'caddy::package' do
   context 'with default values for all parameters' do
     let(:facts) do
-      { os: { family: 'RedHat', release: { major: '6' } } }
+      { osfamily: 'RedHat',
+        operatingsystem: 'RedHat',
+        operatingsystemmajrelease: '6'
+      }
     end
     let(:params) do
       {

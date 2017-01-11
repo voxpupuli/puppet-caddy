@@ -1,11 +1,39 @@
 {
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.8.7 < 5.0.0"
+    }
+  ],
   "name": "puppet-caddy",
   "version": "0.0.1",
   "author": "Lukasz Rohde",
   "summary": "Puppet Caddy Module",
+  "description": "Puppet Caddy module installs and configures caddy - The HTTP/2 web server with automatic HTTPS.",
   "license": "MIT",
   "source": "https://github.com/CommanderK5/puppet-caddy",
   "issues_url": "https://github.com/CommanderK5/puppet-caddy/issues",
-  "dependencies": []
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.6.0 < 5.0.0"
+    }
+  ]
 }
 

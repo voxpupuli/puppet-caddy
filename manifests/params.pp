@@ -5,7 +5,7 @@
 #
 class caddy::params {
 
-  case $facts['os']['family'] {
+  case $::osfamily {
     'RedHat':  {
       $install_path   = '/usr/bin'
       $caddy_user     = 'www-data'

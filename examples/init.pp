@@ -10,7 +10,7 @@
 # https://docs.puppet.com/guides/tests_smoke.html
 #
 
-include caddy
+include ::caddy
 
 caddy::vhost {'example1':
   source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',

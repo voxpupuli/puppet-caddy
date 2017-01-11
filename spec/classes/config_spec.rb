@@ -13,6 +13,13 @@ describe 'caddy::config' do
       }
     end
     it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_file('/etc/caddy') }
+    it { is_expected.to contain_file('/etc/caddy/Caddyfile') }
+    it { is_expected.to contain_file('/etc/caddy/config') }
+    it { is_expected.to contain_file('/etc/ssl/caddy') }
+    it { is_expected.to contain_file('/var/log/caddy') }
+    it { is_expected.to contain_user('caddy') }
+    it { is_expected.to contain_group('caddy') }
     it { is_expected.to contain_file('/etc/init.d/caddy') }
   end
   context 'with default values for Redhat family release 7' do

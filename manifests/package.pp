@@ -23,14 +23,14 @@ class caddy::package (
     command => "bash /tmp/caddy_installer_script.sh ${caddy_features}",
     path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
     creates => "${install_path}/caddy",
-    require => File['caddy_installer_script']
+    require => File['caddy_installer_script'],
   }
 
   file { "${install_path}/caddy":
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
-    require => Exec['install caddy']
+    require => Exec['install caddy'],
   }
 
 }

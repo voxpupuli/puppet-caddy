@@ -1,14 +1,57 @@
----
-sudo: true
+sudo: false
 language: ruby
-bundler_args: --without system_tests
-script: "bundle exec rake test"
+cache: bundler
+bundler_args: "--without system_tests development"
+addons:
+  apt:
+    sources:
+    - augeas
+    packages:
+    - libaugeas-dev
+before_install:
+- bundle -v
+- rm Gemfile.lock || true
+- gem update --system
+- gem update bundler
+- gem --version
+- bundle -v
+script:
+- bundle exec rake $CHECK
 matrix:
   fast_finish: true
   include:
-  - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.0"
-  - rvm: 2.0.0
-    env: PUPPET_GEM_VERSION="~> 3.0" FUTURE_PARSER="yes"
-  - rvm: 2.3.0
-    env: PUPPET_GEM_VERSION="~> 4.0"
+  - rvm: 1.9.3
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
+  - rvm: 1.9.3
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" FUTURE_PARSER="yes" CHECK=test
+  - rvm: 2.1.9
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
+  - rvm: 2.1.9
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
+  - rvm: 2.2.6
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
+  - rvm: 2.3.3
+    env: PUPPET_VERSION="~> 4.0" CHECK=build DEPLOY_TO_FORGE=yes
+  - rvm: 2.3.3
+    env: PUPPET_VERSION="~> 4.0" CHECK=rubocop
+  - rvm: 2.3.3
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
+  - rvm: 2.4.0-rc1
+    env: PUPPET_VERSION="~> 4.0" CHECK=test
+  allow_failures:
+  - rvm: 2.4.0-rc1
+branches:
+  only:
+  - master
+  - "/^v\\d/"
+notifications:
+  email: false
+deploy:
+  provider: puppetforge
+  user: CommanderK5
+  password:
+    secure: rbRzDR5z23hTxndML6rPht6x2xetUcpSxdnpMQD/9oEP2K3+LMprUzPnPpsVWr46WGYihZLs2CWiWrTuPLooyjaJPIYo3zy8J8ksq/EsvRlDqm7hKAyr8stwzpDncAIaYHGYjB8QDQ4LQHOLvG9PVmNE2Hvg04nPx+rMUyDKsfjs3iQlH52j0xbrC0RBrGrKaJj24RSa1Mdwua4tT6xBx0CVWOznNc20+8CbxXJbZdwVu7ofBdcU4gfEQrT6JD9V9nIIfg1pUHN/ixc8xnlXNv9AK62DxFmDNV1bPV3XK+VgfMGSIt+gkbMv6HDruT8luo9bU8EF+dLEEoXKiG+M/UVP0vawCBdmRc0TW4szNySIDf10YG+guuME8HT89P3PWan7hUNoKzsRnlzwIOGr2AAO5wFfvriww/nbGocLRLwvw8M5ejBYYMLKpuWsRnauPB3zIYXuopLoycpQ51xNalelDQ5f7HWQK/kUfmHSZ9Bn3zD1HROqrGID//65tbZz2k9JC/XquQLPd70DCmXbgHc9SAECM+pPuk9xcUZLpoTokPvNEu+QLZPib0e7EIwzIjRPaIU0vV2Ani8bQaqtwHtgDVedw97iFz8VT21FyBfmdev+Z1B4p+A+g1qsPzYWZYXiks/Wzegf88gC3twtIP8aoJsKUb3RfVae4w/tPdo=
+  on:
+    tags: true
+    all_branches: true
+    condition: "$DEPLOY_TO_FORGE = yes"

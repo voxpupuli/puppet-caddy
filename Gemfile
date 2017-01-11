@@ -3,6 +3,12 @@ source ENV['GEM_SOURCE'] || 'https://rubygems.org'
 puppetversion = ENV['PUPPET_VERSION'].nil? ? '~> 4.0' : ENV['PUPPET_VERSION'].to_s
 gem 'puppet', puppetversion, require: false, groups: [:test]
 
+if facterversion = ENV['FACTER_GEM_VERSION']
+  gem 'facter', facterversion.to_s, :require => false, :groups => [:test]
+else
+  gem 'facter', :require => false, :groups => [:test]
+end
+
 group :test do
   gem 'puppetlabs_spec_helper', '~> 1.2.2',                         require: false
   gem 'rspec-puppet', '~> 2.5',                                     require: false
@@ -25,7 +31,6 @@ group :test do
   gem 'simplecov-console',                                          require: false if RUBY_VERSION >= '2.0.0'
   gem 'rubocop',                                                    require: false if RUBY_VERSION >= '2.0.0'
 end
-
 
 group :development do
   gem 'travis',       require: false

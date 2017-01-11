@@ -22,7 +22,7 @@
     }
   ],
   "name": "puppet-caddy",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Lukasz Rohde",
   "summary": "Puppet Caddy Module",
   "description": "Puppet Caddy module installs and configures caddy - The HTTP/2 web server with automatic HTTPS.",

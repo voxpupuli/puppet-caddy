@@ -2,12 +2,6 @@ sudo: false
 language: ruby
 cache: bundler
 bundler_args: "--without system_tests development"
-addons:
-  apt:
-    sources:
-    - augeas
-    packages:
-    - libaugeas-dev
 before_install:
 - bundle -v
 - rm Gemfile.lock || true
@@ -36,10 +30,6 @@ matrix:
     env: PUPPET_VERSION="~> 4.0" CHECK=rubocop
   - rvm: 2.3.3
     env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.4.0-rc1
-    env: PUPPET_VERSION="~> 4.0" CHECK=test
-  allow_failures:
-  - rvm: 2.4.0-rc1
 branches:
   only:
   - master

@@ -2,7 +2,7 @@ require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
 require 'metadata-json-lint/rake_task'
 
-if RUBY_VERSION >= '1.9'
+if RUBY_VERSION >= '2.0'
   require 'rubocop/rake_task'
   RuboCop::RakeTask.new
 end

@@ -1,4 +1,4 @@
-# Puppet Spacewalk Module [![Build Status](https://travis-ci.org/CommanderK5/puppet-caddy.svg?branch=master)](https://travis-ci.org/CommanderK5/puppet-caddy)
+# Puppet Caddy Module [![Build Status](https://travis-ci.org/CommanderK5/puppet-caddy.svg?branch=master)](https://travis-ci.org/CommanderK5/puppet-caddy)
 
 #### Table of Contents
 
@@ -57,10 +57,6 @@ Caddy binary installation path - default /usr/bin
 ###```caddy_user```
 
 User to run caddy - default www-data
-
-###```caddy_home```
-
-Caddy home directory - default /var/www
 
 ###```caddy_log_dir```
 

@@ -5,8 +5,7 @@ describe 'caddy::config' do
     let(:facts) do
       { osfamily: 'RedHat',
         operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '6'
-      }
+        operatingsystemmajrelease: '6' }
     end
     let(:params) do
       {
@@ -29,8 +28,7 @@ describe 'caddy::config' do
     let(:facts) do
       { osfamily: 'RedHat',
         operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '7'
-      }
+        operatingsystemmajrelease: '7' }
     end
     let(:params) do
       {

@@ -38,7 +38,8 @@ matrix:
     bundler_args: "--without development"
 branches:
   only:
-  - master
+    - master
+    - /^v\d/
 notifications:
   email: false
 deploy:
@@ -47,4 +48,6 @@ deploy:
   password:
     secure: DTaJgfY3b0OiiTEskPoLF1rtJc+09Dn0Lws0wvVDALUXnxf3gMCYdn3v92lKd6CLJg3vjyA7+P6n/n2Z5lqk9t+QTUTdSSDJC6jGysFEK+3Fd6288Mg5OhImeaInhGMmLJa/XII4BuwpVdjAcvxshc1woK4SjOcZCdrjgeK6nJyyGDnEyfRVKfSt50JI828cSftzArsZYIH7Fn5r5r1iPyjQJl4a5kU7zunkDX79+B+zy+6309LeDouKG1R0rVohMOzqxVwt2L9YfoWbt6Zd08KbJRYIyvLqABdhWw3mSXhCiW182rd+JiDuEQ1Gx1z3YVfqhJP20p8rBW+ffQc56Gm3X23Be7QiDeW7XVDg0/F0uYajdjZS7AU9UilDbpoiEOMAtW18S4sfU0UQJ8GS//OlIaHixClHWvcDqAwtabTRIYFoZebmtAzUo6LLrQc//D4mG8tywcqNKN9z2Hg2sJftKge102ea+lXcnUnvYSINtVOLaLzDqU2pB+rKIJbYj7KP9tpkBPNMUaftdCB/Fc/Bl/KNlxUoWhaJByKHg8M2KsQKSqLPEn6hRgHaw/48CWwCUViLzg5WECZzGPoMc3mPznp7umFMVkzfq+yW5/+cdwmNvY1pVXSqz7s8n3D4IIiZROV4YGBGNJBuitcVsYOtjqg2jUOGzR1uETM2PZI=
   on:
+    tags: true
+    all_branches: true
     condition: "$DEPLOY_TO_FORGE = yes"

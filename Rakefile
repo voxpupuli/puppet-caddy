@@ -12,6 +12,11 @@ PuppetLint.configuration.send('disable_80chars')
 PuppetLint.configuration.relative = true
 PuppetLint.configuration.ignore_paths = ['spec/**/*.pp', 'pkg/**/*.pp', 'vendor/**/*']
 
+desc 'Run acceptance tests'
+RSpec::Core::RakeTask.new(:acceptance) do |t|
+  t.pattern = 'spec/acceptance'
+end
+
 desc 'Validate manifests, templates, and ruby files'
 task :validate do
   Dir['manifests/**/*.pp'].each do |manifest|

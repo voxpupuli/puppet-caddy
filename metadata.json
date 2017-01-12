@@ -21,8 +21,8 @@
       "version_requirement": ">= 3.8.7 < 5.0.0"
     }
   ],
-  "name": "puppet-caddy",
-  "version": "v0.1.0",
+  "name": "CommanderK5-caddy",
+  "version": "0.1.0",
   "author": "Lukasz Rohde",
   "summary": "Puppet Caddy Module",
   "description": "Puppet Caddy module installs and configures caddy - The HTTP/2 web server with automatic HTTPS.",

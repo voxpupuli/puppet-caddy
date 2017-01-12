@@ -22,18 +22,13 @@
     }
   ],
   "name": "puppet-caddy",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Lukasz Rohde",
   "summary": "Puppet Caddy Module",
   "description": "Puppet Caddy module installs and configures caddy - The HTTP/2 web server with automatic HTTPS.",
   "license": "MIT",
   "source": "https://github.com/CommanderK5/puppet-caddy",
   "issues_url": "https://github.com/CommanderK5/puppet-caddy/issues",
-  "dependencies": [
-    {
-      "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.6.0 < 5.0.0"
-    }
-  ]
+  "dependencies": []
 }
 

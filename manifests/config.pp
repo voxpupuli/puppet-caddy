@@ -3,32 +3,28 @@
 #
 # Caddy server setup
 
-class caddy::config (
+class caddy::config inherits caddy {
 
-  $install_path  = $caddy::install_path,
-  $caddy_user    = $caddy::caddy_user,
-  $caddy_log_dir = $caddy::caddy_log_dir,
-
-  ){
-
-  group {$caddy_user:
+  group {$::caddy::caddy_group:
+    ensure => present,
     system => true,
   }
 
-  user {$caddy_user:
+  user {$::caddy::caddy_user:
     ensure     => present,
     shell      => '/sbin/nologin',
+    gid        => $caddy::caddy_group,
     system     => true,
     home       => '/etc/ssl/caddy',
     managehome => true,
   }
 
-  file {$caddy_log_dir:
+  file {$::caddy::caddy_log_dir:
     ensure  => directory,
-    owner   => $caddy_user,
-    group   => $caddy_user,
+    owner   => $caddy::caddy_user,
+    group   => $caddy::caddy_group,
     mode    => '0755',
-    require => User[$caddy_user],
+    require => User[$caddy::caddy_user],
   }
 
   file {'/etc/caddy':
@@ -41,8 +37,8 @@ class caddy::config (
   file {'/etc/caddy/Caddyfile':
     ensure  => file,
     mode    => '0444',
-    owner   => $caddy_user,
-    group   => $caddy_user,
+    owner   => $caddy::caddy_user,
+    group   => $caddy::caddy_group,
     content => template('caddy/etc/caddy/Caddyfile.erb'),
     require => File['/etc/caddy'],
   }
@@ -52,9 +48,9 @@ class caddy::config (
     purge   => true,
     recurse => true,
     mode    => '0755',
-    owner   => $caddy_user,
-    group   => $caddy_user,
-    require => User[$caddy_user],
+    owner   => $caddy::caddy_user,
+    group   => $caddy::caddy_group,
+    require => User[$caddy::caddy_user],
   }
 
   case $::operatingsystemmajrelease {
@@ -86,7 +82,7 @@ class caddy::config (
       }
     }
     default:  {
-      fail("${facts['os']['family']} is not supported.")
+      fail("${::osfamily} is not supported.")
     }
   }
 }

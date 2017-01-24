@@ -4,37 +4,22 @@ describe 'caddy::package' do
     let(:facts) do
       { osfamily: 'RedHat',
         operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '6' }
-    end
-    let(:params) do
-      {
-        install_path: '/usr/bin',
-        caddy_features: 'git'
-      }
+        operatingsystemmajrelease: '6',
+        architecture: 'x86_64', }
     end
     it { is_expected.to compile.with_all_deps }
     it do
-      is_expected.to contain_file('caddy_installer_script').with(
-        'ensure'  => 'file',
-        'path'    => '/tmp/caddy_installer_script.sh',
-        'mode'    => '0755',
-        'owner'   => 'root',
-        'group'   => 'root'
-      )
+      is_expected.to contain_exec('install caddy')
     end
     it do
-      is_expected.to contain_exec('install caddy').with(
-        'command' => 'bash /tmp/caddy_installer_script.sh git',
-        'creates' => '/usr/bin/caddy',
-        'require' => 'File[caddy_installer_script]'
-      )
+      is_expected.to contain_exec('extract caddy')
     end
     it do
       is_expected.to contain_file('/usr/bin/caddy').with(
         'mode'    => '0755',
         'owner'   => 'root',
         'group'   => 'root',
-        'require' => 'Exec[install caddy]'
+        'require' => 'Exec[extract caddy]'
       )
     end
   end

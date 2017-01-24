@@ -1,7 +1,7 @@
 ---
 HOSTS:
-  centos-6-x64:
-    platform: el-6-x86_64
+  centos-7-x64:
+    platform: el-7-x86_64
     roles:
       - default
     hypervisor: docker

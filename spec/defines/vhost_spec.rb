@@ -1,13 +1,6 @@
 require 'spec_helper'
 describe 'caddy::vhost', type: :define do
   context 'with source' do
-    let(:pre_condition) do
-      'class { "caddy::config":
-                            install_path  => "/usr/bin",
-                            caddy_user    => "caddy",
-                            caddy_log_dir => "/var/log/caddy",}'
-    end
-
     let(:facts) do
       {
         osfamily: 'RedHat',
@@ -19,7 +12,6 @@ describe 'caddy::vhost', type: :define do
     let(:params) do
       {
         source: 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
-        caddy_user: 'caddy'
       }
     end
     it do
@@ -27,21 +19,12 @@ describe 'caddy::vhost', type: :define do
         'ensure'  => 'file',
         'source'  => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
         'mode'    => '0444',
-        'owner'   => 'caddy',
-        'group'   => 'caddy',
         'require' => 'Class[Caddy::Config]',
         'notify'  => 'Class[Caddy::Service]'
       )
     end
   end
   context 'with content' do
-    let(:pre_condition) do
-      'class { "caddy::config":
-                            install_path  => "/usr/bin",
-                            caddy_user    => "caddy",
-                            caddy_log_dir => "/var/log/caddy",}'
-    end
-
     let(:facts) do
       {
         osfamily: 'RedHat',
@@ -53,7 +36,6 @@ describe 'caddy::vhost', type: :define do
     let(:params) do
       {
         content: 'localhost:2015',
-        caddy_user: 'caddy'
       }
     end
     it do
@@ -61,8 +43,6 @@ describe 'caddy::vhost', type: :define do
         'ensure'  => 'file',
         'content' => 'localhost:2015',
         'mode'    => '0444',
-        'owner'   => 'caddy',
-        'group'   => 'caddy',
         'require' => 'Class[Caddy::Config]',
         'notify'  => 'Class[Caddy::Service]'
       )

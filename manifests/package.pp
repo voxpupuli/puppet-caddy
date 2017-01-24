@@ -3,34 +3,31 @@
 #
 # Install required packages
 #
-class caddy::package (
+class caddy::package inherits caddy {
 
-  $install_path = $caddy::install_path,
-  $caddy_features = $caddy::caddy_features,
-
-){
-
-  file { 'caddy_installer_script':
-    ensure  => file,
-    path    => '/tmp/caddy_installer_script.sh',
-    content => template('caddy/caddy_installer_script.sh.erb'),
-    mode    => '0755',
-    owner   => 'root',
-    group   => 'root',
+  Exec {
+    path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
   }
+
+  $caddy_url    ="https://caddyserver.com/download/build?os=linux\\&arch=${$caddy::params::arch}\\&features=${caddy::caddy_features}"
+  $caddy_dl_dir ="-o ${caddy::params::caddy_tmp_dir}/caddy_linux_${$caddy::params::arch}_custom.tar.gz"
 
   exec { 'install caddy':
-    command => "bash /tmp/caddy_installer_script.sh ${caddy_features}",
-    path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-    creates => "${install_path}/caddy",
-    require => File['caddy_installer_script'],
+    command => "curl ${caddy_dl_dir} ${caddy_url}",
+    creates => "${caddy::install_path}/caddy",
   }
 
-  file { "${install_path}/caddy":
+  exec { 'extract caddy':
+    command => "tar -zxf ${caddy::params::caddy_tmp_dir}/caddy_linux_${$caddy::params::arch}_custom.tar.gz -C ${caddy::install_path} 'caddy'",
+    creates => "${caddy::install_path}/caddy",
+    require => Exec['install caddy'],
+  }
+
+  file { "${caddy::install_path}/caddy":
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
-    require => Exec['install caddy'],
+    require => Exec['extract caddy'],
   }
 
 }

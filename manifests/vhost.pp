@@ -13,9 +13,8 @@
 #
 
 define caddy::vhost(
-  $source  = undef,
-  $content = undef,
-  $caddy_user = $caddy::caddy_user,
+  $source     = undef,
+  $content    = undef,
 ) {
 
 
@@ -23,8 +22,6 @@ define caddy::vhost(
     ensure  => file,
     content => $content,
     source  => $source,
-    owner   => $caddy_user,
-    group   => $caddy_user,
     mode    => '0444',
     require => Class['caddy::config'],
     notify  => Class['caddy::service'],

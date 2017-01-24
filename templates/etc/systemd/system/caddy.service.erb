@@ -7,11 +7,11 @@ Wants=network-online.target systemd-networkd-wait-online.service
 [Service]
 
 User=<%= @caddy_user %>
-Group=<%= @caddy_user %>
+Group=<%= @caddy_group %>
 
 Environment=HOME=/etc/ssl/caddy
 
-ExecStart=<%= @install_path %>/caddy -log stderr -agree=true -conf=/etc/caddy/Caddyfile -root=/var/tmp
+ExecStart=<%= @install_path %>/caddy -log <%= @caddy_log_dir %>/caddy.log -agree=true -conf=/etc/caddy/Caddyfile -root=/var/tmp
 ExecReload=/bin/kill -USR1 $MAINPID
 
 LimitNOFILE=1048576

@@ -56,15 +56,23 @@ Caddy binary installation path - default /usr/bin
 
 ###```caddy_user```
 
-User to run caddy - default www-data
+User to run caddy - default caddy
+
+###```caddy_group```
+
+Group to run caddy - default caddy
 
 ###```caddy_log_dir```
 
 Caddy loggin directory - default /var/log/caddy
 
+###```caddy_tmp_dir```
+
+Temp dir for caddy download
+
 ## Limitations
 
-Tested on Centos 6.8 and Centos 7.2.
+Tested on Centos 6.8 and Centos 7.3.
 
 ## TODO
 

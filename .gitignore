@@ -3,4 +3,5 @@ Gemfile.lock
 .vagrant
 .bundle
 log/*
+pkg/*
 

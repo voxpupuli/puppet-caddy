@@ -30,7 +30,9 @@ class caddy (
 
   $install_path  = $caddy::params::install_path,
   $caddy_user    = $caddy::params::caddy_user,
+  $caddy_group   = $caddy::params::caddy_group,
   $caddy_log_dir = $caddy::params::caddy_log_dir,
+  $caddy_tmp_dir = $caddy::params::caddy_tmp_dir,
 
   $caddy_features = 'git,mailout,ipfilter',
 

@@ -16,6 +16,9 @@ Lint/ConditionPosition:
 Metrics/LineLength:
   Enabled: false
 
+Metrics/BlockLength:
+  Enabled: false
+
 Style/EmptyLines:
   Enabled: false
 

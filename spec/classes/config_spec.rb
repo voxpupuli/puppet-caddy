@@ -5,7 +5,7 @@ describe 'caddy::config' do
       { osfamily: 'RedHat',
         operatingsystem: 'RedHat',
         operatingsystemmajrelease: '6',
-        architecture: 'x86_64', }
+        architecture: 'x86_64' }
     end
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_file('/etc/caddy') }
@@ -21,7 +21,7 @@ describe 'caddy::config' do
       { osfamily: 'RedHat',
         operatingsystem: 'RedHat',
         operatingsystemmajrelease: '7',
-        architecture: 'x86_64', }
+        architecture: 'x86_64' }
     end
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_file('/etc/systemd/system/caddy.service') }

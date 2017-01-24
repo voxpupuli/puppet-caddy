@@ -11,7 +11,7 @@ describe 'caddy::vhost', type: :define do
     let(:title) { 'example1' }
     let(:params) do
       {
-        source: 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
+        source: 'puppet:///modules/caddy/etc/caddy/config/example1.conf'
       }
     end
     it do
@@ -35,7 +35,7 @@ describe 'caddy::vhost', type: :define do
     let(:title) { 'example2' }
     let(:params) do
       {
-        content: 'localhost:2015',
+        content: 'localhost:2015'
       }
     end
     it do

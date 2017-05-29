@@ -12,6 +12,8 @@ class caddy::package inherits caddy {
   $caddy_url    ="${caddy_install_url}/${$caddy::params::arch}?plugins=${caddy::caddy_features}"
   $caddy_dl_dir ="-o ${caddy::params::caddy_tmp_dir}/caddy_linux_${$caddy::params::arch}_custom.tar.gz"
 
+  notice{$caddy_url: }
+
   exec { 'install caddy':
     command => "curl ${caddy_dl_dir} ${caddy_url}",
     creates => "${caddy::install_path}/caddy",

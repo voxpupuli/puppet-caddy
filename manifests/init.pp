@@ -34,7 +34,7 @@ class caddy (
   $caddy_log_dir     = $caddy::params::caddy_log_dir,
   $caddy_tmp_dir     = $caddy::params::caddy_tmp_dir,
 
-  $caddy_features    = 'git,mailout,ipfilter',
+  $caddy_features    = 'http.git,http.mailout,http.ipfilter',
   $caddy_install_url = 'https://caddyserver.com/download/linux',
 
   )inherits caddy::params{

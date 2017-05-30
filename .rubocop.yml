@@ -9,6 +9,8 @@ AllCops:
     - .vendor/**/*
     - pkg/**/*
     - spec/fixtures/**/*
+    - Vagrantfile
+    - Rakefile
 
 Lint/ConditionPosition:
   Enabled: True

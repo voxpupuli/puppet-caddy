@@ -22,7 +22,7 @@
     }
   ],
   "name": "CommanderK5-caddy",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Lukasz Rohde",
   "summary": "Puppet Caddy Module",
   "description": "Puppet Caddy module installs and configures caddy - The HTTP/2 web server with automatic HTTPS.",

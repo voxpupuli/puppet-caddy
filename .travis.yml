@@ -1,51 +1,52 @@
+---
 sudo: false
+dist: trusty
 language: ruby
 cache: bundler
-bundler_args: "--without system_tests development"
+# related to https://github.com/rubygems/rubygems/issues/2123
 before_install:
-- bundle -v
-- rm Gemfile.lock || true
-- gem update --system
-- gem update bundler
-- gem --version
-- bundle -v
+  - 'rm -f Gemfile.lock'
+  - 'gem update --system'
+  - 'gem install bundler'
 script:
-- bundle exec rake $CHECK
+  - 'bundle exec rake $CHECK'
 matrix:
   fast_finish: true
   include:
   - rvm: 2.1.9
-    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
-  - rvm: 2.1.9
-    env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.2.6
-    env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.3.3
-    env: PUPPET_VERSION="~> 4.0" CHECK=test
-  - rvm: 2.3.3
-    sudo: required
-    services: docker
-    env: BEAKER_set="docker/centos-6"
-    script: bundle exec rake acceptance
-    bundler_args: "--without development"
-  - rvm: 2.3.3
-    sudo: required
-    services: docker
-    env: BEAKER_set="docker/centos-7"
-    script: bundle exec rake acceptance
-    bundler_args: "--without development"
+    bundler_args: --without system_tests development release
+    env: PUPPET_VERSION="~> 4.0" CHECK=test PARALLEL_TEST_PROCESSORS=12
+  - rvm: 2.4.4
+    bundler_args: --without system_tests development release
+    env: PUPPET_VERSION="~> 5.0" CHECK=test
+  - rvm: 2.5.1
+    bundler_args: --without system_tests development release
+    env: PUPPET_VERSION="~> 5.0" CHECK=test_with_coveralls
+  - rvm: 2.4.4
+    bundler_args: --without system_tests development release
+    env: PUPPET_VERSION="~> 5.0" CHECK=rubocop
+  - rvm: 2.5.1
+    bundler_args: --without system_tests development release
+    env: PUPPET_VERSION="~> 5.0" CHECK=build DEPLOY_TO_FORGE=yes
 branches:
   only:
-    - master
-    - /^v\d/
+  - master
+  - /^v\d/
 notifications:
   email: false
+  irc:
+    on_success: always
+    on_failure: always
+    channels:
+      - "chat.freenode.org#voxpupuli-notifications"
 deploy:
   provider: puppetforge
-  user: CommanderK5
+  user: puppet
   password:
-    secure: DTaJgfY3b0OiiTEskPoLF1rtJc+09Dn0Lws0wvVDALUXnxf3gMCYdn3v92lKd6CLJg3vjyA7+P6n/n2Z5lqk9t+QTUTdSSDJC6jGysFEK+3Fd6288Mg5OhImeaInhGMmLJa/XII4BuwpVdjAcvxshc1woK4SjOcZCdrjgeK6nJyyGDnEyfRVKfSt50JI828cSftzArsZYIH7Fn5r5r1iPyjQJl4a5kU7zunkDX79+B+zy+6309LeDouKG1R0rVohMOzqxVwt2L9YfoWbt6Zd08KbJRYIyvLqABdhWw3mSXhCiW182rd+JiDuEQ1Gx1z3YVfqhJP20p8rBW+ffQc56Gm3X23Be7QiDeW7XVDg0/F0uYajdjZS7AU9UilDbpoiEOMAtW18S4sfU0UQJ8GS//OlIaHixClHWvcDqAwtabTRIYFoZebmtAzUo6LLrQc//D4mG8tywcqNKN9z2Hg2sJftKge102ea+lXcnUnvYSINtVOLaLzDqU2pB+rKIJbYj7KP9tpkBPNMUaftdCB/Fc/Bl/KNlxUoWhaJByKHg8M2KsQKSqLPEn6hRgHaw/48CWwCUViLzg5WECZzGPoMc3mPznp7umFMVkzfq+yW5/+cdwmNvY1pVXSqz7s8n3D4IIiZROV4YGBGNJBuitcVsYOtjqg2jUOGzR1uETM2PZI=
+    secure: ""
   on:
     tags: true
+    # all_branches is required to use tags
     all_branches: true
+    # Only publish the build marked with "DEPLOY_TO_FORGE"
     condition: "$DEPLOY_TO_FORGE = yes"

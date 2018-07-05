@@ -7,6 +7,7 @@ describe 'caddy::config' do
         operatingsystemmajrelease: '6',
         architecture: 'x86_64' }
     end
+
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_file('/etc/caddy') }
     it { is_expected.to contain_file('/etc/caddy/Caddyfile') }
@@ -23,6 +24,7 @@ describe 'caddy::config' do
         operatingsystemmajrelease: '7',
         architecture: 'x86_64' }
     end
+
     it { is_expected.to compile.with_all_deps }
     it { is_expected.to contain_file('/etc/systemd/system/caddy.service') }
     it { is_expected.to contain_file('/etc/systemd/system/caddy.service').that_notifies(['Exec[systemctl-daemon-reload]']) }

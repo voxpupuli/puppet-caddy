@@ -6,12 +6,11 @@ describe 'class caddy:' do
       pp = 'include ::caddy'
 
       apply_manifest(pp, catch_failures: true) do |r|
-        expect(r.stderr).not_to match(/error/i)
+        expect(r.stderr).not_to match(%r{error}i)
       end
-
+    end
+    it 'runs without changes' do
       apply_manifest(pp, catch_failures: true) do |r|
-        expect(r.stderr).not_to eq(/error/i)
-
         expect(r.exit_code).to be_zero
       end
     end
@@ -26,12 +25,11 @@ describe 'class caddy:' do
               source => 'puppet:///modules/caddy/etc/caddy/config/example2.conf',
             }"
       apply_manifest(pp, catch_failures: true) do |r|
-        expect(r.stderr).not_to match(/error/i)
+        expect(r.stderr).not_to match(%r{error}i)
       end
-
+    end
+    it 'runs without changes' do
       apply_manifest(pp, catch_failures: true) do |r|
-        expect(r.stderr).not_to eq(/error/i)
-
         expect(r.exit_code).to be_zero
       end
     end

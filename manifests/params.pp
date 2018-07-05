@@ -17,6 +17,7 @@ class caddy::params {
     'RedHat':  {
       $install_path  = '/usr/bin'
       $caddy_user    = 'caddy'
+      $caddy_home    = '/etc/ssl/caddy'
       $caddy_group   = 'caddy'
       $caddy_log_dir = '/var/log/caddy'
       $caddy_tmp_dir = '/tmp'

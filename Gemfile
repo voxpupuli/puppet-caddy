@@ -1,15 +1,5 @@
 source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
-def location_for(place, fake_version = nil)
-  if place =~ /^(git[:@][^#]*)#(.*)/
-    [fake_version, { :git => $1, :branch => $2, :require => false }].compact
-  elsif place =~ /^file:\/\/(.*)/
-    ['>= 0', { :path => File.expand_path($1), :require => false }]
-  else
-    [place, { :require => false }]
-  end
-end
-
 group :test do
   gem 'puppetlabs_spec_helper', '~> 2.6.0',                         :require => false
   gem 'rspec-puppet', '~> 2.5',                                     :require => false
@@ -27,30 +17,14 @@ group :test do
   gem 'rubocop-rspec', '~> 1.15.0',                                 :require => false if RUBY_VERSION >= '2.3.0'
   gem 'mocha', '~> 1.4.0',                                          :require => false
   gem 'coveralls',                                                  :require => false
-  gem 'simplecov-console',                                          :require => false
   gem 'rack', '~> 1.0',                                             :require => false if RUBY_VERSION < '2.2.2'
   gem 'parallel_tests',                                             :require => false
 end
 
-group :development do
-  gem 'travis',                   :require => false
-  gem 'travis-lint',              :require => false
-  gem 'guard-rake',               :require => false
-  gem 'overcommit', '>= 0.39.1',  :require => false
-end
 
 group :system_tests do
-  gem 'winrm',                              :require => false
-  if beaker_version = ENV['BEAKER_VERSION']
-    gem 'beaker', *location_for(beaker_version)
-  else
-    gem 'beaker', '>= 3.9.0', :require => false
-  end
-  if beaker_rspec_version = ENV['BEAKER_RSPEC_VERSION']
-    gem 'beaker-rspec', *location_for(beaker_rspec_version)
-  else
-    gem 'beaker-rspec',  :require => false
-  end
+  gem 'beaker', '>= 3.9.0', :require => false
+  gem 'beaker-rspec',  :require => false
   gem 'serverspec',                         :require => false
   gem 'beaker-hostgenerator', '>= 1.1.10',  :require => false
   gem 'beaker-puppet_install_helper',       :require => false
@@ -60,17 +34,10 @@ end
 group :release do
   gem 'github_changelog_generator',  :require => false, :git => 'https://github.com/skywinder/github-changelog-generator' if RUBY_VERSION >= '2.2.2'
   gem 'puppet-blacksmith',           :require => false
-  gem 'voxpupuli-release',           :require => false, :git => 'https://github.com/voxpupuli/voxpupuli-release-gem'
   gem 'puppet-strings', '~> 1.0',    :require => false
 end
 
-
-
-if facterversion = ENV['FACTER_GEM_VERSION']
-  gem 'facter', facterversion.to_s, :require => false, :groups => [:test]
-else
-  gem 'facter', :require => false, :groups => [:test]
-end
+gem 'facter', :require => false, :groups => [:test]
 
 ENV['PUPPET_VERSION'].nil? ? puppetversion = '~> 5.0' : puppetversion = ENV['PUPPET_VERSION'].to_s
 gem 'puppet', puppetversion, :require => false, :groups => [:test]

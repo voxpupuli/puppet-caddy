@@ -12,6 +12,11 @@
 
 include ::caddy
 
+
+file {'/var/www':
+  ensure => directory,
+}
+
 caddy::vhost {'example1':
   source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
 }

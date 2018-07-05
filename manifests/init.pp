@@ -33,6 +33,9 @@ class caddy (
   $caddy_group       = $caddy::params::caddy_group,
   $caddy_log_dir     = $caddy::params::caddy_log_dir,
   $caddy_tmp_dir     = $caddy::params::caddy_tmp_dir,
+  $caddy_home        = $caddy::params::caddy_home,
+  $caddy_license     = 'personal',
+  $caddy_telemetry   = 'off',
   $caddy_features    = 'http.filter,http.git,http.ipfilter'
 
   )inherits caddy::params{

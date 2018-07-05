@@ -36,22 +36,14 @@ RSpec::Core::RakeTask.new(:acceptance) do |t|
   t.pattern = 'spec/acceptance'
 end
 
-desc 'Run tests metadata_lint, release_checks'
+desc 'Run tests metadata_lint, release_checks, syntax, lint'
 task test: [
+  :syntax,
+  :lint,
   :metadata_lint,
   :release_checks,
 ]
 
-desc "Run main 'test' task and report merged results to coveralls"
-task test_with_coveralls: [:test] do
-  if Dir.exist?(File.expand_path('../lib', __FILE__))
-    require 'coveralls/rake/task'
-    Coveralls::RakeTask.new
-    Rake::Task['coveralls:push'].invoke
-  else
-    puts 'Skipping reporting to coveralls.  Module has no lib dir'
-  end
-end
 
 desc "Print supported beaker sets"
 task 'beaker_sets', [:directory] do |t, args|

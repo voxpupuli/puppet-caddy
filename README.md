@@ -1,4 +1,4 @@
-# Puppet Caddy Module [![Build Status](https://travis-ci.org/CommanderK5/puppet-caddy.svg?branch=master)](https://travis-ci.org/CommanderK5/puppet-caddy)
+# Puppet Caddy Module [![Build Status](https://semaphoreci.com/api/v1/commanderk5/puppet-caddy-7/branches/master/badge.svg)](https://semaphoreci.com/commanderk5/puppet-caddy-7)
 
 #### Table of Contents
 

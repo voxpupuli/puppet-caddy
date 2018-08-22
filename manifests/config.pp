@@ -39,7 +39,7 @@ class caddy::config inherits caddy {
     mode    => '0444',
     owner   => $caddy::caddy_user,
     group   => $caddy::caddy_group,
-    content => template('caddy/etc/caddy/Caddyfile.erb'),
+    source =>  'puppet:///modules/caddy/etc/caddy/Caddyfile',
     require => File['/etc/caddy'],
   }
 

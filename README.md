@@ -1,5 +1,4 @@
-# Puppet Caddy Module [![Build Status](https://semaphoreci.com/api/v1/commanderk5/puppet-caddy-7/branches/master/badge.svg)](https://semaphoreci.com/commanderk5/puppet-caddy-7)
-
+# Puppet Caddy Module
 #### Table of Contents
 
 1. [Overview](#overview)

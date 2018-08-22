@@ -1,0 +1,2 @@
+# FILE MANAGED BY PUPPET
+import config/*.conf

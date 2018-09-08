@@ -43,7 +43,7 @@ caddy::vhost {'example2':
 }
 ```
 
-## Paramseters
+## Parameters
 
 ### ```caddy_features```
 

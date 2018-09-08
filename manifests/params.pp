@@ -15,7 +15,7 @@ class caddy::params {
 
   case $::osfamily {
     'RedHat':  {
-      $install_path  = '/usr/bin'
+      $install_path  = '/usr/local/bin'
       $caddy_user    = 'caddy'
       $caddy_home    = '/etc/ssl/caddy'
       $caddy_group   = 'caddy'

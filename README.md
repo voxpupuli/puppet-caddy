@@ -51,7 +51,7 @@ Install Caddy with extra features
 
 ### ```install_path```
 
-Caddy binary installation path - default /usr/bin
+Caddy binary installation path - default /usr/local/bin
 
 ### ```caddy_user```
 

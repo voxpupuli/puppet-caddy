@@ -16,7 +16,7 @@ describe 'caddy::package' do
       is_expected.to contain_exec('extract caddy')
     end
     it do
-      is_expected.to contain_file('/usr/bin/caddy').with(
+      is_expected.to contain_file('/usr/local/bin/caddy').with(
         'mode'    => '0755',
         'owner'   => 'root',
         'group'   => 'root',

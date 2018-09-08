@@ -43,29 +43,29 @@ caddy::vhost {'example2':
 }
 ```
 
-##Paramseters
+## Paramseters
 
-###```caddy_features```
+### ```caddy_features```
 
 Install Caddy with extra features
 
-###```install_path```
+### ```install_path```
 
 Caddy binary installation path - default /usr/local/bin
 
-###```caddy_user```
+### ```caddy_user```
 
 User to run caddy - default caddy
 
-###```caddy_group```
+### ```caddy_group```
 
 Group to run caddy - default caddy
 
-###```caddy_log_dir```
+### ```caddy_log_dir```
 
 Caddy loggin directory - default /var/log/caddy
 
-###```caddy_tmp_dir```
+### ```caddy_tmp_dir```
 
 Temp dir for caddy download
 

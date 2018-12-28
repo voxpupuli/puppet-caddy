@@ -30,6 +30,9 @@
   "source": "https://github.com/CommanderK5/puppet-caddy",
   "issues_url": "https://github.com/CommanderK5/puppet-caddy/issues",
   "dependencies": [
-
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.25.0 < 6.0.0"
+    }
   ]
 }

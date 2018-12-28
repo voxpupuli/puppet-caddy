@@ -24,8 +24,9 @@ LOCKFILE=/var/lock/subsys/$NAME
 
 test -x $DAEMON || exit 0
 
-# Set the CADDYPATH; Let's Encrypt certificates will be written to this directory.
-export CADDYPATH=/etc/caddy/ssl
+export HOME=<%= @caddy_home %>
+# Set the CADDYPATH; dLet's Encrypt certificates will be written to this directory.
+export CADDYPATH=<%= @caddy_ssl_dir %>
 
 # Set the ulimits
 ulimit -n 8192

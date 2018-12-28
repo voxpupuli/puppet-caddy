@@ -1,4 +1,13 @@
-# Puppet Caddy Module
+# puppet-caddy
+
+[![Build Status](https://travis-ci.org/voxpupuli/puppet-caddy.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-caddy)
+[![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-caddy/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-caddy)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/caddy.svg)](https://forge.puppetlabs.com/puppet/caddy)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/caddy.svg)](https://forge.puppetlabs.com/puppet/caddy)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/caddy.svg)](https://forge.puppetlabs.com/puppet/caddy)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/caddy.svg)](https://forge.puppetlabs.com/puppet/caddy)
+[![License](https://img.shields.io/github/license/voxpupuli/puppet-caddy.svg)](https://github.com/voxpupuli/puppet-caddy/blob/master/LICENSE)
+
 #### Table of Contents
 
 1. [Overview](#overview)

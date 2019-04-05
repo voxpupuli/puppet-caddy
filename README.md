@@ -22,7 +22,7 @@ Puppet Caddy module installs and configures caddy - The HTTP/2 web server with a
 
 ## Module Description
 
-Puppet Caddy module handles installing, configuring, and running Caddy server on Redhat based oparting systems.
+Puppet Caddy module handles installing, configuring, and running Caddy server on Redhat based operating systems.
 
 ## Usage
 

@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 describe 'class caddy:' do
   context 'with defaults:' do
-    pp = 'include ::caddy'
+    pp = 'include caddy'
     it 'runs successfully' do
       apply_manifest(pp, catch_failures: true) do |r|
         expect(r.stderr).not_to match(%r{error}i)
@@ -16,7 +16,7 @@ describe 'class caddy:' do
     end
   end
   context 'with vhosts' do
-    pp = "include ::caddy
+    pp = "include caddy
           caddy::vhost {'example1':
             source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
           }

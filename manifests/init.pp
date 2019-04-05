@@ -47,7 +47,7 @@ class caddy (
 
   )inherits caddy::params{
 
-  include ::caddy::package
-  include ::caddy::config
-  include ::caddy::service
+  include caddy::package
+  include caddy::config
+  include caddy::service
 }

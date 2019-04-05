@@ -1,17 +1,19 @@
 require 'beaker-rspec'
+require 'beaker-puppet'
 require 'beaker/puppet_install_helper'
-require 'beaker-rspec/helpers/serverspec'
+require 'beaker/module_install_helper'
 
-logger.info('LOADED Spec Acceptance Helper')
-install_puppet_agent_on(hosts, options)
+run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
+install_ca_certs unless ENV['PUPPET_INSTALL_TYPE'] =~ %r{pe}i
+install_module_on(hosts)
+install_module_dependencies_on(hosts)
 
 RSpec.configure do |c|
-  # Project root
-  proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-
   # Readable test descriptions
   c.formatter = :documentation
-  c.before :suite do
-    puppet_module_install(source: proj_root, module_name: 'caddy')
+  hosts.each do |host|
+    if host[:platform] =~ %r{el-7-x86_64} && host[:hypervisor] =~ %r{docker}
+      on(host, "sed -i '/nodocs/d' /etc/yum.conf")
+    end
   end
 end

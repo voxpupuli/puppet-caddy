@@ -10,7 +10,7 @@
 # https://docs.puppet.com/guides/tests_smoke.html
 #
 
-include ::caddy
+include caddy
 
 
 file {'/var/www':

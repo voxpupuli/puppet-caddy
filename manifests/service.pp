@@ -3,8 +3,7 @@
 #
 # Manage caddy service
 #
-class caddy::service inherits caddy {
-
+class caddy::service {
   service{'caddy':
     ensure => running,
     enable => true,

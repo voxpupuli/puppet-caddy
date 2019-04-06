@@ -1,0 +1,16 @@
+caddy::install_path: '/usr/local/bin'
+caddy::caddy_home: '/etc/ssl/caddy'
+caddy::caddy_user: 'caddy'
+caddy::caddy_group: 'caddy'
+caddy::caddy_license: 'personal'
+caddy::caddy_account_id: ~
+caddy::caddy_api_key: ~
+caddy::caddy_telemetry: 'off'
+caddy::caddy_features: 'http.filter,http.git,http.ipfilter'
+caddy::caddy_log_dir: '/var/log/caddy'
+caddy::caddy_tmp_dir: '/tmp'
+caddy::caddy_ssl_dir: "%{hiera('caddy::caddy_home')}/.caddy"
+caddy::caddy_http_port: 80
+caddy::caddy_https_port: 443
+caddy::caddy_private_devices: true
+caddy::caddy_limit_processes: 64

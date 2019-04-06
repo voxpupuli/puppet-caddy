@@ -16,8 +16,6 @@ define caddy::vhost(
   $source     = undef,
   $content    = undef,
 ) {
-
-
   file { "/etc/caddy/config/${title}.conf":
     ensure  => file,
     content => $content,

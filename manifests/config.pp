@@ -3,8 +3,7 @@
 #
 # Caddy server setup
 
-class caddy::config inherits caddy {
-
+class caddy::config {
   group {$caddy::caddy_group:
     ensure => present,
     system => true,
@@ -61,7 +60,7 @@ class caddy::config inherits caddy {
     require => User[$caddy::caddy_user],
   }
 
-  case $::operatingsystemmajrelease {
+  case $facts['os']['release']['major'] {
     '7': {
       file {'/etc/systemd/system/caddy.service':
         ensure  => file,
@@ -70,7 +69,6 @@ class caddy::config inherits caddy {
         group   => 'root',
         content => template('caddy/etc/systemd/system/caddy.service.erb'),
         notify  => Exec['systemctl-daemon-reload'],
-        require => Class['caddy::package'],
       }
 
       exec {'systemctl-daemon-reload':
@@ -86,7 +84,6 @@ class caddy::config inherits caddy {
         owner   => 'root',
         group   => 'root',
         content => template('caddy/etc/init.d/caddy.erb'),
-        require => Class['caddy::package'],
       }
     }
     default:  {

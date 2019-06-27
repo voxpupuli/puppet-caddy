@@ -10,13 +10,72 @@ class caddy::config inherits caddy {
     system => true,
   }
 
+  case $facts['os']['family'] {
+    'RedHat':  {
+      $nologin_shell = '/sbin/nologin'
+      case $facts['os']['release']['major'] {
+        '7': {
+          systemd::unit_file { 'caddy.service':
+            path    => '/etc/systemd/system',
+            content => template('caddy/etc/systemd/system/caddy.service.erb'),
+            enable  => true,
+            require => Class['caddy::package'],
+            notify  => Service['caddy'],
+          }
+        }
+        '6': {
+          file {'/etc/init.d/caddy':
+            ensure  => file,
+            mode    => '0744',
+            owner   => 'root',
+            group   => 'root',
+            content => template('caddy/etc/init.d/caddy.erb'),
+            require => Class['caddy::package'],
+          }
+        }
+        default: {
+          fail("${facts['os']['name']} ${facts['os']['release']['major']} is not supported.")
+        }
+      }
+    }
+    'Debian':  {
+      $nologin_shell = '/usr/sbin/nologin'
+      case $facts['os']['release']['major'] {
+        '18.04', '10': {
+          systemd::unit_file { 'caddy.service':
+            path    => '/lib/systemd/system',
+            content => template('caddy/lib/systemd/system/caddy.service.erb'),
+            enable  => true,
+            require => Class['caddy::package'],
+            notify  => Service['caddy'],
+          }
+        }
+        default: {
+          fail("${facts['os']['family']} ${facts['os']['release']['major']} is not supported.")
+        }
+      }
+    }
+    default:  {
+      fail("${facts['os']['family']} is not supported.")
+    }
+  }
+
+  file { 'caddy home':
+    ensure => directory,
+    path   => $caddy::caddy_home,
+    group  => $caddy::caddy_group,
+  }
+
   user {$caddy::caddy_user:
-    ensure     => present,
-    shell      => '/sbin/nologin',
-    gid        => $caddy::caddy_group,
-    system     => true,
-    home       => $caddy::caddy_home,
-    managehome => true,
+    ensure  => present,
+    shell   => $nologin_shell,
+    gid     => $caddy::caddy_group,
+    system  => true,
+    home    => $caddy::caddy_home,
+    require => [
+      File['caddy home'],
+      Group[$caddy::caddy_group],
+    ],
   }
 
   file {$caddy::caddy_ssl_dir:
@@ -59,38 +118,5 @@ class caddy::config inherits caddy {
     owner   => $caddy::caddy_user,
     group   => $caddy::caddy_group,
     require => User[$caddy::caddy_user],
-  }
-
-  case $facts['os']['release']['major'] {
-    '7': {
-      file {'/etc/systemd/system/caddy.service':
-        ensure  => file,
-        mode    => '0744',
-        owner   => 'root',
-        group   => 'root',
-        content => template('caddy/etc/systemd/system/caddy.service.erb'),
-        notify  => Exec['systemctl-daemon-reload'],
-        require => Class['caddy::package'],
-      }
-
-      exec {'systemctl-daemon-reload':
-        refreshonly => true,
-        path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-        command     => 'systemctl daemon-reload',
-      }
-    }
-    '6': {
-      file {'/etc/init.d/caddy':
-        ensure  => file,
-        mode    => '0744',
-        owner   => 'root',
-        group   => 'root',
-        content => template('caddy/etc/init.d/caddy.erb'),
-        require => Class['caddy::package'],
-      }
-    }
-    default:  {
-      fail("${facts['os']['family']} is not supported.")
-    }
   }
 }

@@ -6,7 +6,9 @@ describe 'caddy::vhost', type: :define do
         os: {
           family: 'RedHat',
           name: 'RedHat',
-          release: { major: '6' },
+          release: {
+            major: '6'
+          },
           architecture: 'x86_64'
         }
       }
@@ -35,7 +37,9 @@ describe 'caddy::vhost', type: :define do
         os: {
           family: 'RedHat',
           name: 'RedHat',
-          release: { major: '6' },
+          release: {
+            major: '7'
+          },
           architecture: 'x86_64'
         }
       }

@@ -5,7 +5,7 @@
 #
 class caddy::service inherits caddy {
 
-  service{'caddy':
+  service { 'caddy':
     ensure => running,
     enable => true,
   }

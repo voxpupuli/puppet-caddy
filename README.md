@@ -85,6 +85,8 @@ Tested on Centos 6.8 and Centos 7.3.
 ## TODO
 
 * Improve management of Caddyfile (templates).
+* Improve low port binding with systemd >= v229
+* Improve defining resources with hiera
 
 ## License
 

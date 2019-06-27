@@ -5,7 +5,14 @@ describe 'caddy::package' do
       { osfamily: 'RedHat',
         operatingsystem: 'RedHat',
         operatingsystemmajrelease: '6',
-        architecture: 'x86_64' }
+        architecture: 'x86_64'
+      }
+      {
+        osfamily: 'Debian',
+        operatingsystem: 'Ubuntu',
+        operatingsystemmajrelease: '18.04',
+        architecture: 'x86_64'
+      }
     end
 
     it { is_expected.to compile.with_all_deps }

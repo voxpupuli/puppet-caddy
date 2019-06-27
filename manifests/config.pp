@@ -61,35 +61,65 @@ class caddy::config inherits caddy {
     require => User[$caddy::caddy_user],
   }
 
-  case $::operatingsystemmajrelease {
-    '7': {
-      file {'/etc/systemd/system/caddy.service':
-        ensure  => file,
-        mode    => '0744',
-        owner   => 'root',
-        group   => 'root',
-        content => template('caddy/etc/systemd/system/caddy.service.erb'),
-        notify  => Exec['systemctl-daemon-reload'],
-        require => Class['caddy::package'],
-      }
+  case $::operatingsystem {
+    'Redhat': {
+      case $::operatingsystemmajrelease {
+        '7': {
+          file {'/etc/systemd/system/caddy.service':
+            ensure  => file,
+            mode    => '0744',
+            owner   => 'root',
+            group   => 'root',
+            content => template('caddy/etc/systemd/system/caddy.service.erb'),
+            notify  => Exec['systemctl-daemon-reload'],
+            require => Class['caddy::package'],
+          }
 
-      exec {'systemctl-daemon-reload':
-        refreshonly => true,
-        path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-        command     => 'systemctl daemon-reload',
+          exec {'systemctl-daemon-reload':
+            refreshonly => true,
+            path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+            command     => 'systemctl daemon-reload',
+          }
+        }
+        '6': {
+          file {'/etc/init.d/caddy':
+            ensure  => file,
+            mode    => '0744',
+            owner   => 'root',
+            group   => 'root',
+            content => template('caddy/etc/init.d/caddy.erb'),
+            require => Class['caddy::package'],
+          }
+        }
+        default: {
+          fail("${::operatingsystem} is not supported.")
+        }
       }
     }
-    '6': {
-      file {'/etc/init.d/caddy':
-        ensure  => file,
-        mode    => '0744',
-        owner   => 'root',
-        group   => 'root',
-        content => template('caddy/etc/init.d/caddy.erb'),
-        require => Class['caddy::package'],
+    'Ubuntu': {
+      case $::operatingsystemmajrelease {
+        '18.04': {
+          file {'/lib/systemd/system/caddy.service':
+            ensure  => file,
+            mode    => '0744',
+            owner   => 'root',
+            group   => 'root',
+            content => template('caddy/lib/systemd/system/caddy.service.erb'),
+            notify  => Exec['systemctl-daemon-reload'],
+            require => Class['caddy::package'],
+          }
+          exec {'systemctl-daemon-reload':
+            refreshonly => true,
+            path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+            command     => 'systemctl daemon-reload',
+          }
+        }
+        default: {
+          fail("${::operatingsystem} is not supported.")
+        }
       }
     }
-    default:  {
+    default: {
       fail("${::osfamily} is not supported.")
     }
   }

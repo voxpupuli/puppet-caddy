@@ -1,21 +1,16 @@
 require 'spec_helper'
 describe 'caddy::package' do
-  context 'with default values for all parameters' do
+  context 'with default values for Redhat family release 6' do
     let(:facts) do
       { osfamily: 'RedHat',
         operatingsystem: 'RedHat',
         operatingsystemmajrelease: '6',
         architecture: 'x86_64'
       }
-      {
-        osfamily: 'Debian',
-        operatingsystem: 'Ubuntu',
-        operatingsystemmajrelease: '18.04',
-        architecture: 'x86_64'
-      }
     end
 
     it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_class('caddy::package') }
     it do
       is_expected.to contain_exec('install caddy')
     end
@@ -30,5 +25,33 @@ describe 'caddy::package' do
         'require' => 'Exec[extract caddy]'
       )
     end
+  end
+  context 'with default values for Debian family, Ubuntu 18.04' do
+    let(:facts) do
+      {
+        osfamily: 'Debian',
+        operatingsystem: 'Ubuntu',
+        operatingsystemmajrelease: '18.04',
+        architecture: 'x86_64'
+      }
+    end
+
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_class('caddy::package') }
+    it do
+      is_expected.to contain_exec('install caddy')
+    end
+    it do
+      is_expected.to contain_exec('extract caddy')
+    end
+    it do
+      is_expected.to contain_file('/usr/local/bin/caddy').with(
+        'mode'    => '0755',
+        'owner'   => 'root',
+        'group'   => 'root',
+        'require' => 'Exec[extract caddy]'
+      )
+    end
+    it { is_expected.to contain_exec('set cap caddy') }
   end
 end

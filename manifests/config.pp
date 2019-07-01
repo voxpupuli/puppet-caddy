@@ -10,13 +10,34 @@ class caddy::config inherits caddy {
     system => true,
   }
 
+  case $::osfamily {
+    'RedHat':  {
+      $nologin_shell = '/sbin/nologin'
+    }
+    'Debian':  {
+      $nologin_shell = '/usr/sbin/nologin'
+    }
+    default:  {
+      fail("${::osfamily} is not supported.")
+    }
+  }
+
+  file { 'caddy home':
+    ensure => directory,
+    path   => $caddy::caddy_home,
+    group  => $caddy::caddy_group,
+  }
+
   user {$caddy::caddy_user:
-    ensure     => present,
-    shell      => '/sbin/nologin',
-    gid        => $caddy::caddy_group,
-    system     => true,
-    home       => $caddy::caddy_home,
-    managehome => true,
+    ensure  => present,
+    shell   => $nologin_shell,
+    gid     => $caddy::caddy_group,
+    system  => true,
+    home    => $caddy::caddy_home,
+    require => [
+      File['caddy home'],
+      Group[$caddy::caddy_group],
+    ],
   }
 
   file {$caddy::caddy_ssl_dir:
@@ -92,7 +113,7 @@ class caddy::config inherits caddy {
           }
         }
         default: {
-          fail("${::operatingsystem} is not supported.")
+          fail("${::operatingsystem} ${::operatingsystemmajrelease} is not supported.")
         }
       }
     }
@@ -115,12 +136,12 @@ class caddy::config inherits caddy {
           }
         }
         default: {
-          fail("${::operatingsystem} is not supported.")
+          fail("${::operatingsystem} ${::operatingsystemmajrelease} is not supported.")
         }
       }
     }
     default: {
-      fail("${::osfamily} is not supported.")
+      fail("${::operatingsystem} is not supported.")
     }
   }
 }

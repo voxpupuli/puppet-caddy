@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'caddy::params' do
+describe 'caddy::service' do
   context 'with default values for Debian family, Ubuntu 18.04' do
     let(:facts) do
       {
@@ -9,6 +9,7 @@ describe 'caddy::params' do
         architecture: 'x86_64'
       }
     end
-  it { is_expected.to compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_service('caddy') }
   end
 end

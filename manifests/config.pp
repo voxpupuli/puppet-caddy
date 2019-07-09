@@ -13,9 +13,62 @@ class caddy::config inherits caddy {
   case $::osfamily {
     'RedHat':  {
       $nologin_shell = '/sbin/nologin'
+      case $::operatingsystemmajrelease {
+        '7': {
+          file {'/etc/systemd/system/caddy.service':
+            ensure  => file,
+            mode    => '0744',
+            owner   => 'root',
+            group   => 'root',
+            content => template('caddy/etc/systemd/system/caddy.service.erb'),
+            notify  => Exec['systemctl-daemon-reload'],
+            require => Class['caddy::package'],
+          }
+
+          exec {'systemctl-daemon-reload':
+            refreshonly => true,
+            path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+            command     => 'systemctl daemon-reload',
+          }
+        }
+        '6': {
+          file {'/etc/init.d/caddy':
+            ensure  => file,
+            mode    => '0744',
+            owner   => 'root',
+            group   => 'root',
+            content => template('caddy/etc/init.d/caddy.erb'),
+            require => Class['caddy::package'],
+          }
+        }
+        default: {
+          fail("${::operatingsystem} ${::operatingsystemmajrelease} is not supported.")
+        }
+      }
     }
     'Debian':  {
       $nologin_shell = '/usr/sbin/nologin'
+      case $::operatingsystemmajrelease {
+        '18.04': {
+          file {'/lib/systemd/system/caddy.service':
+            ensure  => file,
+            mode    => '0744',
+            owner   => 'root',
+            group   => 'root',
+            content => template('caddy/lib/systemd/system/caddy.service.erb'),
+            notify  => Exec['systemctl-daemon-reload'],
+            require => Class['caddy::package'],
+          }
+          exec {'systemctl-daemon-reload':
+            refreshonly => true,
+            path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
+            command     => 'systemctl daemon-reload',
+          }
+        }
+        default: {
+          fail("${::operatingsystem} ${::operatingsystemmajrelease} is not supported.")
+        }
+      }
     }
     default:  {
       fail("${::osfamily} is not supported.")
@@ -80,68 +133,5 @@ class caddy::config inherits caddy {
     owner   => $caddy::caddy_user,
     group   => $caddy::caddy_group,
     require => User[$caddy::caddy_user],
-  }
-
-  case $::operatingsystem {
-    'Redhat': {
-      case $::operatingsystemmajrelease {
-        '7': {
-          file {'/etc/systemd/system/caddy.service':
-            ensure  => file,
-            mode    => '0744',
-            owner   => 'root',
-            group   => 'root',
-            content => template('caddy/etc/systemd/system/caddy.service.erb'),
-            notify  => Exec['systemctl-daemon-reload'],
-            require => Class['caddy::package'],
-          }
-
-          exec {'systemctl-daemon-reload':
-            refreshonly => true,
-            path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-            command     => 'systemctl daemon-reload',
-          }
-        }
-        '6': {
-          file {'/etc/init.d/caddy':
-            ensure  => file,
-            mode    => '0744',
-            owner   => 'root',
-            group   => 'root',
-            content => template('caddy/etc/init.d/caddy.erb'),
-            require => Class['caddy::package'],
-          }
-        }
-        default: {
-          fail("${::operatingsystem} ${::operatingsystemmajrelease} is not supported.")
-        }
-      }
-    }
-    'Ubuntu': {
-      case $::operatingsystemmajrelease {
-        '18.04': {
-          file {'/lib/systemd/system/caddy.service':
-            ensure  => file,
-            mode    => '0744',
-            owner   => 'root',
-            group   => 'root',
-            content => template('caddy/lib/systemd/system/caddy.service.erb'),
-            notify  => Exec['systemctl-daemon-reload'],
-            require => Class['caddy::package'],
-          }
-          exec {'systemctl-daemon-reload':
-            refreshonly => true,
-            path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-            command     => 'systemctl daemon-reload',
-          }
-        }
-        default: {
-          fail("${::operatingsystem} ${::operatingsystemmajrelease} is not supported.")
-        }
-      }
-    }
-    default: {
-      fail("${::operatingsystem} is not supported.")
-    }
   }
 }

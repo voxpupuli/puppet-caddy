@@ -1,0 +1,15 @@
+---
+HOSTS:
+  ubuntu1804-64-1:
+    platform: ubuntu-18.04-amd64
+    roles:
+      - default
+    hypervisor: docker
+    image: ubuntu:18.04
+    docker_cmd: '["/sbin/init"]'
+    docker_preserve_image: true
+CONFIG:
+  type: aio
+  log_level: verbose
+...
+# vim: syntax=yaml

@@ -21,7 +21,7 @@ class caddy::package inherits caddy {
       $caddy_url        = 'https://caddyserver.com/download/linux'
       $caddy_dl_url     = "${caddy_url}/${caddy::params::arch}?plugins=${caddy::caddy_features}&license=${caddy::caddy_license}&telemetry=${caddy::caddy_telemetry}"
       $caddy_dl_name    = "caddy_linux_${caddy::params::arch}_custom.tar.gz"
-      $caddy_dl_dir     = "${caddy::params::caddy_tmp_dir}/${caddy_dl_name}_custom.tar.gz"
+      $caddy_dl_dir     = "${caddy::params::caddy_tmp_dir}/${caddy_dl_name}"
       $caddy_dl_command = $caddy::params::caddy_license ? {
         'personal'   => "curl -s -o ${caddy_dl_dir} '${caddy_dl_url}'",
         'commercial' => "curl -s -o ${caddy_dl_dir} '${caddy_dl_url}' --user ${caddy::params::caddy_account_id}:${caddy::params::caddy_api_key}"

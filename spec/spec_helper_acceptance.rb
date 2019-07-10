@@ -16,7 +16,7 @@ RSpec.configure do |c|
       on(host, "sed -i '/nodocs/d' /etc/yum.conf")
     end
     if host[:platform] =~ %r{ubuntu-18.04} && host[:hypervisor] =~ %r{docker}
-      on(host, "apt-get install -y libcap2-bin")
+      on(host, 'apt-get install -y libcap2-bin')
     end
   end
 end

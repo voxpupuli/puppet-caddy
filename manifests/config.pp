@@ -15,20 +15,12 @@ class caddy::config inherits caddy {
       $nologin_shell = '/sbin/nologin'
       case $facts['os']['release']['major'] {
         '7': {
-          file {'/etc/systemd/system/caddy.service':
-            ensure  => file,
-            mode    => '0744',
-            owner   => 'root',
-            group   => 'root',
+          systemd::unit_file { 'caddy.service':
+            path    => '/etc/systemd/system',
             content => template('caddy/etc/systemd/system/caddy.service.erb'),
-            notify  => Exec['systemctl-daemon-reload'],
+            enable  => true,
             require => Class['caddy::package'],
-          }
-
-          exec {'systemctl-daemon-reload':
-            refreshonly => true,
-            path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-            command     => 'systemctl daemon-reload',
+            notify  => Service['caddy'],
           }
         }
         '6': {
@@ -50,19 +42,12 @@ class caddy::config inherits caddy {
       $nologin_shell = '/usr/sbin/nologin'
       case $facts['os']['release']['major'] {
         '18.04': {
-          file {'/lib/systemd/system/caddy.service':
-            ensure  => file,
-            mode    => '0744',
-            owner   => 'root',
-            group   => 'root',
+          systemd::unit_file { 'caddy.service':
+            path    => '/lib/systemd/system',
             content => template('caddy/lib/systemd/system/caddy.service.erb'),
-            notify  => Exec['systemctl-daemon-reload'],
+            enable  => true,
             require => Class['caddy::package'],
-          }
-          exec {'systemctl-daemon-reload':
-            refreshonly => true,
-            path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-            command     => 'systemctl daemon-reload',
+            notify  => Service['caddy'],
           }
         }
         default: {

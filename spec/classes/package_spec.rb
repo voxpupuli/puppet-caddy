@@ -41,7 +41,8 @@ describe 'caddy::package' do
             major: '18.04'
           },
           architecture: 'x86_64'
-        }
+        },
+        path: '/usr/bin:/usr/sbin:/bin:/usr/local/bin'
       }
     end
 

@@ -11,7 +11,7 @@ class caddy::package inherits caddy {
 
   case $caddy::install_method {
     'github': {
-      $caddy_url        = 'https://github.com/mholt/caddy/releases/download'
+      $caddy_url        = 'https://github.com/caddyserver/caddy/releases/download'
       $caddy_dl_url     = "${caddy_url}/v${caddy::params::version}/caddy_v${caddy::params::version}_linux_${caddy::params::arch}.tar.gz"
       $caddy_dl_name    = "caddy_v${caddy::params::version}_linux_${caddy::params::arch}.tar.gz"
       $caddy_dl_dir     = "${caddy::params::caddy_tmp_dir}/${caddy_dl_name}"

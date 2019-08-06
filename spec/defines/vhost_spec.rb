@@ -2,10 +2,16 @@ require 'spec_helper'
 describe 'caddy::vhost', type: :define do
   context 'with source' do
     let(:facts) do
-      { osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '6',
-        architecture: 'x86_64' }
+      {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: {
+            major: '6'
+          },
+          architecture: 'x86_64'
+        }
+      }
     end
     let(:pre_condition) { 'include ::caddy' }
     let(:title) { 'example1' }
@@ -27,10 +33,16 @@ describe 'caddy::vhost', type: :define do
   end
   context 'with content' do
     let(:facts) do
-      { osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '6',
-        architecture: 'x86_64' }
+      {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: {
+            major: '7'
+          },
+          architecture: 'x86_64'
+        }
+      }
     end
     let(:title) { 'example2' }
     let(:pre_condition) { 'include ::caddy' }

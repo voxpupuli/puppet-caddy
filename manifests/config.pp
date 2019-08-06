@@ -10,10 +10,10 @@ class caddy::config inherits caddy {
     system => true,
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat':  {
       $nologin_shell = '/sbin/nologin'
-      case $::operatingsystemmajrelease {
+      case $facts['os']['release']['major'] {
         '7': {
           file {'/etc/systemd/system/caddy.service':
             ensure  => file,
@@ -42,13 +42,13 @@ class caddy::config inherits caddy {
           }
         }
         default: {
-          fail("${::operatingsystem} ${::operatingsystemmajrelease} is not supported.")
+          fail("${facts['os']['name']} ${facts['os']['release']['major']} is not supported.")
         }
       }
     }
     'Debian':  {
       $nologin_shell = '/usr/sbin/nologin'
-      case $::operatingsystemmajrelease {
+      case $facts['os']['release']['major'] {
         '18.04': {
           file {'/lib/systemd/system/caddy.service':
             ensure  => file,
@@ -66,12 +66,12 @@ class caddy::config inherits caddy {
           }
         }
         default: {
-          fail("${::operatingsystem} ${::operatingsystemmajrelease} is not supported.")
+          fail("${facts['os']['family']} ${facts['os']['release']['major']} is not supported.")
         }
       }
     }
     default:  {
-      fail("${::osfamily} is not supported.")
+      fail("${facts['os']['family']} is not supported.")
     }
   }
 

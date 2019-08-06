@@ -24,15 +24,15 @@ class caddy::params {
   $systemd_ambientcapabilities   = undef
   $systemd_nonewprivileges       = undef
 
-  case $::architecture {
+  case $facts['os']['architecture'] {
     'x86_64', 'amd64': { $arch = 'amd64'}
     'x86'            : { $arch = '386' }
     default:  {
-      fail("${::architecture} is not supported.")
+      fail("${facts['os']['architecture']} is not supported.")
     }
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat':  {
       $caddy_home            = '/etc/ssl/caddy'
       $caddy_user            = 'caddy'
@@ -46,7 +46,7 @@ class caddy::params {
       $caddy_ssl_dir         = "${caddy_home}/.caddy"
     }
     default:  {
-      fail("${::osfamily} is not supported.")
+      fail("${facts['os']['family']} is not supported.")
     }
   }
 }

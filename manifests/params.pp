@@ -5,15 +5,15 @@
 #
 class caddy::params {
 
-  case $::architecture {
+  case $facts['os']['architecture'] {
     'x86_64': { $arch = 'amd64'}
     'x86'   : { $arch = '386' }
     default:  {
-      fail("${::architecture} is not supported.")
+      fail("${facts['os']['architecture']} is not supported.")
     }
   }
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat':  {
       $install_path          = '/usr/local/bin'
       $caddy_home            = '/etc/ssl/caddy'
@@ -34,7 +34,7 @@ class caddy::params {
     }
 
     default:  {
-      fail("${::osfamily} is not supported.")
+      fail("${facts['os']['family']} is not supported.")
     }
   }
 }

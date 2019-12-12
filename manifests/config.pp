@@ -61,7 +61,7 @@ class caddy::config inherits caddy {
     require => User[$caddy::caddy_user],
   }
 
-  case $::operatingsystemmajrelease {
+  case $facts['os']['release']['major'] {
     '7': {
       file {'/etc/systemd/system/caddy.service':
         ensure  => file,
@@ -90,7 +90,7 @@ class caddy::config inherits caddy {
       }
     }
     default:  {
-      fail("${::osfamily} is not supported.")
+      fail("${facts['os']['family']} is not supported.")
     }
   }
 }

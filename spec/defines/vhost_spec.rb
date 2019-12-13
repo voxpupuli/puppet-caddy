@@ -3,10 +3,12 @@ describe 'caddy::vhost', type: :define do
   context 'with source' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '6',
-        architecture: 'x86_64'
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { major: '6' },
+          architecture: 'x86_64'
+        }
       }
     end
     let(:pre_condition) { 'include ::caddy' }
@@ -30,10 +32,12 @@ describe 'caddy::vhost', type: :define do
   context 'with content' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '6',
-        architecture: 'x86_64'
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { major: '6' },
+          architecture: 'x86_64'
+        }
       }
     end
     let(:title) { 'example2' }

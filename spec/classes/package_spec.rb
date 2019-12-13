@@ -2,10 +2,14 @@ require 'spec_helper'
 describe 'caddy::package' do
   context 'with default values for all parameters' do
     let(:facts) do
-      { osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '6',
-        architecture: 'x86_64' }
+      {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { major: '6' },
+          architecture: 'x86_64'
+        }
+      }
     end
 
     it { is_expected.to compile.with_all_deps }

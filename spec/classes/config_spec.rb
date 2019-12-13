@@ -2,10 +2,14 @@ require 'spec_helper'
 describe 'caddy::config' do
   context 'with default values for Redhat family release 6' do
     let(:facts) do
-      { osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '6',
-        architecture: 'x86_64' }
+      {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { major: '6' },
+          architecture: 'x86_64'
+        }
+      }
     end
 
     it { is_expected.to compile.with_all_deps }
@@ -19,10 +23,14 @@ describe 'caddy::config' do
   end
   context 'with default values for Redhat family release 7' do
     let(:facts) do
-      { osfamily: 'RedHat',
-        operatingsystem: 'RedHat',
-        operatingsystemmajrelease: '7',
-        architecture: 'x86_64' }
+      {
+        os: {
+          family: 'RedHat',
+          name: 'RedHat',
+          release: { major: '7' },
+          architecture: 'x86_64'
+        }
+      }
     end
 
     it { is_expected.to compile.with_all_deps }

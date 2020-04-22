@@ -10,11 +10,11 @@ class caddy::package inherits caddy {
   }
 
   $caddy_url        = 'https://caddyserver.com/download/linux'
-  $caddy_dl_url     = "${caddy_url}/${caddy::params::arch}?plugins=${caddy::caddy_features}&license=${caddy::caddy_license}&telemetry=${caddy::caddy_telemetry}"
-  $caddy_dl_dir     = "${caddy::params::caddy_tmp_dir}/caddy_linux_${$caddy::params::arch}_custom.tar.gz"
-  $caddy_dl_command = $caddy::params::caddy_license ? {
+  $caddy_dl_url     = "${caddy_url}/${caddy::arch}?plugins=${caddy::caddy_features}&license=${caddy::caddy_license}&telemetry=${caddy::caddy_telemetry}"
+  $caddy_dl_dir     = "${caddy::caddy_tmp_dir}/caddy_linux_${$caddy::arch}_custom.tar.gz"
+  $caddy_dl_command = $caddy::caddy_license ? {
     'personal'   => "curl -o ${caddy_dl_dir} '${caddy_dl_url}'",
-    'commercial' => "curl -o ${caddy_dl_dir} '${caddy_dl_url}' --user ${caddy::params::caddy_account_id}:${caddy::params::caddy_api_key}"
+    'commercial' => "curl -o ${caddy_dl_dir} '${caddy_dl_url}' --user ${caddy::caddy_account_id}:${caddy::caddy_api_key}"
   }
 
   exec { 'install caddy':
@@ -23,7 +23,7 @@ class caddy::package inherits caddy {
   }
 
   exec { 'extract caddy':
-    command => "tar -zxf ${caddy::params::caddy_tmp_dir}/caddy_linux_${$caddy::params::arch}_custom.tar.gz -C ${caddy::install_path} 'caddy'",
+    command => "tar -zxf ${caddy::caddy_tmp_dir}/caddy_linux_${$caddy::arch}_custom.tar.gz -C ${caddy::install_path} 'caddy'",
     creates => "${caddy::install_path}/caddy",
     require => Exec['install caddy'],
   }

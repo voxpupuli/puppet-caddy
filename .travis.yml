@@ -1,63 +1,68 @@
 ---
-dist: bionic
+os: linux
+dist: xenial
 language: ruby
 cache: bundler
 before_install:
-  - yes | gem update --system
-  - bundle --version
+  - bundle -v
+  - rm -f Gemfile.lock
+  - "# Update system gems if requested. This is useful to temporarily workaround troubles in the test runner"
+  - "# See https://github.com/puppetlabs/pdk-templates/commit/705154d5c437796b821691b707156e1b056d244f for an example of how this was used"
+  - "# Ignore exit code of SIGPIPE'd yes to not fail with shell's pipefail set"
+  - '[ -z "$RUBYGEMS_VERSION" ] || (yes || true) | gem update --system $RUBYGEMS_VERSION'
+  - gem --version
+  - bundle -v
 script:
   - 'bundle exec rake $CHECK'
-matrix:
+bundler_args: --without system_tests
+rvm:
+  - 2.5.7
+stages:
+  - static
+  - spec
+  - acceptance
+  -
+    if: tag =~ ^v\d
+    name: deploy
+jobs:
   fast_finish: true
   include:
-  - rvm: 2.4.4
-    bundler_args: --without system_tests development release
-    env: PUPPET_VERSION="~> 5.0" CHECK=test
-  - rvm: 2.5.3
-    bundler_args: --without system_tests development release
-    env: PUPPET_VERSION="~> 6.0" CHECK=test_with_coveralls
-  - rvm: 2.5.3
-    bundler_args: --without system_tests development release
-    env: PUPPET_VERSION="~> 6.0" CHECK=rubocop
-  - rvm: 2.4.4
-    bundler_args: --without system_tests development release
-    env: PUPPET_VERSION="~> 5.0" CHECK=build DEPLOY_TO_FORGE=yes
-  - rvm: 2.5.3
-    bundler_args: --without development release
-    env: BEAKER_PUPPET_COLLECTION=puppet5 BEAKER_setfile=centos6-64 CHECK=beaker
-    services: docker
-  - rvm: 2.5.3
-    bundler_args: --without development release
-    env: BEAKER_PUPPET_COLLECTION=puppet6 BEAKER_setfile=centos6-64 CHECK=beaker
-    services: docker
-  - rvm: 2.5.3
-    bundler_args: --without development release
-    env: BEAKER_PUPPET_COLLECTION=puppet5 BEAKER_setfile=centos7-64 CHECK=beaker
-    services: docker
-  - rvm: 2.5.3
-    bundler_args: --without development release
-    env: BEAKER_PUPPET_COLLECTION=puppet6 BEAKER_setfile=centos7-64 CHECK=beaker
-    services: docker
+    -
+      bundler_args: --with system_tests
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_PUPPET_COLLECTION=puppet6 BEAKER_set=centos6-64 BEAKER_TESTMODE=apply
+      rvm: 2.5.7
+      script: bundle exec rake beaker
+      services: docker
+      stage: acceptance
+      sudo: required
+    -
+      bundler_args: --with system_tests
+      dist: trusty
+      env: PUPPET_INSTALL_TYPE=agent BEAKER_debug=true BEAKER_PUPPET_COLLECTION=puppet6 BEAKER_set=centos7-64 BEAKER_TESTMODE=apply
+      rvm: 2.5.7
+      script: bundle exec rake beaker
+      services: docker
+      stage: acceptance
+      sudo: required
+    -
+      env: CHECK="check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop syntax lint metadata_lint"
+      stage: static
+    -
+      env: PUPPET_GEM_VERSION="~> 5.0" CHECK=parallel_spec
+      rvm: 2.4.5
+      stage: spec
+    -
+      env: PUPPET_GEM_VERSION="~> 6.0" CHECK=parallel_spec
+      rvm: 2.5.7
+      stage: spec
+    -
+      env: DEPLOY_TO_FORGE=yes
+      stage: deploy
 branches:
   only:
-  - master
-  - /^v\d/
+    - master
+    - verify
+    - /^v\d/
 notifications:
   email: false
-  webhooks: https://voxpupu.li/incoming/travis
-  irc:
-    on_success: always
-    on_failure: always
-    channels:
-      - "chat.freenode.org#voxpupuli-notifications"
-deploy:
-  provider: puppetforge
-  user: puppet
-  password:
-    secure: "g9ykRmtsQpBmH334LIpyhGRhUs5FjjRadZ4eOqjQI+Nr+8BcyjQdxjp4M4YFlTp2nLVxPODuVtHn9uDqMuV8nOZl7li2HHbBZSpgHJQ7l0ci2k6DKjaeSM2xErtE0anRRqpvyK3+1toZhgdRREta2bgaD+/3cNEJOM60LjwZ3Bc5tusTGPlQCkYN+S/LnbvlmR/G9IW1L5o03qII+wiBfUqDeUf00tTXlNnsexi3pDE1xfyJb9G4/58dkU1Go/qw0fIY/aW5dJTM1p3jGcuybGSxWUYHWHGuo36Fi6PBZ4OEfMCM4W0BTZqpcej6uArxg28NLwR5Np+rBWee4krluUQSS1BOQ1X7gFt1d4PHdQcuX9IZwB903GXebMTmOmHGH8Gyi4p2haYhrpRzZsjeCNlJMTE6gO4Kod2HQ4AKrA+ZJYSfOCgh3Vid4A5P52bII5RGA1hnpcs2SulfTBMsPH3m6lfjVtHOvydnbbbErY0LQm2RJcqqqSkffvhYPUGSd+rBAadNnWzaG51g6LboCzpRXWCn7NHyiAUjUCFM3pvPiqN75Hybl6Oxn/hHzdZaOI4uK4YSQct1AfUuzc4IXxCQamTwTtpyKYJZwJjuk1xzKAya9Nw1O4Sap/KCA6wIAZs60Q5s3qoUeWwpyOJCy70YvniC4l/IGjoI0LsRP60="
-  on:
-    tags: true
-    # all_branches is required to use tags
-    all_branches: true
-    # Only publish the build marked with "DEPLOY_TO_FORGE"
-    condition: "$DEPLOY_TO_FORGE = yes"

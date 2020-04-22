@@ -1,0 +1,15 @@
+---
+HOSTS:
+  centos-8-x64:
+    platform: el-8-x86_64
+    roles:
+      - default
+    hypervisor: docker
+    image: centos:8
+    docker_cmd: '["/sbin/init"]'
+    docker_preserve_image: true
+CONFIG:
+  type: aio
+  log_level: verbose
+...
+# vim: syntax=yaml

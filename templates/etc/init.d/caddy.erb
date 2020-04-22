@@ -13,7 +13,7 @@
 
 
 NAME=caddy
-DAEMON=$(which caddy)
+DAEMON=<%= scope['caddy::install_path'] -%>/caddy
 LOG=<%= @caddy_log_dir %>
 DAEMONUSER=<%= @caddy_user %>
 CONFIGFILE=/etc/caddy/Caddyfile

@@ -1,0 +1,5 @@
+---
+
+caddy::caddy_home: '/etc/ssl/caddy'
+caddy::caddy_user: 'caddy'
+caddy::caddy_group: 'caddy'

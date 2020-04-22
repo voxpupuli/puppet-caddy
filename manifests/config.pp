@@ -61,8 +61,8 @@ class caddy::config inherits caddy {
     require => User[$caddy::caddy_user],
   }
 
-  case $facts['os']['release']['major'] {
-    '7': {
+  case $facts['service_provider'] {
+    'systemd': {
       file {'/etc/systemd/system/caddy.service':
         ensure  => file,
         mode    => '0744',
@@ -77,9 +77,10 @@ class caddy::config inherits caddy {
         refreshonly => true,
         path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
         command     => 'systemctl daemon-reload',
+        notify      => Service['caddy'],
       }
     }
-    '6': {
+    default:  {
       file {'/etc/init.d/caddy':
         ensure  => file,
         mode    => '0744',
@@ -87,10 +88,8 @@ class caddy::config inherits caddy {
         group   => 'root',
         content => template('caddy/etc/init.d/caddy.erb'),
         require => Class['caddy::package'],
+        notify  => Service['caddy'],
       }
-    }
-    default:  {
-      fail("${facts['os']['family']} is not supported.")
     }
   }
 }

@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v1.0.0](https://github.com/voxpupuli/puppet-caddy/tree/v1.0.0) (2020-04-24)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-caddy/compare/v0.2.0...v1.0.0)
+
+**Breaking changes:**
+
+- modulesync 2.7.0 and drop puppet 4 [\#16](https://github.com/voxpupuli/puppet-caddy/pull/16) ([bastelfreak](https://github.com/bastelfreak))
+
+**Closed issues:**
+
+- Migrate caddy module to Vox Pupuli [\#2](https://github.com/voxpupuli/puppet-caddy/issues/2)
+
+**Merged pull requests:**
+
+- Use voxpupuli-acceptance [\#25](https://github.com/voxpupuli/puppet-caddy/pull/25) ([ekohl](https://github.com/ekohl))
+- update repo links to https [\#23](https://github.com/voxpupuli/puppet-caddy/pull/23) ([bastelfreak](https://github.com/bastelfreak))
+- Allow puppetlabs/stdlib 6.x [\#22](https://github.com/voxpupuli/puppet-caddy/pull/22) ([dhoppe](https://github.com/dhoppe))
+- modulesync 2.6.0 [\#15](https://github.com/voxpupuli/puppet-caddy/pull/15) ([dhoppe](https://github.com/dhoppe))
+- Fix typo at documentation [\#14](https://github.com/voxpupuli/puppet-caddy/pull/14) ([dhoppe](https://github.com/dhoppe))
+
 ## [v0.2.0](https://github.com/voxpupuli/puppet-caddy/tree/v0.2.0) (2018-12-28)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-caddy/compare/v0.1.2...v0.2.0)

@@ -51,7 +51,7 @@ class caddy (
     'x86_64', 'amd64': { $arch = 'amd64'}
     'x86'            : { $arch = '386' }
     default:  {
-      fail("${facts['os']['architecture']} is not supported.")
+      warning("arch ${facts['os']['architecture']} may not be supported.")
     }
   }
 

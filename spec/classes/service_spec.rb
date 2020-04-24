@@ -9,7 +9,12 @@ describe 'caddy::service' do
 
       context 'with defaults for all parameters' do
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to contain_service('caddy') }
+        it do
+          is_expected.to contain_service('caddy').with(
+            'ensure' => 'running',
+            'enable' => 'true'
+          )
+        end
       end
     end
   end

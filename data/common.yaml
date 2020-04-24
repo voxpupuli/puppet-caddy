@@ -1,0 +1,15 @@
+---
+
+caddy::version: 1.0.0
+
+caddy::install_path: '/usr/local/bin'
+caddy::caddy_http_port: 80
+caddy::caddy_https_port: 443
+caddy::caddy_private_devices: true
+caddy::caddy_limit_processes: 64
+caddy::caddy_license: 'personal'
+caddy::caddy_telemetry: 'off'
+caddy::caddy_features: 'http.filter,http.git,http.ipfilter'
+caddy::caddy_tmp_dir: '/tmp'
+caddy::caddy_ssl_dir: "%{lookup('caddy::caddy_home')}/.caddy"
+caddy::caddy_log_dir: '/var/log/caddy'

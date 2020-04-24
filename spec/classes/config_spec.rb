@@ -11,6 +11,7 @@ describe 'caddy::config' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_group('caddy') }
         it { is_expected.to contain_user('caddy') }
+        it { is_expected.to contain_file('/etc/ssl/caddy/.caddy') }
         it { is_expected.to contain_file('/var/log/caddy') }
         it { is_expected.to contain_file('/etc/caddy') }
         it { is_expected.to contain_file('/etc/caddy/Caddyfile') }

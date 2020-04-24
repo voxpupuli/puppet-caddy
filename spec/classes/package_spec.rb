@@ -19,6 +19,13 @@ describe 'caddy::package' do
             'require' => 'Exec[extract caddy]'
           )
         end
+        it do
+          is_expected.to contain_exec('set cap caddy').with(
+            command: 'setcap cap_net_bind_service=+ep /usr/local/bin/caddy',
+            require: 'File[/usr/local/bin/caddy]',
+            refreshonly: 'true'
+          )
+        end
       end
     end
   end

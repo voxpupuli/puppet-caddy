@@ -19,55 +19,44 @@ class caddy::config inherits caddy {
     managehome => true,
   }
 
-  file {$caddy::caddy_ssl_dir:
-    ensure  => directory,
-    owner   => $caddy::caddy_user,
-    group   => $caddy::caddy_group,
-    mode    => '0755',
-    require => User[$caddy::caddy_user],
-  }
+  file {
+    default:
+      ensure => directory,
+      owner  => $caddy::caddy_user,
+      group  => $caddy::caddy_group,
+      mode   => '0755',
+    ;
+    [ $caddy::caddy_ssl_dir,
+      $caddy::caddy_log_dir,
+    ]:
+      require => User[$caddy::caddy_user],
+    ;
+    [ '/etc/caddy' ]:
+      owner => 'root',
+      group => 'root',
+    ;
 
-  file {$caddy::caddy_log_dir:
-    ensure  => directory,
-    owner   => $caddy::caddy_user,
-    group   => $caddy::caddy_group,
-    mode    => '0755',
-    require => User[$caddy::caddy_user],
-  }
+    [ '/etc/caddy/Caddyfile' ]:
+      ensure  => file,
+      mode    => '0444',
+      source  => 'puppet:///modules/caddy/etc/caddy/Caddyfile',
+      require => File['/etc/caddy'],
+    ;
 
-  file {'/etc/caddy':
-    ensure => directory,
-    mode   => '0755',
-    owner  => 'root',
-    group  => 'root',
-  }
-
-  file {'/etc/caddy/Caddyfile':
-    ensure  => file,
-    mode    => '0444',
-    owner   => $caddy::caddy_user,
-    group   => $caddy::caddy_group,
-    source  => 'puppet:///modules/caddy/etc/caddy/Caddyfile',
-    require => File['/etc/caddy'],
-  }
-
-  file {'/etc/caddy/config':
-    ensure  => directory,
-    purge   => true,
-    recurse => true,
-    mode    => '0755',
-    owner   => $caddy::caddy_user,
-    group   => $caddy::caddy_group,
-    require => User[$caddy::caddy_user],
+    [ '/etc/caddy/config' ]:
+      purge   => true,
+      recurse => true,
+      require => User[$caddy::caddy_user],
+    ;
   }
 
   case $facts['os']['release']['major'] {
     '7': {
       file {'/etc/systemd/system/caddy.service':
         ensure  => file,
-        mode    => '0744',
         owner   => 'root',
         group   => 'root',
+        mode    => '0744',
         content => template('caddy/etc/systemd/system/caddy.service.erb'),
         notify  => Exec['systemctl-daemon-reload'],
         require => Class['caddy::package'],
@@ -82,9 +71,9 @@ class caddy::config inherits caddy {
     '6': {
       file {'/etc/init.d/caddy':
         ensure  => file,
-        mode    => '0744',
         owner   => 'root',
         group   => 'root',
+        mode    => '0744',
         content => template('caddy/etc/init.d/caddy.erb'),
         require => Class['caddy::package'],
       }

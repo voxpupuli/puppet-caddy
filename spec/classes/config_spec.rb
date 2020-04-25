@@ -10,22 +10,6 @@ describe 'caddy::config' do
       context 'with default values for Redhat family release 6' do
         it { is_expected.to compile.with_all_deps }
         it do
-          is_expected.to contain_group('caddy').with(
-            'ensure' => 'present',
-            'system' => 'true'
-          )
-        end
-        it do
-          is_expected.to contain_user('caddy').with(
-            'ensure'     => 'present',
-            'shell'      => '/sbin/nologin',
-            'gid'        => 'caddy',
-            'system'     => 'true',
-            'home'       => '/etc/ssl/caddy',
-            'managehome' => 'true'
-          )
-        end
-        it do
           is_expected.to contain_file('/etc/ssl/caddy/.caddy').with(
             'ensure'  => 'directory',
             'owner'   => 'caddy',

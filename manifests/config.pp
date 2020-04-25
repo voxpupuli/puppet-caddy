@@ -5,20 +5,6 @@
 
 class caddy::config inherits caddy {
 
-  group {$caddy::caddy_group:
-    ensure => present,
-    system => true,
-  }
-
-  user {$caddy::caddy_user:
-    ensure     => present,
-    shell      => '/sbin/nologin',
-    gid        => $caddy::caddy_group,
-    system     => true,
-    home       => $caddy::caddy_home,
-    managehome => true,
-  }
-
   file {$caddy::caddy_ssl_dir:
     ensure  => directory,
     owner   => $caddy::caddy_user,

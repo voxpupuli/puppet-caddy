@@ -47,6 +47,20 @@ class caddy (
 
   )inherits caddy::params{
 
+  group { $caddy::caddy_group:
+    ensure => present,
+    system => true,
+  }
+
+  user { $caddy::caddy_user:
+    ensure     => present,
+    shell      => '/sbin/nologin',
+    gid        => $caddy::caddy_group,
+    system     => true,
+    home       => $caddy::caddy_home,
+    managehome => true,
+  }
+
   include caddy::package
   include caddy::config
   include caddy::service

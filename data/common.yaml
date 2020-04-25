@@ -1,6 +1,8 @@
 ---
 
 caddy::install_path: '/usr/local/bin'
+caddy::caddy_user: 'caddy'
+caddy::caddy_group: 'caddy'
 caddy::caddy_http_port: 80
 caddy::caddy_https_port: 443
 caddy::caddy_private_devices: true
@@ -11,4 +13,3 @@ caddy::caddy_features: 'http.filter,http.git,http.ipfilter'
 caddy::caddy_tmp_dir: '/tmp'
 caddy::caddy_ssl_dir: "%{lookup('caddy::caddy_home')}/.caddy"
 caddy::caddy_log_dir: '/var/log/caddy'
-

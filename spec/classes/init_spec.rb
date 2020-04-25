@@ -2,18 +2,21 @@ require 'spec_helper'
 
 describe 'caddy' do
   on_supported_os.each do |os, facts|
+    svcpro =  case facts[:os]['release']['major']
+              when '6'
+                'redhat'
+              else
+                'systemd'
+              end
+
     context "on #{os}" do
       let(:facts) do
-        facts
+        facts.merge(service_provider: svcpro) # factordb doesn't provide service_provider
       end
 
       context 'with defaults for all parameters' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('caddy') }
-        it { is_expected.to contain_class('caddy::params') }
-        it { is_expected.to contain_class('caddy::package').that_comes_before('Class[caddy::config]') }
-        it { is_expected.to contain_class('caddy::config').that_notifies('Class[caddy::service]') }
-        it { is_expected.to contain_class('caddy::service') }
         it do
           is_expected.to contain_group('caddy').with(
             'ensure' => 'present',

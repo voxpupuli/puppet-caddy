@@ -2,9 +2,16 @@ require 'spec_helper'
 
 describe 'caddy::vhost', type: :define do
   on_supported_os.each do |os, facts|
+    svcpro =  case facts[:os]['release']['major']
+              when '6'
+                'redhat'
+              else
+                'systemd'
+              end
+
     context "on #{os}" do
       let(:facts) do
-        facts
+        facts.merge(service_provider: svcpro) # factordb doesn't provide service_provider
       end
 
       let(:pre_condition) { 'include caddy' }

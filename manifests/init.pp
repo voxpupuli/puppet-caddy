@@ -28,6 +28,7 @@
 #
 class caddy (
 
+  String                         $arch                  = $caddy::params::arch,
   String                         $install_path          = $caddy::params::install_path,
   String                         $caddy_user            = $caddy::params::caddy_user,
   String                         $caddy_group           = $caddy::params::caddy_group,
@@ -61,7 +62,11 @@ class caddy (
     managehome => true,
   }
 
-  include caddy::package
-  include caddy::config
-  include caddy::service
+  contain caddy::package
+  contain caddy::config
+  contain caddy::service
+
+  Class['caddy::package']
+  -> Class['caddy::config']
+  ~> Class['caddy::service']
 }

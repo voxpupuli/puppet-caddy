@@ -3,19 +3,26 @@
 #
 # Caddy server setup
 
-class caddy::config inherits caddy {
+class caddy::config (
+  $caddy_user            = $caddy::caddy_user,
+  $caddy_group           = $caddy::caddy_group,
+  $caddy_log_dir         = $caddy::caddy_log_dir,
+  $caddy_tmp_dir         = $caddy::caddy_tmp_dir,
+  $caddy_ssl_dir         = $caddy::caddy_ssl_dir,
+) {
+
+  assert_private()
 
   file {
     default:
       ensure => directory,
-      owner  => $caddy::caddy_user,
-      group  => $caddy::caddy_group,
+      owner  => $caddy_user,
+      group  => $caddy_group,
       mode   => '0755',
     ;
-    [ $caddy::caddy_ssl_dir,
-      $caddy::caddy_log_dir,
+    [ $caddy_ssl_dir,
+      $caddy_log_dir,
     ]:
-      require => User[$caddy::caddy_user],
     ;
     [ '/etc/caddy' ]:
       owner => 'root',
@@ -32,7 +39,6 @@ class caddy::config inherits caddy {
     [ '/etc/caddy/config' ]:
       purge   => true,
       recurse => true,
-      require => User[$caddy::caddy_user],
     ;
   }
 }

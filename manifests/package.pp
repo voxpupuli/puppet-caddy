@@ -37,8 +37,8 @@ class caddy::package (
   }
 
   file_capability { "${install_path}/caddy":
-     ensure     => present,
-     capability => 'cap_net_bind_service=ep',
-     require    => Archive[$caddy_dl_dir],
+    ensure     => present,
+    capability => 'cap_net_bind_service=ep',
+    require    => Archive[$caddy_dl_dir],
   }
 }

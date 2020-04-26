@@ -45,13 +45,13 @@ class caddy::package (
     mode    => '0755',
     owner   => 'root',
     group   => 'root',
+    notify  => File_capability["${install_path}/caddy"],
     require => Exec['extract caddy'],
-    notify  => Exec['set cap caddy'],
   }
 
-  exec { 'set cap caddy':
-    command     => "setcap cap_net_bind_service=+ep ${install_path}/caddy",
-    require     => File["${install_path}/caddy"],
-    refreshonly => true,
+  file_capability { "${install_path}/caddy":
+    ensure     => present,
+    capability => 'cap_net_bind_service=ep',
+    require    => File["${install_path}/caddy"],
   }
 }

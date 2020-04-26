@@ -49,15 +49,15 @@ describe 'caddy' do
             'mode'    => '0755',
             'owner'   => 'root',
             'group'   => 'root',
-            'notify'  => 'Exec[set cap caddy]',
+            'notify'  => 'File_capability[/usr/local/bin/caddy]',
             'require' => 'Exec[extract caddy]'
           )
         end
         it do
-          is_expected.to contain_exec('set cap caddy').with(
-            'command'     => 'setcap cap_net_bind_service=+ep /usr/local/bin/caddy',
-            'require'     => 'File[/usr/local/bin/caddy]',
-            'refreshonly' => 'true'
+          is_expected.to contain_file_capability('/usr/local/bin/caddy').with(
+            'ensure'     => 'present',
+            'capability' => 'cap_net_bind_service=ep',
+            'require'    => 'File[/usr/local/bin/caddy]'
           )
         end
 

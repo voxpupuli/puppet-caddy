@@ -18,10 +18,6 @@ class caddy::package (
 
   assert_private()
 
-  Exec {
-    path    => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-  }
-
   $caddy_url        = 'https://caddyserver.com/download/linux'
   $caddy_dl_url     = "${caddy_url}/${arch}?plugins=${caddy_features}&license=${caddy_license}&telemetry=${caddy_telemetry}"
   $caddy_dl_dir     = "${caddy_tmp_dir}/caddy_linux_${$arch}_custom.tar.gz"
@@ -37,12 +33,12 @@ class caddy::package (
     group        => 'root',
     creates      => "${install_path}/caddy",
     cleanup      => true,
-    notify       => Exec['set cap caddy'],
+    notify       => File_capability["${install_path}/caddy"],
   }
 
-  exec { 'set cap caddy':
-    command     => "setcap cap_net_bind_service=+ep ${install_path}/caddy",
-    require     => Archive[$caddy_dl_dir],
-    refreshonly => true,
+  file_capability { "${install_path}/caddy":
+    ensure     => present,
+    capability => 'cap_net_bind_service=ep',
+    require    => Archive[$caddy_dl_dir],
   }
 }

@@ -41,14 +41,14 @@ describe 'caddy' do
             'group'        => 'root',
             'creates'      => '/usr/local/bin/caddy',
             'cleanup'      => 'true',
-            'notify'       => 'Exec[set cap caddy]'
+            'notify'       => 'File_capability[/usr/local/bin/caddy]'
           )
         end
         it do
-          is_expected.to contain_exec('set cap caddy').with(
-            'command'     => 'setcap cap_net_bind_service=+ep /usr/local/bin/caddy',
-            'require'     => 'Archive[/tmp/caddy_linux_amd64_custom.tar.gz]',
-            'refreshonly' => 'true'
+          is_expected.to contain_file_capability('/usr/local/bin/caddy').with(
+            'ensure'     => 'present',
+            'capability' => 'cap_net_bind_service=ep',
+            'require'    => 'Archive[/tmp/caddy_linux_amd64_custom.tar.gz]'
           )
         end
 

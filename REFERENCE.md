@@ -37,7 +37,7 @@ include caddy
 
 ```puppet
 class { 'caddy':
-  caddy_features => 'http.git, http.filter, http.ipfilter',
+  caddy_features => 'http.git,http.filter,http.ipfilter',
 }
 ```
 
@@ -131,7 +131,7 @@ Data type: `String[1]`
 
 A list of features the Caddy binary should support.
 
-Default value: 'http.filter,http.git,http.ipfilter'
+Default value: 'http.git,http.filter,http.ipfilter'
 
 ##### `caddy_http_port`
 

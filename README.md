@@ -57,7 +57,7 @@ Install Caddy with additional features:
 
 ```puppet
 class { 'caddy':
-  caddy_features => 'http.git, http.filter, http.ipfilter',
+  caddy_features => 'http.git,http.filter,http.ipfilter',
 }
 ```
 

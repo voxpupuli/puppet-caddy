@@ -8,6 +8,7 @@ class caddy::config (
   $caddy_group   = $caddy::caddy_group,
   $caddy_log_dir = $caddy::caddy_log_dir,
   $caddy_tmp_dir = $caddy::caddy_tmp_dir,
+  $caddy_home    = $caddy::caddy_home,
   $caddy_ssl_dir = $caddy::caddy_ssl_dir,
 ) {
 
@@ -20,7 +21,8 @@ class caddy::config (
       group  => $caddy_group,
       mode   => '0755',
     ;
-    [ $caddy_ssl_dir,
+    [ $caddy_home,
+      $caddy_ssl_dir,
       $caddy_log_dir,
     ]:
     ;

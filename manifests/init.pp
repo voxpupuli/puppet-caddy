@@ -110,12 +110,11 @@ class caddy (
   }
 
   user { $caddy_user:
-    ensure     => present,
-    shell      => $caddy_shell,
-    gid        => $caddy_group,
-    system     => true,
-    home       => $caddy_home,
-    managehome => true,
+    ensure => present,
+    shell  => $caddy_shell,
+    gid    => $caddy_group,
+    system => true,
+    home   => $caddy_home,
   }
 
   contain caddy::install

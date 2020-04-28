@@ -40,8 +40,7 @@ describe 'caddy' do
             'shell'      => caddy_shell,
             'gid'        => caddy_group,
             'system'     => 'true',
-            'home'       => caddy_home,
-            'managehome' => 'true'
+            'home'       => caddy_home
           )
         end
 
@@ -66,6 +65,14 @@ describe 'caddy' do
           )
         end
 
+        it do
+          is_expected.to contain_file(caddy_home).with(
+            'ensure'  => 'directory',
+            'owner'   => caddy_user,
+            'group'   => caddy_group,
+            'mode'    => '0755'
+          )
+        end
         it do
           is_expected.to contain_file(caddy_ssl_dir).with(
             'ensure'  => 'directory',

@@ -17,9 +17,6 @@ describe 'caddy' do
       context 'with defaults for all parameters' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('caddy') }
-        it { is_expected.to contain_class('caddy::install').that_comes_before('Class[caddy::config]') }
-        it { is_expected.to contain_class('caddy::config').that_notifies('Class[caddy::service]') }
-        it { is_expected.to contain_class('caddy::service') }
         it do
           is_expected.to contain_group('caddy').with(
             'ensure' => 'present',
@@ -103,9 +100,7 @@ describe 'caddy' do
             'ensure'  => 'file',
             'owner'   => 'caddy',
             'group'   => 'caddy',
-            'mode'    => '0444',
-            'source'  => 'puppet:///modules/caddy/etc/caddy/Caddyfile',
-            'require' => 'File[/etc/caddy]'
+            'mode'    => '0444'
           )
         end
         it do

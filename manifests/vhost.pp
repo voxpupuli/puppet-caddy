@@ -17,12 +17,15 @@ define caddy::vhost(
 ) {
 
   include caddy
+
   file { "/etc/caddy/config/${title}.conf":
     ensure  => file,
     content => $content,
     source  => $source,
+    owner   => $caddy::caddy_user,
+    group   => $caddy::caddy_group,
     mode    => '0444',
-    require => Class['caddy::config'],
-    notify  => Class['caddy::service'],
+    require => File['/etc/caddy/Caddyfile'],
+    notify  => Service['caddy'],
   }
 }

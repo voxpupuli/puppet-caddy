@@ -17,11 +17,11 @@ describe 'class caddy:' do
   end
   context 'with vhosts' do
     pp = "include caddy
-          caddy::vhost {'example1':
-            source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
+          caddy::vhost { 'example1':
+            content => file('caddy/examples/example1.conf'),
           }
-          caddy::vhost {'example2':
-            source => 'puppet:///modules/caddy/etc/caddy/config/example2.conf',
+          caddy::vhost { 'example2':
+            content => file('caddy/examples/example2.conf'),
           }"
     it 'runs successfully' do
       apply_manifest(pp, catch_failures: true) do |r|

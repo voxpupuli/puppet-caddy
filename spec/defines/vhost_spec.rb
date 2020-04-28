@@ -19,9 +19,11 @@ describe 'caddy::vhost', type: :define do
           is_expected.to contain_file('/etc/caddy/config/example1.conf').with(
             'ensure'  => 'file',
             'source'  => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0444',
-            'require' => 'Class[Caddy::Config]',
-            'notify'  => 'Class[Caddy::Service]'
+            'require' => 'File[/etc/caddy/Caddyfile]',
+            'notify'  => 'Service[caddy]'
           )
         end
       end
@@ -38,9 +40,11 @@ describe 'caddy::vhost', type: :define do
           is_expected.to contain_file('/etc/caddy/config/example2.conf').with(
             'ensure'  => 'file',
             'content' => 'localhost:2015',
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0444',
-            'require' => 'Class[Caddy::Config]',
-            'notify'  => 'Class[Caddy::Service]'
+            'require' => 'File[/etc/caddy/Caddyfile]',
+            'notify'  => 'Service[caddy]'
           )
         end
       end

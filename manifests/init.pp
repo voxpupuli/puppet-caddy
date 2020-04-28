@@ -71,11 +71,11 @@ class caddy (
     managehome => true,
   }
 
-  contain caddy::package
+  contain caddy::install
   contain caddy::config
   contain caddy::service
 
-  Class['caddy::package']
+  Class['caddy::install']
   -> Class['caddy::config']
   ~> Class['caddy::service']
 }

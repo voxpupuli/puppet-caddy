@@ -1,9 +1,9 @@
-# Class caddy::package
+# Class caddy::install
 # ===========================
 #
 # Install required packages
 #
-class caddy::package (
+class caddy::install (
   $arch                  = $caddy::arch,
   $install_path          = $caddy::install_path,
   $caddy_tmp_dir         = $caddy::caddy_tmp_dir,

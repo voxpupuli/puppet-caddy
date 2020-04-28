@@ -19,7 +19,7 @@ describe 'caddy' do
       context 'with defaults for all parameters' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('caddy') }
-        it { is_expected.to contain_class('caddy::package').that_comes_before('Class[caddy::config]') }
+        it { is_expected.to contain_class('caddy::install').that_comes_before('Class[caddy::config]') }
         it { is_expected.to contain_class('caddy::config').that_notifies('Class[caddy::service]') }
         it { is_expected.to contain_class('caddy::service') }
         it do

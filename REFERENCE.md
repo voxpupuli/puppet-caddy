@@ -215,7 +215,7 @@ The following parameters are available in the `caddy::vhost` defined type.
 
 ##### `source`
 
-Data type: `Any`
+Data type: `Optional[Stdlib::Filesource]`
 
 
 
@@ -223,7 +223,7 @@ Default value: `undef`
 
 ##### `content`
 
-Data type: `Any`
+Data type: `Optional[String]`
 
 
 

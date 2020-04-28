@@ -18,9 +18,9 @@ class caddy::install (
 
   assert_private()
 
-  $caddy_url        = 'https://caddyserver.com/download/linux'
-  $caddy_dl_url     = "${caddy_url}/${arch}?plugins=${caddy_features}&license=${caddy_license}&telemetry=${caddy_telemetry}"
-  $caddy_dl_dir     = "${caddy_tmp_dir}/caddy_linux_${$arch}_custom.tar.gz"
+  $caddy_url    = 'https://caddyserver.com/download/linux'
+  $caddy_dl_url = "${caddy_url}/${arch}?plugins=${caddy_features}&license=${caddy_license}&telemetry=${caddy_telemetry}"
+  $caddy_dl_dir = "${caddy_tmp_dir}/caddy_linux_${$arch}_custom.tar.gz"
 
   archive { $caddy_dl_dir:
     ensure       => present,

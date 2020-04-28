@@ -4,11 +4,11 @@
 # @api private
 #
 class caddy::config (
-  $caddy_user            = $caddy::caddy_user,
-  $caddy_group           = $caddy::caddy_group,
-  $caddy_log_dir         = $caddy::caddy_log_dir,
-  $caddy_tmp_dir         = $caddy::caddy_tmp_dir,
-  $caddy_ssl_dir         = $caddy::caddy_ssl_dir,
+  $caddy_user    = $caddy::caddy_user,
+  $caddy_group   = $caddy::caddy_group,
+  $caddy_log_dir = $caddy::caddy_log_dir,
+  $caddy_tmp_dir = $caddy::caddy_tmp_dir,
+  $caddy_ssl_dir = $caddy::caddy_ssl_dir,
 ) {
 
   assert_private()

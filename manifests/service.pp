@@ -26,8 +26,8 @@ class caddy::service (
       }
       ~> Service['caddy']
     }
-    'redhat': { # we could probably add 'debian' for older debian releases but not sure
-      file {'/etc/init.d/caddy':
+    'redhat': {
+      file { '/etc/init.d/caddy':
         ensure  => file,
         mode    => '0744',
         owner   => 'root',
@@ -40,7 +40,7 @@ class caddy::service (
     }
   }
 
-  service{'caddy':
+  service{ 'caddy':
     ensure => running,
     enable => true,
   }

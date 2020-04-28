@@ -19,25 +19,15 @@ class caddy::service (
 
   assert_private()
 
-  case $facts['os']['release']['major'] {
-    '7': {
-      file { '/etc/systemd/system/caddy.service':
-        ensure  => file,
-        mode    => '0744',
-        owner   => 'root',
-        group   => 'root',
+  case $facts['service_provider'] {
+    'systemd': {
+      systemd::unit_file { 'caddy.service':
         content => template('caddy/etc/systemd/system/caddy.service.erb'),
-        notify  => Exec['systemctl-daemon-reload'],
       }
-
-      exec {'systemctl-daemon-reload':
-        refreshonly => true,
-        path        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-        command     => 'systemctl daemon-reload',
-      }
+      ~> Service['caddy']
     }
-    '6': {
-      file { '/etc/init.d/caddy':
+    'redhat': { # we could probably add 'debian' for older debian releases but not sure
+      file {'/etc/init.d/caddy':
         ensure  => file,
         mode    => '0744',
         owner   => 'root',
@@ -46,11 +36,11 @@ class caddy::service (
       }
     }
     default:  {
-      fail("${facts['os']['family']} is not supported.")
+      fail("service provider ${$facts['service_provider']} is not supported.")
     }
   }
 
-  service{ 'caddy':
+  service{'caddy':
     ensure => running,
     enable => true,
   }

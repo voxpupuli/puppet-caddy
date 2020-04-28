@@ -28,25 +28,34 @@
 #
 class caddy (
 
-  String                         $arch                  = $caddy::params::arch,
-  String                         $install_path          = $caddy::params::install_path,
-  String                         $caddy_user            = $caddy::params::caddy_user,
-  String                         $caddy_group           = $caddy::params::caddy_group,
-  String                         $caddy_log_dir         = $caddy::params::caddy_log_dir,
-  String                         $caddy_tmp_dir         = $caddy::params::caddy_tmp_dir,
-  String                         $caddy_ssl_dir         = $caddy::params::caddy_ssl_dir,
-  String                         $caddy_home            = $caddy::params::caddy_home,
-  Enum['personal', 'commercial'] $caddy_license         = $caddy::params::caddy_license,
-  Optional[String[1]]            $caddy_account_id      = $caddy::params::caddy_account_id,
-  Optional[String[1]]            $caddy_api_key         = $caddy::params::caddy_api_key,
-  Enum['on','off']               $caddy_telemetry       = $caddy::params::caddy_telemetry,
-  String                         $caddy_features        = $caddy::params::caddy_features,
-  Stdlib::Port                   $caddy_http_port       = $caddy::params::caddy_http_port,
-  Stdlib::Port                   $caddy_https_port      = $caddy::params::caddy_https_port,
-  Boolean                        $caddy_private_devices = $caddy::params::caddy_private_devices,
-  Integer                        $caddy_limit_processes = $caddy::params::caddy_limit_processes,
+  Stdlib::Absolutepath           $install_path = '/usr/local/bin',
+  String                         $caddy_user = 'caddy',
+  String                         $caddy_group = 'caddy',
+  Stdlib::Absolutepath           $caddy_log_dir = '/var/log/caddy',
+  Stdlib::Absolutepath           $caddy_tmp_dir = '/tmp',
+  Stdlib::Absolutepath           $caddy_home = '/etc/ssl/caddy',
+  Stdlib::Absolutepath           $caddy_ssl_dir = "${caddy_home}/.caddy",
+  Enum['personal', 'commercial'] $caddy_license = 'personal',
+  Enum['on','off']               $caddy_telemetry = 'off',
+  String                         $caddy_features = 'http.filter,http.git,http.ipfilter',
+  Stdlib::Port                   $caddy_http_port = 80,
+  Stdlib::Port                   $caddy_https_port = 443,
+  Boolean                        $caddy_private_devices = true,
+  Integer                        $caddy_limit_processes = 64,
+  String                         $caddy_architecture = $facts['os']['architecture'],
+  Optional[String[1]]            $caddy_account_id = undef,
+  Optional[String[1]]            $caddy_api_key = undef,
 
-  )inherits caddy::params{
+  )
+{
+  case $caddy_architecture {
+    'x86_64', 'amd64': { $arch = 'amd64'}
+    'x86'            : { $arch = '386' }
+    default:  {
+      $arch = $caddy_architecture
+      warning("arch ${arch} may not be supported.")
+    }
+  }
 
   group { $caddy::caddy_group:
     ensure => present,

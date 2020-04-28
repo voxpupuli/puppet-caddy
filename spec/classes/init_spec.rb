@@ -2,15 +2,23 @@ require 'spec_helper'
 
 describe 'caddy' do
   on_supported_os.each do |os, facts|
+    service_provider =  case facts[:os]['release']['major']
+                        when '6'
+                          'redhat'
+                        else
+                          'systemd'
+                        end
+    # service_provider it provided by stdlib, not facterdb
+    os_facts = facts.merge(service_provider: service_provider)
+
     context "on #{os}" do
       let(:facts) do
-        facts
+        os_facts
       end
 
       context 'with defaults for all parameters' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to contain_class('caddy') }
-        it { is_expected.to contain_class('caddy::params') }
         it { is_expected.to contain_class('caddy::package').that_comes_before('Class[caddy::config]') }
         it { is_expected.to contain_class('caddy::config').that_notifies('Class[caddy::service]') }
         it { is_expected.to contain_class('caddy::service') }
@@ -97,26 +105,14 @@ describe 'caddy' do
           )
         end
 
-        case facts[:os]['release']['major']
-        when '7'
+        case os_facts[:service_provider]
+        when 'systemd'
           it do
-            is_expected.to contain_file('/etc/systemd/system/caddy.service').with(
-              'ensure'  => 'file',
-              'owner'   => 'root',
-              'group'   => 'root',
-              'mode'    => '0744',
-              'content' => %r{User=caddy},
-              'notify'  => 'Exec[systemctl-daemon-reload]'
+            is_expected.to contain_systemd__unit_file('caddy.service').with(
+              'content' => %r{User=caddy}
             )
           end
-          it do
-            is_expected.to contain_exec('systemctl-daemon-reload').with(
-              'refreshonly' => 'true',
-              'path'        => '/usr/bin:/usr/sbin:/bin:/usr/local/bin',
-              'command'     => 'systemctl daemon-reload'
-            )
-          end
-        when '6'
+        when 'redhat'
           it do
             is_expected.to contain_file('/etc/init.d/caddy').with(
               'ensure'  => 'file',

@@ -18,6 +18,9 @@
 # @param caddy_group
 #   The group used by the Caddy process.
 #
+# @param caddy_shell
+#   Which shell is used.
+#
 # @param caddy_log_dir
 #   Directory where the log files are stored.
 #
@@ -64,6 +67,7 @@ class caddy (
   Stdlib::Absolutepath           $install_path          = '/usr/local/bin',
   String[1]                      $caddy_user            = 'caddy',
   String[1]                      $caddy_group           = 'caddy',
+  Stdlib::Absolutepath           $caddy_shell           = '/sbin/nologin',
   Stdlib::Absolutepath           $caddy_log_dir         = '/var/log/caddy',
   Stdlib::Absolutepath           $caddy_tmp_dir         = '/tmp',
   Stdlib::Absolutepath           $caddy_home            = '/etc/ssl/caddy',
@@ -88,17 +92,17 @@ class caddy (
     }
   }
 
-  group { $caddy::caddy_group:
+  group { $caddy_group:
     ensure => present,
     system => true,
   }
 
-  user { $caddy::caddy_user:
+  user { $caddy_user:
     ensure     => present,
-    shell      => '/sbin/nologin',
-    gid        => $caddy::caddy_group,
+    shell      => $caddy_shell,
+    gid        => $caddy_group,
     system     => true,
-    home       => $caddy::caddy_home,
+    home       => $caddy_home,
     managehome => true,
   }
 

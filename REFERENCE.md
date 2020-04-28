@@ -69,6 +69,14 @@ The group used by the Caddy process.
 
 Default value: 'caddy'
 
+##### `caddy_shell`
+
+Data type: `Stdlib::Absolutepath`
+
+Which shell is used.
+
+Default value: '/sbin/nologin'
+
 ##### `caddy_log_dir`
 
 Data type: `Stdlib::Absolutepath`

@@ -2,18 +2,24 @@ require 'spec_helper'
 
 describe 'caddy' do
   on_supported_os.each do |os, facts|
-    service_provider =  case facts[:os]['release']['major']
-                        when '6'
-                          'redhat'
-                        else
-                          'systemd'
-                        end
-    # service_provider it provided by stdlib, not facterdb
-    os_facts = facts.merge(service_provider: service_provider)
-
     context "on #{os}" do
       let(:facts) do
-        os_facts
+        facts.merge(os_specific_facts(facts))
+      end
+
+      case facts[:os]['family']
+      when 'Debian'
+        caddy_user    = 'www-data'
+        caddy_group   = 'www-data'
+        caddy_shell   = '/usr/sbin/nologin'
+        caddy_home    = '/opt/caddy'
+        caddy_ssl_dir = '/opt/caddy/.caddy'
+      when 'RedHat'
+        caddy_user    = 'caddy'
+        caddy_group   = 'caddy'
+        caddy_shell   = '/sbin/nologin'
+        caddy_home    = '/etc/ssl/caddy'
+        caddy_ssl_dir = '/etc/ssl/caddy/.caddy'
       end
 
       context 'with defaults for all parameters' do
@@ -23,18 +29,18 @@ describe 'caddy' do
         it { is_expected.to contain_class('caddy::config').that_notifies('Class[caddy::service]') }
         it { is_expected.to contain_class('caddy::service') }
         it do
-          is_expected.to contain_group('caddy').with(
+          is_expected.to contain_group(caddy_group).with(
             'ensure' => 'present',
             'system' => 'true'
           )
         end
         it do
-          is_expected.to contain_user('caddy').with(
+          is_expected.to contain_user(caddy_user).with(
             'ensure'     => 'present',
-            'shell'      => '/sbin/nologin',
-            'gid'        => 'caddy',
+            'shell'      => caddy_shell,
+            'gid'        => caddy_group,
             'system'     => 'true',
-            'home'       => '/etc/ssl/caddy',
+            'home'       => caddy_home,
             'managehome' => 'true'
           )
         end
@@ -61,18 +67,18 @@ describe 'caddy' do
         end
 
         it do
-          is_expected.to contain_file('/etc/ssl/caddy/.caddy').with(
+          is_expected.to contain_file(caddy_ssl_dir).with(
             'ensure'  => 'directory',
-            'owner'   => 'caddy',
-            'group'   => 'caddy',
+            'owner'   => caddy_user,
+            'group'   => caddy_group,
             'mode'    => '0755'
           )
         end
         it do
           is_expected.to contain_file('/var/log/caddy').with(
             'ensure'  => 'directory',
-            'owner'   => 'caddy',
-            'group'   => 'caddy',
+            'owner'   => caddy_user,
+            'group'   => caddy_group,
             'mode'    => '0755'
           )
         end
@@ -87,8 +93,8 @@ describe 'caddy' do
         it do
           is_expected.to contain_file('/etc/caddy/Caddyfile').with(
             'ensure'  => 'file',
-            'owner'   => 'caddy',
-            'group'   => 'caddy',
+            'owner'   => caddy_user,
+            'group'   => caddy_group,
             'mode'    => '0444',
             'source'  => 'puppet:///modules/caddy/etc/caddy/Caddyfile',
             'require' => 'File[/etc/caddy]'
@@ -99,13 +105,13 @@ describe 'caddy' do
             'ensure'  => 'directory',
             'purge'   => 'true',
             'recurse' => 'true',
-            'owner'   => 'caddy',
-            'group'   => 'caddy',
+            'owner'   => caddy_user,
+            'group'   => caddy_group,
             'mode'    => '0755'
           )
         end
 
-        case os_facts[:service_provider]
+        case facts[:service_provider]
         when 'systemd'
           it do
             is_expected.to contain_systemd__unit_file('caddy.service').with(

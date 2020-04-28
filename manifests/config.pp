@@ -1,8 +1,8 @@
-# Class caddy::config
-# ===========================
+# @summary
+#   This class handles the Caddy config.
 #
-# Caddy server setup
-
+# @api private
+#
 class caddy::config (
   $caddy_user            = $caddy::caddy_user,
   $caddy_group           = $caddy::caddy_group,

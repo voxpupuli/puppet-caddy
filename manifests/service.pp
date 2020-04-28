@@ -1,7 +1,7 @@
-# Class caddy::service
-# ===========================
+# @summary
+#   This class handles the Caddy service.
 #
-# Manage caddy service
+# @api private
 #
 class caddy::service (
   $install_path          = $caddy::install_path,

@@ -1,15 +1,15 @@
-# Defione: caddy::vhost
-# ===========================
+# @summary
+#   This defined type handles the Caddy virtual hosts.
 #
-# Setup caddy vhost in /etc/caddy/config/
+# @example Configure virtual host, based on source
+#   caddy::vhost { 'example1':
+#     source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf'
+#   }
 #
-# Examples:
-# ---------
-#
-# caddy::vhost {'example1':
-#   source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
-# }
-#
+# @example Configure virtual host, based on content
+#   caddy::vhost { 'example2:
+#     content => 'localhost:2015',
+#   }
 #
 define caddy::vhost(
   $source     = undef,

@@ -1,30 +1,64 @@
-# Class: caddy
-# ===========================
+# @summary
+#   Main class, includes all other classes.
 #
-# Examples
-# --------
+# @example Basic usage
+#   include caddy
 #
-# ```puppet
-# include caddy
-# ```
+# @example Install Caddy with additional features
+#   class { 'caddy':
+#     caddy_features => 'http.git, http.filter, http.ipfilter',
+#   }
 #
-# Install caddy with additiional features
+# @param install_path
+#   Directory where the Caddy binary is stored.
 #
-# ```puppet
-# class {'caddy':
-#   caddy_features = "http.filter,http.git,http.ipfilter",
-# }
-# ```
+# @param caddy_user
+#   The user used by the Caddy process.
 #
-# Authors
-# -------
+# @param caddy_group
+#   The group used by the Caddy process.
 #
-# Lukasz Rohde <kujon447@gmail.com>
+# @param caddy_log_dir
+#   Directory where the log files are stored.
 #
-# Copyright
-# ---------
+# @param caddy_tmp_dir
+#   Directory where the Caddy archive is stored.
 #
-# Copyright 2016 Lukasz Rohde.
+# @param caddy_home
+#   Directory where the Caddy data is stored.
+#
+# @param caddy_ssl_dir
+#   Directory where Let's Encrypt certificates are stored.
+#
+# @param caddy_license
+#   Whether a personal or commercial license is used.
+#
+# @param caddy_telemetry
+#   Whether telemetry data should be collected.
+#
+# @param caddy_features
+#   A list of features the Caddy binary should support.
+#
+# @param caddy_http_port
+#   Which port for HTTP is used.
+#
+# @param caddy_https_port
+#   Which port for HTTPS is used.
+#
+# @param caddy_private_device
+#   Whether physical devices are turned off.
+#
+# @param caddy_limit_processes
+#   The maximum number of Caddy processes.
+#
+# @param caddy_architecture
+#    A temporary variable, required for the download URL.
+#
+# @param caddy_account_id
+#   The account ID, required for the commercial license.
+#
+# @param caddy_api_key
+#   The API key, required for the commercial license.
 #
 class caddy (
 

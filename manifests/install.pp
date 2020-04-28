@@ -1,7 +1,7 @@
-# Class caddy::install
-# ===========================
+# @summary
+#   This class handles the Caddy archive.
 #
-# Install required packages
+# @api private
 #
 class caddy::install (
   $arch                  = $caddy::arch,

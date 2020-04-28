@@ -149,18 +149,6 @@ Which port for HTTPS is used.
 
 Default value: 443
 
-##### `caddy_private_device`
-
-Whether physical devices are turned off.
-
-##### `caddy_limit_processes`
-
-Data type: `Integer[0]`
-
-The maximum number of Caddy processes.
-
-Default value: 64
-
 ##### `caddy_architecture`
 
 Data type: `String[1]`
@@ -185,13 +173,53 @@ The API key, required for the commercial license.
 
 Default value: `undef`
 
-##### `caddy_private_devices`
+##### `systemd_limit_processes`
+
+Data type: `Integer[0]`
+
+The number of processes.
+
+Default value: 64
+
+##### `systemd_private_device`
+
+Whether the process has access to physical devices.
+
+##### `systemd_capability_bounding_set`
+
+Data type: `Optional[String[1]]`
+
+Controls which capabilities to include in the capability bounding set for the executed process.
+
+Default value: `undef`
+
+##### `systemd_ambient_capabilities`
+
+Data type: `Optional[String[1]]`
+
+Controls which capabilities to include in the ambient capability set for the executed process.
+
+Default value: `undef`
+
+##### `systemd_no_new_privileges`
+
+Whether the process and all its children can gain new privileges through execve().
+
+##### `systemd_private_devices`
 
 Data type: `Boolean`
 
 
 
 Default value: `true`
+
+##### `systemd_no_ne_wprivileges`
+
+Data type: `Optional[Boolean]`
+
+
+
+Default value: `undef`
 
 ## Defined types
 

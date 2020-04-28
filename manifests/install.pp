@@ -12,8 +12,6 @@ class caddy::install (
   $caddy_api_key         = $caddy::caddy_api_key,
   $caddy_telemetry       = $caddy::caddy_telemetry,
   $caddy_features        = $caddy::caddy_features,
-  $caddy_private_devices = $caddy::caddy_private_devices,
-  $caddy_limit_processes = $caddy::caddy_limit_processes,
 ) {
 
   assert_private()

@@ -56,15 +56,15 @@ include caddy
 Install Caddy with additional features:
 
 ```puppet
-class {'caddy':
-  caddy_features = "git,mailout,ipfilter",
+class { 'caddy':
+  caddy_features => 'http.git, http.filter, http.ipfilter',
 }
 ```
 
 Install Caddy and configure virtual host, based on source:
 
 ```puppet
-caddy::vhost {'example1':
+caddy::vhost { 'example1':
   source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
 }
 ````
@@ -72,8 +72,8 @@ caddy::vhost {'example1':
 Install Caddy and configure virtual host, based on content:
 
 ```puppet
-caddy::vhost {'example2':
-  source => 'puppet:///modules/caddy/etc/caddy/config/example2.conf',
+caddy::vhost { 'example2:
+  content => 'localhost:2015',
 }
 ```
 
@@ -87,6 +87,8 @@ This module has been tested on:
 
 * RedHat 6/7/8
 * CentOS 6/7/8
+* Debian 8/9/10
+* Ubuntu 16.04/18.04
 
 ## Development
 

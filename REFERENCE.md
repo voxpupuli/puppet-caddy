@@ -225,7 +225,7 @@ This defined type handles the Caddy virtual hosts.
 
 ```puppet
 caddy::vhost { 'example1':
-  source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf'
+  source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
 }
 ```
 

@@ -3,7 +3,7 @@
 #
 # @example Configure virtual host, based on source
 #   caddy::vhost { 'example1':
-#     source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf'
+#     source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
 #   }
 #
 # @example Configure virtual host, based on content

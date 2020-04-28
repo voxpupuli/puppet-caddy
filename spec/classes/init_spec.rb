@@ -49,7 +49,7 @@ describe 'caddy' do
             'ensure'       => 'present',
             'extract'      => 'true',
             'extract_path' => '/usr/local/bin',
-            'source'       => 'https://caddyserver.com/download/linux/amd64?plugins=http.filter,http.git,http.ipfilter&license=personal&telemetry=off',
+            'source'       => 'https://caddyserver.com/download/linux/amd64?plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off',
             'user'         => 'root',
             'group'        => 'root',
             'creates'      => '/usr/local/bin/caddy',

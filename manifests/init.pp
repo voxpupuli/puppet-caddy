@@ -6,7 +6,7 @@
 #
 # @example Install Caddy with additional features
 #   class { 'caddy':
-#     caddy_features => 'http.git, http.filter, http.ipfilter',
+#     caddy_features => 'http.git,http.filter,http.ipfilter',
 #   }
 #
 # @param install_path
@@ -83,7 +83,7 @@ class caddy (
   Stdlib::Absolutepath           $caddy_ssl_dir                   = "${caddy_home}/.caddy",
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
   Enum['on','off']               $caddy_telemetry                 = 'off',
-  String[1]                      $caddy_features                  = 'http.filter,http.git,http.ipfilter',
+  String[1]                      $caddy_features                  = 'http.git,http.filter,http.ipfilter',
   Stdlib::Port                   $caddy_http_port                 = 80,
   Stdlib::Port                   $caddy_https_port                = 443,
   String[1]                      $caddy_architecture              = $facts['os']['architecture'],

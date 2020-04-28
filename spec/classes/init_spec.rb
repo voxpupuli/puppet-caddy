@@ -4,7 +4,7 @@ describe 'caddy' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
-        facts.merge(os_specific_facts(facts))
+        facts
       end
 
       case facts[:os]['family']
@@ -111,11 +111,11 @@ describe 'caddy' do
           )
         end
 
-        case facts[:service_provider]
+        case facts['service_provider']
         when 'systemd'
           it do
             is_expected.to contain_systemd__unit_file('caddy.service').with(
-              'content' => %r{User=caddy}
+              'content' => %r{User=#{caddy_user}}
             )
           end
         when 'redhat'
@@ -125,7 +125,7 @@ describe 'caddy' do
               'owner'   => 'root',
               'group'   => 'root',
               'mode'    => '0755',
-              'content' => %r{DAEMONUSER=caddy}
+              'content' => %r{DAEMONUSER=#{caddy_user}}
             )
           end
         end

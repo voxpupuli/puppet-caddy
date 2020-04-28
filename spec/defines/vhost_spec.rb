@@ -4,7 +4,7 @@ describe 'caddy::vhost', type: :define do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
-        facts.merge(os_specific_facts(facts))
+        facts
       end
 
       let(:pre_condition) { 'include caddy' }

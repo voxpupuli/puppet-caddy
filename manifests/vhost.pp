@@ -12,8 +12,8 @@
 #   }
 #
 define caddy::vhost(
-  $source  = undef,
-  $content = undef,
+  Optional[Stdlib::Filesource] $source  = undef,
+  Optional[String]             $content = undef,
 ) {
 
   file { "/etc/caddy/config/${title}.conf":

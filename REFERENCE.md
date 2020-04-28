@@ -181,9 +181,13 @@ The number of processes.
 
 Default value: 64
 
-##### `systemd_private_device`
+##### `systemd_private_devices`
+
+Data type: `Boolean`
 
 Whether the process has access to physical devices.
+
+Default value: `true`
 
 ##### `systemd_capability_bounding_set`
 
@@ -203,21 +207,9 @@ Default value: `undef`
 
 ##### `systemd_no_new_privileges`
 
-Whether the process and all its children can gain new privileges through execve().
-
-##### `systemd_private_devices`
-
-Data type: `Boolean`
-
-
-
-Default value: `true`
-
-##### `systemd_no_ne_wprivileges`
-
 Data type: `Optional[Boolean]`
 
-
+Whether the process and all its children can gain new privileges through execve().
 
 Default value: `undef`
 
@@ -251,7 +243,7 @@ The following parameters are available in the `caddy::vhost` defined type.
 
 ##### `source`
 
-Data type: `Any`
+Data type: `Optional[Stdlib::Filesource]`
 
 
 
@@ -259,7 +251,7 @@ Default value: `undef`
 
 ##### `content`
 
-Data type: `Any`
+Data type: `Optional[String]`
 
 
 

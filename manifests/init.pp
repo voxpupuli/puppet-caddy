@@ -60,7 +60,7 @@
 # @param systemd_limit_processes
 #   The number of processes.
 #
-# @param systemd_private_device
+# @param systemd_private_devices
 #   Whether the process has access to physical devices.
 #
 # @param systemd_capability_bounding_set
@@ -93,7 +93,7 @@ class caddy (
   Boolean                        $systemd_private_devices         = true,
   Optional[String[1]]            $systemd_capability_bounding_set = undef,
   Optional[String[1]]            $systemd_ambient_capabilities    = undef,
-  Optional[Boolean]              $systemd_no_ne_wprivileges       = undef,
+  Optional[Boolean]              $systemd_no_new_privileges       = undef,
 ) {
   case $caddy_architecture {
     'x86_64', 'amd64': { $arch = 'amd64'}

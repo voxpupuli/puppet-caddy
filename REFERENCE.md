@@ -55,7 +55,7 @@ Default value: '/usr/local/bin'
 
 ##### `caddy_user`
 
-Data type: `String`
+Data type: `String[1]`
 
 The user used by the Caddy process.
 
@@ -63,7 +63,7 @@ Default value: 'caddy'
 
 ##### `caddy_group`
 
-Data type: `String`
+Data type: `String[1]`
 
 The group used by the Caddy process.
 
@@ -119,7 +119,7 @@ Default value: 'off'
 
 ##### `caddy_features`
 
-Data type: `String`
+Data type: `String[1]`
 
 A list of features the Caddy binary should support.
 
@@ -147,7 +147,7 @@ Whether physical devices are turned off.
 
 ##### `caddy_limit_processes`
 
-Data type: `Integer`
+Data type: `Integer[0]`
 
 The maximum number of Caddy processes.
 
@@ -155,7 +155,7 @@ Default value: 64
 
 ##### `caddy_architecture`
 
-Data type: `String`
+Data type: `String[1]`
 
 A temporary variable, required for the download URL.
 

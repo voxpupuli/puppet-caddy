@@ -1,2 +1,5 @@
-# FILE MANAGED BY PUPPET
+#
+# THIS FILE IS MANAGED BY PUPPET
+#
+
 import config/*.conf

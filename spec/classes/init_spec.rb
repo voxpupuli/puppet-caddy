@@ -124,7 +124,7 @@ describe 'caddy' do
               'ensure'  => 'file',
               'owner'   => 'root',
               'group'   => 'root',
-              'mode'    => '0744',
+              'mode'    => '0755',
               'content' => %r{DAEMONUSER=caddy}
             )
           end

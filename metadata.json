@@ -22,7 +22,7 @@
     },
     {
       "name": "camptocamp/systemd",
-      "version_requirement": ">= 2.9.0"
+      "version_requirement": ">= 2.9.0 < 3.0.0"
     }
   ],
   "operatingsystem_support": [

@@ -61,27 +61,24 @@
 #   The API key, required for the commercial license.
 #
 class caddy (
-
   Stdlib::Absolutepath           $install_path          = '/usr/local/bin',
-  String                         $caddy_user            = 'caddy',
-  String                         $caddy_group           = 'caddy',
+  String[1]                      $caddy_user            = 'caddy',
+  String[1]                      $caddy_group           = 'caddy',
   Stdlib::Absolutepath           $caddy_log_dir         = '/var/log/caddy',
   Stdlib::Absolutepath           $caddy_tmp_dir         = '/tmp',
   Stdlib::Absolutepath           $caddy_home            = '/etc/ssl/caddy',
   Stdlib::Absolutepath           $caddy_ssl_dir         = "${caddy_home}/.caddy",
   Enum['personal', 'commercial'] $caddy_license         = 'personal',
   Enum['on','off']               $caddy_telemetry       = 'off',
-  String                         $caddy_features        = 'http.filter,http.git,http.ipfilter',
+  String[1]                      $caddy_features        = 'http.filter,http.git,http.ipfilter',
   Stdlib::Port                   $caddy_http_port       = 80,
   Stdlib::Port                   $caddy_https_port      = 443,
   Boolean                        $caddy_private_devices = true,
-  Integer                        $caddy_limit_processes = 64,
-  String                         $caddy_architecture    = $facts['os']['architecture'],
+  Integer[0]                     $caddy_limit_processes = 64,
+  String[1]                      $caddy_architecture    = $facts['os']['architecture'],
   Optional[String[1]]            $caddy_account_id      = undef,
   Optional[String[1]]            $caddy_api_key         = undef,
-
-  )
-{
+) {
   case $caddy_architecture {
     'x86_64', 'amd64': { $arch = 'amd64'}
     'x86'            : { $arch = '386' }

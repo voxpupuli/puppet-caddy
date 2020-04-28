@@ -29,7 +29,7 @@ class caddy::service (
     'redhat': {
       file { '/etc/init.d/caddy':
         ensure  => file,
-        mode    => '0744',
+        mode    => '0755',
         owner   => 'root',
         group   => 'root',
         content => template('caddy/etc/init.d/caddy.erb'),

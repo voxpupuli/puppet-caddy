@@ -34,6 +34,7 @@ class caddy::install (
     notify       => File_capability["${install_path}/caddy"],
   }
 
+  include file_capability
   file_capability { "${install_path}/caddy":
     ensure     => present,
     capability => 'cap_net_bind_service=ep',

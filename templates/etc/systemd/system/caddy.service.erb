@@ -1,28 +1,65 @@
+;
+; THIS FILE IS MANAGED BY PUPPET
+;
+
 [Unit]
 Description=Caddy HTTP/2 web server
 Documentation=https://caddyserver.com/docs
 After=network-online.target
 Wants=network-online.target systemd-networkd-wait-online.service
 
-[Service]
+; Do not allow the process to be restarted in a tight loop. If the
+; process fails to start, something critical needs to be fixed.
+StartLimitIntervalSec=14400
+StartLimitBurst=10
 
+[Service]
+Restart=on-abnormal
+
+; User and group the process will run as.
 User=<%= @caddy_user %>
 Group=<%= @caddy_group %>
 
 Environment=HOME=<%= @caddy_home %>
+
+; Letsencrypt-issued certificates will be written to this directory.
 Environment=CADDYPATH=<%= @caddy_ssl_dir %>
 
+; Always set "-root" to something safe in case it gets forgotten in the Caddyfile.
 ExecStart=<%= @install_path %>/caddy -log <%= @caddy_log_dir %>/caddy.log -agree=true -conf=/etc/caddy/Caddyfile -root=/var/tmp -http-port=<%= @caddy_http_port %> -https-port=<%= @caddy_https_port %>
 ExecReload=/bin/kill -USR1 $MAINPID
 
-LimitNOFILE=1048576
-LimitNPROC=<%= @caddy_limit_processes %>
+; Use graceful shutdown with a reasonable timeout
+KillMode=mixed
+KillSignal=SIGQUIT
+TimeoutStopSec=5s
 
+; Limit the number of file descriptors; see `man systemd.exec` for more limit settings.
+LimitNOFILE=1048576
+; Unmodified caddy is not expected to use more than that.
+LimitNPROC=<%= @systemd_limit_processes %>
+
+; Use private /tmp and /var/tmp, which are discarded after caddy stops.
 PrivateTmp=true
-PrivateDevices=<%= @caddy_private_devices %>
+; Use a minimal /dev (May bring additional security if switched to 'true', but it may not work on Raspberry Pi's or other devices, so it has been disabled in this dist.)
+PrivateDevices=<%= @systemd_private_devices %>
+; Hide /home, /root, and /run/user. Nobody will steal your SSH-keys.
 ProtectHome=true
+; Make /usr, /boot, /etc and possibly some more folders read-only.
 ProtectSystem=full
+; … except /etc/ssl/caddy, because we want Letsencrypt-certificates there.
+;   This merely retains r/w access rights, it does not add any new. Must still be writable on the host!
 ReadWriteDirectories=<%= @caddy_home %>
+
+; The following additional security directives only work with systemd v229 or later.
+; They further restrict privileges that can be gained by caddy. Uncomment if you like.
+; Note that you may have to add capabilities required by any plugins in use.
+<% if @systemd_capability_bounding_set -%>CapabilityBoundingSet=<%= @systemd_capability_bounding_set %>
+<% end -%>
+<% if @systemd_ambient_capabilities -%>AmbientCapabilities=<%= @systemd_ambient_capabilities %>
+<% end -%>
+<% if @systemd_no_new_privileges -%>NoNewPrivileges=<%= @systemd_no_new_privileges %>
+<% end -%>
 
 [Install]
 WantedBy=multi-user.target

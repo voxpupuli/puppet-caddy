@@ -9,6 +9,10 @@
   "issues_url": "https://github.com/voxpupuli/puppet-caddy/issues",
   "dependencies": [
     {
+      "name": "camptocamp/systemd",
+      "version_requirement": ">= 2.9.0 < 3.0.0"
+    },
+    {
       "name": "puppet/archive",
       "version_requirement": ">= 4.4.0 < 5.0.0"
     },
@@ -19,10 +23,6 @@
     {
       "name": "stm/file_capability",
       "version_requirement": ">= 3.0.0 < 4.0.0"
-    },
-    {
-      "name": "camptocamp/systemd",
-      "version_requirement": ">= 2.9.0"
     }
   ],
   "operatingsystem_support": [
@@ -40,6 +40,21 @@
         "6",
         "7",
         "8"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "8",
+        "9",
+        "10"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "16.04",
+        "18.04"
       ]
     }
   ],

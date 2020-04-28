@@ -1,14 +1,15 @@
-# Class caddy::config
-# ===========================
+# @summary
+#   This class handles the Caddy config.
 #
-# Caddy server setup
-
+# @api private
+#
 class caddy::config (
-  $caddy_user            = $caddy::caddy_user,
-  $caddy_group           = $caddy::caddy_group,
-  $caddy_log_dir         = $caddy::caddy_log_dir,
-  $caddy_tmp_dir         = $caddy::caddy_tmp_dir,
-  $caddy_ssl_dir         = $caddy::caddy_ssl_dir,
+  $caddy_user    = $caddy::caddy_user,
+  $caddy_group   = $caddy::caddy_group,
+  $caddy_log_dir = $caddy::caddy_log_dir,
+  $caddy_tmp_dir = $caddy::caddy_tmp_dir,
+  $caddy_home    = $caddy::caddy_home,
+  $caddy_ssl_dir = $caddy::caddy_ssl_dir,
 ) {
 
   assert_private()
@@ -20,7 +21,8 @@ class caddy::config (
       group  => $caddy_group,
       mode   => '0755',
     ;
-    [ $caddy_ssl_dir,
+    [ $caddy_home,
+      $caddy_ssl_dir,
       $caddy_log_dir,
     ]:
     ;

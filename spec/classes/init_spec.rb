@@ -9,12 +9,8 @@ describe 'caddy' do
 
       case facts[:os]['family']
       when 'Debian'
-        caddy_user    = 'www-data'
-        caddy_group   = 'www-data'
         caddy_shell   = '/usr/sbin/nologin'
       when 'RedHat'
-        caddy_user    = 'caddy'
-        caddy_group   = 'caddy'
         caddy_shell   = '/sbin/nologin'
       end
 
@@ -25,16 +21,16 @@ describe 'caddy' do
         it { is_expected.to contain_class('caddy::config').that_notifies('Class[caddy::service]') }
         it { is_expected.to contain_class('caddy::service') }
         it do
-          is_expected.to contain_group(caddy_group).with(
+          is_expected.to contain_group('caddy').with(
             'ensure' => 'present',
             'system' => 'true'
           )
         end
         it do
-          is_expected.to contain_user(caddy_user).with(
+          is_expected.to contain_user('caddy').with(
             'ensure'     => 'present',
             'shell'      => caddy_shell,
-            'gid'        => caddy_group,
+            'gid'        => 'caddy',
             'system'     => 'true',
             'home'       => '/var/lib/caddy'
           )
@@ -73,24 +69,24 @@ describe 'caddy' do
         it do
           is_expected.to contain_file('/var/lib/caddy').with(
             'ensure'  => 'directory',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0755'
           )
         end
         it do
           is_expected.to contain_file('/etc/ssl/caddy').with(
             'ensure'  => 'directory',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0755'
           )
         end
         it do
           is_expected.to contain_file('/var/log/caddy').with(
             'ensure'  => 'directory',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0755'
           )
         end
@@ -105,8 +101,8 @@ describe 'caddy' do
         it do
           is_expected.to contain_file('/etc/caddy/Caddyfile').with(
             'ensure'  => 'file',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0444',
             'source'  => 'puppet:///modules/caddy/etc/caddy/Caddyfile',
             'require' => 'File[/etc/caddy]'
@@ -117,8 +113,8 @@ describe 'caddy' do
             'ensure'  => 'directory',
             'purge'   => 'true',
             'recurse' => 'true',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0755'
           )
         end
@@ -127,7 +123,7 @@ describe 'caddy' do
         when 'systemd'
           it do
             is_expected.to contain_systemd__unit_file('caddy.service').with(
-              'content' => %r{User=#{caddy_user}}
+              'content' => %r{User=caddy}
             )
           end
         when 'redhat'
@@ -137,7 +133,7 @@ describe 'caddy' do
               'owner'   => 'root',
               'group'   => 'root',
               'mode'    => '0755',
-              'content' => %r{DAEMONUSER=#{caddy_user}}
+              'content' => %r{DAEMONUSER=caddy}
             )
           end
         end

@@ -4,10 +4,22 @@
 # @example Basic usage
 #   include caddy
 #
-# @example Install Caddy with additional features
+# @example Install customised version of Caddy
 #   class { 'caddy':
 #     caddy_features => 'http.git,http.filter,http.ipfilter',
 #   }
+#
+# @example Install specific version of Caddy
+#   class { 'caddy':
+#     version        => '1.0.3',
+#     install_method => 'github',
+#   }
+#
+# @param version
+#   Which version is used.
+#
+# @param install_method
+#   Which source is used.
 #
 # @param install_path
 #   Directory where the Caddy binary is stored.
@@ -73,6 +85,8 @@
 #   Whether the process and all its children can gain new privileges through execve().
 #
 class caddy (
+  String[1]                      $version                         = '1.0.4',
+  Optional[Enum['github']]       $install_method                  = undef,
   Stdlib::Absolutepath           $install_path                    = '/opt/caddy',
   String[1]                      $caddy_user                      = 'caddy',
   String[1]                      $caddy_group                     = 'caddy',

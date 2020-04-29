@@ -53,11 +53,20 @@ include caddy
 
 ## Usage
 
-Install Caddy with additional features:
+Install customised version of Caddy
 
 ```puppet
 class { 'caddy':
   caddy_features => 'http.git,http.filter,http.ipfilter',
+}
+```
+
+Install specific version of Caddy
+
+```puppet
+class { 'caddy':
+  version        => '1.0.3',
+  install_method => 'github',
 }
 ```
 

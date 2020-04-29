@@ -18,8 +18,8 @@
 
 NAME=caddy
 DAEMON=$(which caddy)
-LOG=<%= @caddy_log_dir %>
-DAEMONUSER=<%= @caddy_user %>
+LOG=<%= $caddy_log_dir %>
+DAEMONUSER=<%= $caddy_user %>
 CONFIGFILE=/etc/caddy/Caddyfile
 DAEMONOPTS="-agree=true -log=$LOG/caddy.log -conf=$CONFIGFILE -root=/var/tmp -quiet"
 
@@ -28,9 +28,9 @@ LOCKFILE=/var/lock/subsys/$NAME
 
 test -x $DAEMON || exit 0
 
-export HOME=<%= @caddy_home %>
+export HOME=<%= $caddy_home %>
 # Set the CADDYPATH; dLet's Encrypt certificates will be written to this directory.
-export CADDYPATH=<%= @caddy_ssl_dir %>
+export CADDYPATH=<%= $caddy_ssl_dir %>
 
 # Set the ulimits
 ulimit -n 8192

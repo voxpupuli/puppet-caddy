@@ -8,7 +8,6 @@ class caddy::service (
   $caddy_user                      = $caddy::caddy_user,
   $caddy_group                     = $caddy::caddy_group,
   $caddy_log_dir                   = $caddy::caddy_log_dir,
-  $caddy_tmp_dir                   = $caddy::caddy_tmp_dir,
   $caddy_ssl_dir                   = $caddy::caddy_ssl_dir,
   $caddy_home                      = $caddy::caddy_home,
   $caddy_http_port                 = $caddy::caddy_http_port,
@@ -25,7 +24,23 @@ class caddy::service (
   case $facts['service_provider'] {
     'systemd': {
       systemd::unit_file { 'caddy.service':
-        content => template('caddy/etc/systemd/system/caddy.service.erb'),
+        content => epp('caddy/etc/systemd/system/caddy.service.epp',
+          {
+            install_path                    => $install_path,
+            caddy_user                      => $caddy_user,
+            caddy_group                     => $caddy_group,
+            caddy_log_dir                   => $caddy_log_dir,
+            caddy_ssl_dir                   => $caddy_ssl_dir,
+            caddy_home                      => $caddy_home,
+            caddy_http_port                 => $caddy_http_port,
+            caddy_https_port                => $caddy_https_port,
+            systemd_limit_processes         => $systemd_limit_processes,
+            systemd_private_devices         => $systemd_private_devices,
+            systemd_capability_bounding_set => $systemd_capability_bounding_set,
+            systemd_ambient_capabilities    => $systemd_ambient_capabilities,
+            systemd_no_new_privileges       => $systemd_no_new_privileges,
+          }
+        ),
       }
       ~> Service['caddy']
     }
@@ -35,7 +50,14 @@ class caddy::service (
         mode    => '0755',
         owner   => 'root',
         group   => 'root',
-        content => template('caddy/etc/init.d/caddy.erb'),
+        content => epp('caddy/etc/init.d/caddy.epp',
+          {
+            caddy_user    => $caddy_user,
+            caddy_log_dir => $caddy_log_dir,
+            caddy_ssl_dir => $caddy_ssl_dir,
+            caddy_home    => $caddy_home,
+          }
+        ),
       }
     }
     default:  {

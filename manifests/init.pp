@@ -80,7 +80,7 @@ class caddy (
   Stdlib::Absolutepath           $caddy_log_dir                   = '/var/log/caddy',
   Stdlib::Absolutepath           $caddy_tmp_dir                   = '/tmp',
   Stdlib::Absolutepath           $caddy_home                      = '/var/lib/caddy',
-  Stdlib::Absolutepath           $caddy_ssl_dir                   = "${caddy_home}/.caddy",
+  Stdlib::Absolutepath           $caddy_ssl_dir                   = '/etc/ssl/caddy',
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
   Enum['on','off']               $caddy_telemetry                 = 'off',
   String[1]                      $caddy_features                  = 'http.git,http.filter,http.ipfilter',

@@ -2,4 +2,3 @@
 caddy::caddy_user: 'www-data'
 caddy::caddy_group: 'www-data'
 caddy::caddy_shell: '/usr/sbin/nologin'
-caddy::caddy_ssl_dir: '/opt/caddy/.caddy'

@@ -107,7 +107,7 @@ Data type: `Stdlib::Absolutepath`
 
 Directory where Let's Encrypt certificates are stored.
 
-Default value: "${caddy_home}/.caddy"
+Default value: "/etc/ssl/caddy"
 
 ##### `caddy_license`
 

@@ -12,12 +12,10 @@ describe 'caddy' do
         caddy_user    = 'www-data'
         caddy_group   = 'www-data'
         caddy_shell   = '/usr/sbin/nologin'
-        caddy_ssl_dir = '/opt/caddy/.caddy'
       when 'RedHat'
         caddy_user    = 'caddy'
         caddy_group   = 'caddy'
         caddy_shell   = '/sbin/nologin'
-        caddy_ssl_dir = '/etc/ssl/caddy/.caddy'
       end
 
       context 'with defaults for all parameters' do
@@ -81,7 +79,7 @@ describe 'caddy' do
           )
         end
         it do
-          is_expected.to contain_file(caddy_ssl_dir).with(
+          is_expected.to contain_file('/etc/ssl/caddy').with(
             'ensure'  => 'directory',
             'owner'   => caddy_user,
             'group'   => caddy_group,

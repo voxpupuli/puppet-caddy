@@ -7,8 +7,6 @@ describe 'caddy::vhost', type: :define do
         facts
       end
 
-      let(:pre_condition) { 'include caddy' }
-
       context 'with source' do
         let(:title) { 'example1' }
         let(:params) do

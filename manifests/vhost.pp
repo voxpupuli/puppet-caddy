@@ -16,6 +16,7 @@ define caddy::vhost(
   Optional[String]             $content = undef,
 ) {
 
+  include caddy
   file { "/etc/caddy/config/${title}.conf":
     ensure  => file,
     content => $content,

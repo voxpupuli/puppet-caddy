@@ -33,7 +33,7 @@ Main class, includes all other classes.
 include caddy
 ```
 
-##### Install Caddy with additional features
+##### Install customised version of Caddy
 
 ```puppet
 class { 'caddy':
@@ -41,9 +41,34 @@ class { 'caddy':
 }
 ```
 
+##### Install specific version of Caddy
+
+```puppet
+class { 'caddy':
+  version        => '1.0.3',
+  install_method => 'github',
+}
+```
+
 #### Parameters
 
 The following parameters are available in the `caddy` class.
+
+##### `version`
+
+Data type: `String[1]`
+
+Which version is used.
+
+Default value: '1.0.4'
+
+##### `install_method`
+
+Data type: `Optional[Enum['github']]`
+
+Which source is used.
+
+Default value: `undef`
 
 ##### `install_path`
 

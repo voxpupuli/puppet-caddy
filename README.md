@@ -67,12 +67,12 @@ Install Caddy and configure virtual host, based on source:
 caddy::vhost { 'example1':
   source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
 }
-````
+```
 
 Install Caddy and configure virtual host, based on content:
 
 ```puppet
-caddy::vhost { 'example2:
+caddy::vhost { 'example2':
   content => 'localhost:2015',
 }
 ```

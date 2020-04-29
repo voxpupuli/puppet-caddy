@@ -51,7 +51,7 @@ Data type: `Stdlib::Absolutepath`
 
 Directory where the Caddy binary is stored.
 
-Default value: '/usr/local/bin'
+Default value: '/opt/caddy'
 
 ##### `caddy_user`
 

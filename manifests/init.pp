@@ -73,7 +73,7 @@
 #   Whether the process and all its children can gain new privileges through execve().
 #
 class caddy (
-  Stdlib::Absolutepath           $install_path                    = '/usr/local/bin',
+  Stdlib::Absolutepath           $install_path                    = '/opt/caddy',
   String[1]                      $caddy_user                      = 'caddy',
   String[1]                      $caddy_group                     = 'caddy',
   Stdlib::Absolutepath           $caddy_shell                     = '/sbin/nologin',

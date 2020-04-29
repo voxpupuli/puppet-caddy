@@ -6,6 +6,8 @@
 class caddy::install (
   $arch                  = $caddy::arch,
   $install_path          = $caddy::install_path,
+  $caddy_user            = $caddy::caddy_user,
+  $caddy_group           = $caddy::caddy_group,
   $caddy_tmp_dir         = $caddy::caddy_tmp_dir,
   $caddy_license         = $caddy::caddy_license,
   $caddy_account_id      = $caddy::caddy_account_id,
@@ -20,6 +22,13 @@ class caddy::install (
   $caddy_dl_url = "${caddy_url}/${arch}?plugins=${caddy_features}&license=${caddy_license}&telemetry=${caddy_telemetry}"
   $caddy_dl_dir = "${caddy_tmp_dir}/caddy_linux_${$arch}_custom.tar.gz"
 
+  file { $install_path:
+    ensure => directory,
+    owner  => $caddy_user,
+    group  => $caddy_group,
+    mode   => '0755',
+  }
+
   archive { $caddy_dl_dir:
     ensure       => present,
     extract      => true,
@@ -32,6 +41,7 @@ class caddy::install (
     creates      => "${install_path}/caddy",
     cleanup      => true,
     notify       => File_capability["${install_path}/caddy"],
+    require      => File[$install_path],
   }
 
   include file_capability

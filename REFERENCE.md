@@ -51,7 +51,7 @@ Data type: `Stdlib::Absolutepath`
 
 Directory where the Caddy binary is stored.
 
-Default value: '/usr/local/bin'
+Default value: '/opt/caddy'
 
 ##### `caddy_user`
 
@@ -99,7 +99,7 @@ Data type: `Stdlib::Absolutepath`
 
 Directory where the Caddy data is stored.
 
-Default value: '/etc/ssl/caddy'
+Default value: '/var/lib/caddy'
 
 ##### `caddy_ssl_dir`
 
@@ -107,7 +107,7 @@ Data type: `Stdlib::Absolutepath`
 
 Directory where Let's Encrypt certificates are stored.
 
-Default value: "${caddy_home}/.caddy"
+Default value: "/etc/ssl/caddy"
 
 ##### `caddy_license`
 

@@ -9,17 +9,9 @@ describe 'caddy' do
 
       case facts[:os]['family']
       when 'Debian'
-        caddy_user    = 'www-data'
-        caddy_group   = 'www-data'
         caddy_shell   = '/usr/sbin/nologin'
-        caddy_home    = '/opt/caddy'
-        caddy_ssl_dir = '/opt/caddy/.caddy'
       when 'RedHat'
-        caddy_user    = 'caddy'
-        caddy_group   = 'caddy'
         caddy_shell   = '/sbin/nologin'
-        caddy_home    = '/etc/ssl/caddy'
-        caddy_ssl_dir = '/etc/ssl/caddy/.caddy'
       end
 
       context 'with defaults for all parameters' do
@@ -29,36 +21,45 @@ describe 'caddy' do
         it { is_expected.to contain_class('caddy::config').that_notifies('Class[caddy::service]') }
         it { is_expected.to contain_class('caddy::service') }
         it do
-          is_expected.to contain_group(caddy_group).with(
+          is_expected.to contain_group('caddy').with(
             'ensure' => 'present',
             'system' => 'true'
           )
         end
         it do
-          is_expected.to contain_user(caddy_user).with(
+          is_expected.to contain_user('caddy').with(
             'ensure'     => 'present',
             'shell'      => caddy_shell,
-            'gid'        => caddy_group,
+            'gid'        => 'caddy',
             'system'     => 'true',
-            'home'       => caddy_home
+            'home'       => '/var/lib/caddy'
           )
         end
 
         it do
-          is_expected.to contain_archive('/tmp/caddy_linux_amd64_custom.tar.gz').with(
-            'ensure'       => 'present',
-            'extract'      => 'true',
-            'extract_path' => '/usr/local/bin',
-            'source'       => 'https://caddyserver.com/download/linux/amd64?plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off',
-            'user'         => 'root',
-            'group'        => 'root',
-            'creates'      => '/usr/local/bin/caddy',
-            'cleanup'      => 'true',
-            'notify'       => 'File_capability[/usr/local/bin/caddy]'
+          is_expected.to contain_file('/opt/caddy').with(
+            'ensure'  => 'directory',
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
+            'mode'    => '0755'
           )
         end
         it do
-          is_expected.to contain_file_capability('/usr/local/bin/caddy').with(
+          is_expected.to contain_archive('/tmp/caddy_linux_amd64_custom.tar.gz').with(
+            'ensure'       => 'present',
+            'extract'      => 'true',
+            'extract_path' => '/opt/caddy',
+            'source'       => 'https://caddyserver.com/download/linux/amd64?plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off',
+            'user'         => 'root',
+            'group'        => 'root',
+            'creates'      => '/opt/caddy/caddy',
+            'cleanup'      => 'true',
+            'notify'       => 'File_capability[/opt/caddy/caddy]',
+            'require'      => 'File[/opt/caddy]'
+          )
+        end
+        it do
+          is_expected.to contain_file_capability('/opt/caddy/caddy').with(
             'ensure'     => 'present',
             'capability' => 'cap_net_bind_service=ep',
             'require'    => 'Archive[/tmp/caddy_linux_amd64_custom.tar.gz]'
@@ -66,26 +67,26 @@ describe 'caddy' do
         end
 
         it do
-          is_expected.to contain_file(caddy_home).with(
+          is_expected.to contain_file('/var/lib/caddy').with(
             'ensure'  => 'directory',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0755'
           )
         end
         it do
-          is_expected.to contain_file(caddy_ssl_dir).with(
+          is_expected.to contain_file('/etc/ssl/caddy').with(
             'ensure'  => 'directory',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0755'
           )
         end
         it do
           is_expected.to contain_file('/var/log/caddy').with(
             'ensure'  => 'directory',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0755'
           )
         end
@@ -100,8 +101,8 @@ describe 'caddy' do
         it do
           is_expected.to contain_file('/etc/caddy/Caddyfile').with(
             'ensure'  => 'file',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0444',
             'source'  => 'puppet:///modules/caddy/etc/caddy/Caddyfile',
             'require' => 'File[/etc/caddy]'
@@ -112,8 +113,8 @@ describe 'caddy' do
             'ensure'  => 'directory',
             'purge'   => 'true',
             'recurse' => 'true',
-            'owner'   => caddy_user,
-            'group'   => caddy_group,
+            'owner'   => 'caddy',
+            'group'   => 'caddy',
             'mode'    => '0755'
           )
         end
@@ -122,7 +123,7 @@ describe 'caddy' do
         when 'systemd'
           it do
             is_expected.to contain_systemd__unit_file('caddy.service').with(
-              'content' => %r{User=#{caddy_user}}
+              'content' => %r{User=caddy}
             )
           end
         when 'redhat'
@@ -132,7 +133,7 @@ describe 'caddy' do
               'owner'   => 'root',
               'group'   => 'root',
               'mode'    => '0755',
-              'content' => %r{DAEMONUSER=#{caddy_user}}
+              'content' => %r{DAEMONUSER=caddy}
             )
           end
         end

@@ -12,13 +12,11 @@ describe 'caddy' do
         caddy_user    = 'www-data'
         caddy_group   = 'www-data'
         caddy_shell   = '/usr/sbin/nologin'
-        caddy_home    = '/opt/caddy'
         caddy_ssl_dir = '/opt/caddy/.caddy'
       when 'RedHat'
         caddy_user    = 'caddy'
         caddy_group   = 'caddy'
         caddy_shell   = '/sbin/nologin'
-        caddy_home    = '/etc/ssl/caddy'
         caddy_ssl_dir = '/etc/ssl/caddy/.caddy'
       end
 
@@ -40,7 +38,7 @@ describe 'caddy' do
             'shell'      => caddy_shell,
             'gid'        => caddy_group,
             'system'     => 'true',
-            'home'       => caddy_home
+            'home'       => '/var/lib/caddy'
           )
         end
 
@@ -75,7 +73,7 @@ describe 'caddy' do
         end
 
         it do
-          is_expected.to contain_file(caddy_home).with(
+          is_expected.to contain_file('/var/lib/caddy').with(
             'ensure'  => 'directory',
             'owner'   => caddy_user,
             'group'   => caddy_group,

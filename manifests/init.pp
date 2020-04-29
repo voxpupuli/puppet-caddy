@@ -79,7 +79,7 @@ class caddy (
   Stdlib::Absolutepath           $caddy_shell                     = '/sbin/nologin',
   Stdlib::Absolutepath           $caddy_log_dir                   = '/var/log/caddy',
   Stdlib::Absolutepath           $caddy_tmp_dir                   = '/tmp',
-  Stdlib::Absolutepath           $caddy_home                      = '/etc/ssl/caddy',
+  Stdlib::Absolutepath           $caddy_home                      = '/var/lib/caddy',
   Stdlib::Absolutepath           $caddy_ssl_dir                   = "${caddy_home}/.caddy",
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
   Enum['on','off']               $caddy_telemetry                 = 'off',

@@ -99,7 +99,7 @@ Data type: `Stdlib::Absolutepath`
 
 Directory where the Caddy data is stored.
 
-Default value: '/etc/ssl/caddy'
+Default value: '/var/lib/caddy'
 
 ##### `caddy_ssl_dir`
 

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v2.0.0](https://github.com/voxpupuli/puppet-caddy/tree/v2.0.0) (2020-04-29)
+## [v2.0.0](https://github.com/voxpupuli/puppet-caddy/tree/v2.0.0) (2020-05-14)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-caddy/compare/v1.0.0...v2.0.0)
 
@@ -30,7 +30,6 @@ These should not affect the functionality of the module.
 
 **Closed issues:**
 
-- Roadmap for Caddy 1 / Caddy 2 [\#63](https://github.com/voxpupuli/puppet-caddy/issues/63)
 - Support a specific version [\#59](https://github.com/voxpupuli/puppet-caddy/issues/59)
 - Migrate from .erb to .epp templates [\#55](https://github.com/voxpupuli/puppet-caddy/issues/55)
 - Change the default values [\#54](https://github.com/voxpupuli/puppet-caddy/issues/54)

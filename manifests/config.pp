@@ -11,7 +11,6 @@ class caddy::config (
   $caddy_home    = $caddy::caddy_home,
   $caddy_ssl_dir = $caddy::caddy_ssl_dir,
 ) {
-
   assert_private()
 
   file {
@@ -20,27 +19,27 @@ class caddy::config (
       owner  => $caddy_user,
       group  => $caddy_group,
       mode   => '0755',
-    ;
-    [ $caddy_home,
+      ;
+    [$caddy_home,
       $caddy_ssl_dir,
       $caddy_log_dir,
     ]:
-    ;
-    [ '/etc/caddy' ]:
+      ;
+    ['/etc/caddy']:
       owner => 'root',
       group => 'root',
-    ;
+      ;
 
-    [ '/etc/caddy/Caddyfile' ]:
+    ['/etc/caddy/Caddyfile']:
       ensure  => file,
       mode    => '0444',
       source  => 'puppet:///modules/caddy/etc/caddy/Caddyfile',
       require => File['/etc/caddy'],
-    ;
+      ;
 
-    [ '/etc/caddy/config' ]:
+    ['/etc/caddy/config']:
       purge   => true,
       recurse => true,
-    ;
+      ;
   }
 }

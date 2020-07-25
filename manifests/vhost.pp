@@ -11,11 +11,10 @@
 #     content => 'localhost:2015',
 #   }
 #
-define caddy::vhost(
+define caddy::vhost (
   Optional[Stdlib::Filesource] $source  = undef,
   Optional[String]             $content = undef,
 ) {
-
   include caddy
   file { "/etc/caddy/config/${title}.conf":
     ensure  => file,

@@ -49,7 +49,7 @@ describe 'caddy' do
             'ensure'       => 'present',
             'extract'      => 'true',
             'extract_path' => '/opt/caddy',
-            'source'       => 'https://caddyserver.com/download/linux/amd64?plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off',
+            'source'       => 'https://caddyserver.com/api/download?os=linux&arch=amd64&plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off',
             'user'         => 'root',
             'group'        => 'root',
             'creates'      => '/opt/caddy/caddy',
@@ -146,25 +146,50 @@ describe 'caddy' do
       end
 
       context 'with specific version' do
-        let(:params) do
-          {
-            version: '1.0.3',
-            install_method: 'github'
-          }
+        context 'version 1.x' do
+          let(:params) do
+            {
+                version: '1.0.3',
+                install_method: 'github'
+            }
+          end
+
+          it do
+            is_expected.to contain_archive('/tmp/caddy_v1.0.3_linux_amd64.tar.gz').with(
+                'ensure'       => 'present',
+                'extract'      => 'true',
+                'extract_path' => '/opt/caddy',
+                'source'       => 'https://github.com/caddyserver/caddy/releases/download/v1.0.3/caddy_v1.0.3_linux_amd64.tar.gz',
+                'user'         => 'root',
+                'group'        => 'root',
+                'creates'      => '/opt/caddy/caddy',
+                'cleanup'      => 'true',
+                'notify'       => 'File_capability[/opt/caddy/caddy]'
+            )
+          end
         end
 
-        it do
-          is_expected.to contain_archive('/tmp/caddy_v1.0.3_linux_amd64.tar.gz').with(
-            'ensure'       => 'present',
-            'extract'      => 'true',
-            'extract_path' => '/opt/caddy',
-            'source'       => 'https://github.com/caddyserver/caddy/releases/download/v1.0.3/caddy_v1.0.3_linux_amd64.tar.gz',
-            'user'         => 'root',
-            'group'        => 'root',
-            'creates'      => '/opt/caddy/caddy',
-            'cleanup'      => 'true',
-            'notify'       => 'File_capability[/opt/caddy/caddy]'
-          )
+        context 'version 2.x' do
+          let(:params) do
+            {
+                version: '2.2.0',
+                install_method: 'github'
+            }
+          end
+
+          it do
+            is_expected.to contain_archive('/tmp/caddy_2.2.0_linux_amd64.tar.gz').with(
+                'ensure'       => 'present',
+                'extract'      => 'true',
+                'extract_path' => '/opt/caddy',
+                'source'       => 'https://github.com/caddyserver/caddy/releases/download/v2.2.0/caddy_2.2.0_linux_amd64.tar.gz',
+                'user'         => 'root',
+                'group'        => 'root',
+                'creates'      => '/opt/caddy/caddy',
+                'cleanup'      => 'true',
+                'notify'       => 'File_capability[/opt/caddy/caddy]'
+            )
+          end
         end
       end
     end

@@ -20,15 +20,24 @@ class caddy::install (
 
   assert_private()
 
+  case $version {
+    /^1\./: {
+      $dl_file_name = "caddy_v${version}_linux_${arch}.tar.gz"
+    }
+    default: {
+      $dl_file_name = "caddy_${version}_linux_${arch}.tar.gz"
+    }
+  }
+
   case $install_method {
     'github': {
       $caddy_url    = 'https://github.com/caddyserver/caddy/releases/download'
-      $caddy_dl_url = "${caddy_url}/v${version}/caddy_v${version}_linux_${arch}.tar.gz"
-      $caddy_dl_dir = "${caddy_tmp_dir}/caddy_v${version}_linux_${$arch}.tar.gz"
+      $caddy_dl_url = "${caddy_url}/v${version}/${dl_file_name}"
+      $caddy_dl_dir = "${caddy_tmp_dir}/${dl_file_name}"
     }
     default: {
-      $caddy_url    = 'https://caddyserver.com/download/linux'
-      $caddy_dl_url = "${caddy_url}/${arch}?plugins=${caddy_features}&license=${caddy_license}&telemetry=${caddy_telemetry}"
+      $caddy_url    = 'https://caddyserver.com/api/download'
+      $caddy_dl_url = "${caddy_url}?os=linux&arch=${arch}&plugins=${caddy_features}&license=${caddy_license}&telemetry=${caddy_telemetry}"
       $caddy_dl_dir = "${caddy_tmp_dir}/caddy_linux_${$arch}_custom.tar.gz"
     }
   }

@@ -17,7 +17,6 @@ class caddy::install (
   $caddy_telemetry  = $caddy::caddy_telemetry,
   $caddy_features   = $caddy::caddy_features,
 ) {
-
   assert_private()
 
   case $version {
@@ -34,11 +33,12 @@ class caddy::install (
       $caddy_url    = 'https://github.com/caddyserver/caddy/releases/download'
       $caddy_dl_url = "${caddy_url}/v${version}/${dl_file_name}"
       $caddy_dl_dir = "${caddy_tmp_dir}/${dl_file_name}"
+      $archive      = true
     }
     default: {
       $caddy_url    = 'https://caddyserver.com/api/download'
       $caddy_dl_url = "${caddy_url}?os=linux&arch=${arch}&plugins=${caddy_features}&license=${caddy_license}&telemetry=${caddy_telemetry}"
-      $caddy_dl_dir = "${caddy_tmp_dir}/caddy_linux_${$arch}_custom.tar.gz"
+      $archive      = false
     }
   }
 
@@ -49,19 +49,30 @@ class caddy::install (
     mode   => '0755',
   }
 
-  archive { $caddy_dl_dir:
-    ensure       => present,
-    extract      => true,
-    extract_path => $install_path,
-    source       => $caddy_dl_url,
-    username     => $caddy_account_id,
-    password     => $caddy_api_key,
-    user         => 'root',
-    group        => 'root',
-    creates      => "${install_path}/caddy",
-    cleanup      => true,
-    notify       => File_capability["${install_path}/caddy"],
-    require      => File[$install_path],
+  if $archive {
+    archive { $caddy_dl_dir:
+      ensure       => present,
+      extract      => true,
+      extract_path => $install_path,
+      source       => $caddy_dl_url,
+      username     => $caddy_account_id,
+      password     => $caddy_api_key,
+      user         => 'root',
+      group        => 'root',
+      creates      => "${install_path}/caddy",
+      cleanup      => true,
+      notify       => File_capability["${install_path}/caddy"],
+      require      => File[$install_path],
+    }
+  } else {
+    file { "${install_path}/caddy":
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      source  => $caddy_dl_url,
+      notify  => File_capability["${install_path}/caddy"],
+      require => File[$install_path],
+    }
   }
 
   include file_capability

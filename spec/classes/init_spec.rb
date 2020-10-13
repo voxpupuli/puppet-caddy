@@ -45,18 +45,14 @@ describe 'caddy' do
           )
         end
         it do
-          is_expected.to contain_archive('/tmp/caddy_linux_amd64_custom.tar.gz').with(
-            'ensure'       => 'present',
-            'extract'      => 'true',
-            'extract_path' => '/opt/caddy',
-            'source'       => 'https://caddyserver.com/api/download?os=linux&arch=amd64&plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off',
-            'user'         => 'root',
-            'group'        => 'root',
-            'creates'      => '/opt/caddy/caddy',
-            'cleanup'      => 'true',
-            'notify'       => 'File_capability[/opt/caddy/caddy]',
-            'require'      => 'File[/opt/caddy]'
-          )
+          is_expected.to contain_file('/opt/caddy/caddy').with(
+              'ensure'  => 'file',
+              'owner'   => 'root',
+              'group'   => 'root',
+              'source'  => 'https://caddyserver.com/api/download?os=linux&arch=amd64&plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off',
+              'notify'  => 'File_capability[/opt/caddy/caddy]',
+              'require' => 'File[/opt/caddy]'
+              )
         end
         it do
           is_expected.to contain_file_capability('/opt/caddy/caddy').with(
@@ -145,7 +141,7 @@ describe 'caddy' do
         end
       end
 
-      context 'with specific version' do
+      context 'using github install method' do
         context 'version 1.x' do
           let(:params) do
             {

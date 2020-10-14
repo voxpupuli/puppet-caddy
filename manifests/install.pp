@@ -19,13 +19,10 @@ class caddy::install (
 ) {
   assert_private()
 
-  case $version {
-    /^1\./: {
-      $dl_file_name = "caddy_v${version}_linux_${arch}.tar.gz"
-    }
-    default: {
-      $dl_file_name = "caddy_${version}_linux_${arch}.tar.gz"
-    }
+  if $version =~ /^1\./ {
+    $dl_file_name = "caddy_v${version}_linux_${arch}.tar.gz"
+  } else {
+    $dl_file_name = "caddy_${version}_linux_${arch}.tar.gz"
   }
 
   case $install_method {

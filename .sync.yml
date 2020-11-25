@@ -1,13 +1,3 @@
 ---
-.travis.yml:
-  docker_sets:
-    - set: centos7-64
-    - set: centos8-64
-    - set: debian8-64
-    - set: debian9-64
-    - set: debian10-64
-    - set: ubuntu1604-64
-    - set: ubuntu1804-64
-  secure: "g9ykRmtsQpBmH334LIpyhGRhUs5FjjRadZ4eOqjQI+Nr+8BcyjQdxjp4M4YFlTp2nLVxPODuVtHn9uDqMuV8nOZl7li2HHbBZSpgHJQ7l0ci2k6DKjaeSM2xErtE0anRRqpvyK3+1toZhgdRREta2bgaD+/3cNEJOM60LjwZ3Bc5tusTGPlQCkYN+S/LnbvlmR/G9IW1L5o03qII+wiBfUqDeUf00tTXlNnsexi3pDE1xfyJb9G4/58dkU1Go/qw0fIY/aW5dJTM1p3jGcuybGSxWUYHWHGuo36Fi6PBZ4OEfMCM4W0BTZqpcej6uArxg28NLwR5Np+rBWee4krluUQSS1BOQ1X7gFt1d4PHdQcuX9IZwB903GXebMTmOmHGH8Gyi4p2haYhrpRzZsjeCNlJMTE6gO4Kod2HQ4AKrA+ZJYSfOCgh3Vid4A5P52bII5RGA1hnpcs2SulfTBMsPH3m6lfjVtHOvydnbbbErY0LQm2RJcqqqSkffvhYPUGSd+rBAadNnWzaG51g6LboCzpRXWCn7NHyiAUjUCFM3pvPiqN75Hybl6Oxn/hHzdZaOI4uK4YSQct1AfUuzc4IXxCQamTwTtpyKYJZwJjuk1xzKAya9Nw1O4Sap/KCA6wIAZs60Q5s3qoUeWwpyOJCy70YvniC4l/IGjoI0LsRP60="
 spec/spec_helper_acceptance.rb:
   unmanaged: false

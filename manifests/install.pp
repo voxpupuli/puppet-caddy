@@ -19,16 +19,39 @@ class caddy::install (
 ) {
   assert_private()
 
-  case $install_method {
-    'github': {
-      $caddy_url    = 'https://github.com/caddyserver/caddy/releases/download'
-      $caddy_dl_url = "${caddy_url}/v${version}/caddy_v${version}_linux_${arch}.tar.gz"
-      $caddy_dl_dir = "${caddy_tmp_dir}/caddy_${version}_linux_${$arch}.tar.gz"
+  $bin_file = "${install_path}/caddy"
+
+  if $install_method == 'github' {
+    $caddy_url    = 'https://github.com/caddyserver/caddy/releases/download'
+    $caddy_dl_url = "${caddy_url}/v${version}/caddy_v${version}_linux_${arch}.tar.gz"
+    $caddy_dl_dir = "${caddy_tmp_dir}/caddy_v${version}_linux_${$arch}.tar.gz"
+
+    archive { $caddy_dl_dir:
+      ensure       => present,
+      extract      => true,
+      extract_path => $install_path,
+      source       => $caddy_dl_url,
+      username     => $caddy_account_id,
+      password     => $caddy_api_key,
+      user         => 'root',
+      group        => 'root',
+      creates      => $bin_file,
+      cleanup      => true,
+      notify       => File_capability[$bin_file],
+      require      => File[$install_path],
     }
-    default: {
-      $caddy_url    = 'https://caddyserver.com/download/linux'
-      $caddy_dl_url = "${caddy_url}/${arch}?plugins=${caddy_features}&license=${caddy_license}&telemetry=${caddy_telemetry}"
-      $caddy_dl_dir = "${caddy_tmp_dir}/caddy_linux_${$arch}_custom.tar.gz"
+  } else {
+    $caddy_url    = 'https://caddyserver.com/api/download'
+    $caddy_dl_url = "${caddy_url}?os=linux&arch=${arch}&plugins=${caddy_features}&license=${caddy_license}&telemetry=${caddy_telemetry}"
+
+    file { $bin_file:
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      source  => $caddy_dl_url,
+      replace => false, # Don't download the file on every run
+      notify  => File_capability[$bin_file],
     }
   }
 
@@ -39,25 +62,9 @@ class caddy::install (
     mode   => '0755',
   }
 
-  archive { $caddy_dl_dir:
-    ensure       => present,
-    extract      => true,
-    extract_path => $install_path,
-    source       => $caddy_dl_url,
-    username     => $caddy_account_id,
-    password     => $caddy_api_key,
-    user         => 'root',
-    group        => 'root',
-    creates      => "${install_path}/caddy",
-    cleanup      => true,
-    notify       => File_capability["${install_path}/caddy"],
-    require      => File[$install_path],
-  }
-
   include file_capability
-  file_capability { "${install_path}/caddy":
+  file_capability { $bin_file:
     ensure     => present,
     capability => 'cap_net_bind_service=ep',
-    require    => Archive[$caddy_dl_dir],
   }
 }

@@ -97,8 +97,8 @@ The [reference][1] documentation of this module is generated using [puppetlabs/p
 
 This module has been tested on:
 
-* RedHat 6/7/8
-* CentOS 6/7/8
+* RedHat 7/8
+* CentOS 7/8
 * Debian 8/9/10
 * Ubuntu 16.04/18.04
 

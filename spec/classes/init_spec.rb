@@ -119,28 +119,15 @@ describe 'caddy' do
           )
         end
 
-        case facts['service_provider']
-        when 'systemd'
-          it do
-            is_expected.to contain_systemd__unit_file('caddy.service').with(
-              'content' => %r{User=caddy}
-            )
-          end
-        when 'redhat'
-          it do
-            is_expected.to contain_file('/etc/init.d/caddy').with(
-              'ensure'  => 'file',
-              'owner'   => 'root',
-              'group'   => 'root',
-              'mode'    => '0755',
-              'content' => %r{DAEMONUSER=caddy}
-            )
-          end
+        it do
+          is_expected.to contain_systemd__unit_file('caddy.service').with(
+            'content' => %r{User=caddy}
+          )
         end
         it do
-          is_expected.to contain_service('caddy').with(
-            'ensure' => 'running',
-            'enable' => 'true'
+          is_expected.to contain_service('caddy.service').with(
+            'ensure' => true,
+            'enable' => true
           )
         end
       end

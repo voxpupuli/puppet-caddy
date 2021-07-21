@@ -148,17 +148,17 @@ describe 'caddy' do
       context 'with specific version' do
         let(:params) do
           {
-            version: '1.0.3',
+            version: '2.0.0',
             install_method: 'github'
           }
         end
 
         it do
-          is_expected.to contain_archive('/tmp/caddy_v1.0.3_linux_amd64.tar.gz').with(
+          is_expected.to contain_archive('/tmp/caddy_v2.0.0_linux_amd64.tar.gz').with(
             'ensure'       => 'present',
             'extract'      => 'true',
             'extract_path' => '/opt/caddy',
-            'source'       => 'https://github.com/caddyserver/caddy/releases/download/v1.0.3/caddy_v1.0.3_linux_amd64.tar.gz',
+            'source'       => 'https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_v2.0.0_linux_amd64.tar.gz',
             'user'         => 'root',
             'group'        => 'root',
             'creates'      => '/opt/caddy/caddy',

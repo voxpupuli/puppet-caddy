@@ -45,7 +45,7 @@ class { 'caddy':
 
 ```puppet
 class { 'caddy':
-  version        => '1.0.3',
+  version        => '2.0.0',
   install_method => 'github',
 }
 ```
@@ -60,7 +60,7 @@ Data type: `String[1]`
 
 Which version is used.
 
-Default value: '1.0.4'
+Default value: '2.0.0'
 
 ##### `install_method`
 
@@ -132,7 +132,7 @@ Data type: `Stdlib::Absolutepath`
 
 Directory where Let's Encrypt certificates are stored.
 
-Default value: "/etc/ssl/caddy"
+Default value: '/etc/ssl/caddy'
 
 ##### `caddy_license`
 

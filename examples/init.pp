@@ -12,15 +12,14 @@
 
 include caddy
 
-
-file {'/var/www':
+file { '/var/www':
   ensure => directory,
 }
 
-caddy::vhost {'example1':
+caddy::vhost { 'example1':
   source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
 }
 
-caddy::vhost {'example2':
+caddy::vhost { 'example2':
   source => 'puppet:///modules/caddy/etc/caddy/config/example2.conf',
 }

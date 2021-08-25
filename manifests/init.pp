@@ -110,7 +110,7 @@ class caddy (
   Optional[Boolean]              $systemd_no_new_privileges       = undef,
 ) {
   case $caddy_architecture {
-    'x86_64', 'amd64': { $arch = 'amd64'}
+    'x86_64', 'amd64': { $arch = 'amd64' }
     'x86'            : { $arch = '386' }
     default:  {
       $arch = $caddy_architecture

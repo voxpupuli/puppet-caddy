@@ -17,7 +17,6 @@ class caddy::install (
   $caddy_telemetry  = $caddy::caddy_telemetry,
   $caddy_features   = $caddy::caddy_features,
 ) {
-
   assert_private()
 
   case $install_method {

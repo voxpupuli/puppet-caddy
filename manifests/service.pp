@@ -18,7 +18,6 @@ class caddy::service (
   $systemd_ambient_capabilities    = $caddy::systemd_ambient_capabilities,
   $systemd_no_new_privileges       = $caddy::systemd_no_new_privileges,
 ) {
-
   assert_private()
 
   case $facts['service_provider'] {
@@ -65,7 +64,7 @@ class caddy::service (
     }
   }
 
-  service{ 'caddy':
+  service { 'caddy':
     ensure => running,
     enable => true,
   }

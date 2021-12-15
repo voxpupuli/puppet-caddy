@@ -3,26 +3,19 @@
 #
 # @api private
 #
-class caddy::config (
-  $caddy_user    = $caddy::caddy_user,
-  $caddy_group   = $caddy::caddy_group,
-  $caddy_log_dir = $caddy::caddy_log_dir,
-  $caddy_tmp_dir = $caddy::caddy_tmp_dir,
-  $caddy_home    = $caddy::caddy_home,
-  $caddy_ssl_dir = $caddy::caddy_ssl_dir,
-) {
+class caddy::config {
   assert_private()
 
   file {
     default:
       ensure => directory,
-      owner  => $caddy_user,
-      group  => $caddy_group,
+      owner  => $caddy::caddy_user,
+      group  => $caddy::caddy_group,
       mode   => '0755',
       ;
-    [$caddy_home,
-      $caddy_ssl_dir,
-      $caddy_log_dir,
+    [$caddy::caddy_home,
+      $caddy::caddy_ssl_dir,
+      $caddy::caddy_log_dir,
     ]:
       ;
     ['/etc/caddy']:

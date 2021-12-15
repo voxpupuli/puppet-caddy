@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'caddy::vhost', type: :define do
@@ -16,12 +18,12 @@ describe 'caddy::vhost', type: :define do
         end
 
         it do
-          is_expected.to contain_file('/etc/caddy/config/example1.conf').with(
-            'ensure'  => 'file',
-            'source'  => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
-            'mode'    => '0444',
+          expect(subject).to contain_file('/etc/caddy/config/example1.conf').with(
+            'ensure' => 'file',
+            'source' => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
+            'mode' => '0444',
             'require' => 'Class[Caddy::Config]',
-            'notify'  => 'Class[Caddy::Service]'
+            'notify' => 'Class[Caddy::Service]'
           )
         end
       end
@@ -35,12 +37,12 @@ describe 'caddy::vhost', type: :define do
         end
 
         it do
-          is_expected.to contain_file('/etc/caddy/config/example2.conf').with(
-            'ensure'  => 'file',
+          expect(subject).to contain_file('/etc/caddy/config/example2.conf').with(
+            'ensure' => 'file',
             'content' => 'localhost:2015',
-            'mode'    => '0444',
+            'mode' => '0444',
             'require' => 'Class[Caddy::Config]',
-            'notify'  => 'Class[Caddy::Service]'
+            'notify' => 'Class[Caddy::Service]'
           )
         end
       end

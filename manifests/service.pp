@@ -17,8 +17,6 @@ class caddy::service {
         caddy_log_dir                   => $caddy::caddy_log_dir,
         caddy_ssl_dir                   => $caddy::caddy_ssl_dir,
         caddy_home                      => $caddy::caddy_home,
-        caddy_http_port                 => $caddy::caddy_http_port,
-        caddy_https_port                => $caddy::caddy_https_port,
         systemd_limit_processes         => $caddy::systemd_limit_processes,
         systemd_private_devices         => $caddy::systemd_private_devices,
         systemd_capability_bounding_set => $caddy::systemd_capability_bounding_set,

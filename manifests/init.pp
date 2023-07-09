@@ -54,12 +54,6 @@
 # @param caddy_features
 #   A list of features the Caddy binary should support.
 #
-# @param caddy_http_port
-#   Which port for HTTP is used.
-#
-# @param caddy_https_port
-#   Which port for HTTPS is used.
-#
 # @param caddy_architecture
 #    A temporary variable, required for the download URL.
 #
@@ -98,8 +92,6 @@ class caddy (
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
   Enum['on','off']               $caddy_telemetry                 = 'off',
   String[1]                      $caddy_features                  = 'http.git,http.filter,http.ipfilter',
-  Stdlib::Port                   $caddy_http_port                 = 80,
-  Stdlib::Port                   $caddy_https_port                = 443,
   String[1]                      $caddy_architecture              = $facts['os']['architecture'],
   Optional[String[1]]            $caddy_account_id                = undef,
   Optional[String[1]]            $caddy_api_key                   = undef,

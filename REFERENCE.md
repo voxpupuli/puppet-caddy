@@ -68,8 +68,6 @@ The following parameters are available in the `caddy` class:
 * [`caddy_license`](#-caddy--caddy_license)
 * [`caddy_telemetry`](#-caddy--caddy_telemetry)
 * [`caddy_features`](#-caddy--caddy_features)
-* [`caddy_http_port`](#-caddy--caddy_http_port)
-* [`caddy_https_port`](#-caddy--caddy_https_port)
 * [`caddy_architecture`](#-caddy--caddy_architecture)
 * [`caddy_account_id`](#-caddy--caddy_account_id)
 * [`caddy_api_key`](#-caddy--caddy_api_key)
@@ -182,22 +180,6 @@ Data type: `String[1]`
 A list of features the Caddy binary should support.
 
 Default value: `'http.git,http.filter,http.ipfilter'`
-
-##### <a name="-caddy--caddy_http_port"></a>`caddy_http_port`
-
-Data type: `Stdlib::Port`
-
-Which port for HTTP is used.
-
-Default value: `80`
-
-##### <a name="-caddy--caddy_https_port"></a>`caddy_https_port`
-
-Data type: `Stdlib::Port`
-
-Which port for HTTPS is used.
-
-Default value: `443`
 
 ##### <a name="-caddy--caddy_architecture"></a>`caddy_architecture`
 

@@ -10,7 +10,7 @@ class caddy::install {
 
   if $caddy::install_method == 'github' {
     $caddy_url    = 'https://github.com/caddyserver/caddy/releases/download'
-    $caddy_dl_url = "${caddy_url}/v${caddy::version}/caddy_v${caddy::version}_linux_${caddy::arch}.tar.gz"
+    $caddy_dl_url = "${caddy_url}/v${caddy::version}/caddy_${caddy::version}_linux_${caddy::arch}.tar.gz"
     $caddy_dl_dir = "${caddy::caddy_tmp_dir}/caddy_v${caddy::version}_linux_${$caddy::arch}.tar.gz"
 
     archive { $caddy_dl_dir:

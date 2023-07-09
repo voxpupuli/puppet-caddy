@@ -1,5 +1,7 @@
-# @summary
-#   This defined type handles the Caddy virtual hosts.
+# @summary This defined type handles the Caddy virtual hosts.
+#
+# @param source source (path) for the caddy vhost configuration
+# @param content string with the caddy vhost configuration
 #
 # @example Configure virtual host, based on source
 #   caddy::vhost { 'example1':
@@ -11,11 +13,10 @@
 #     content => 'localhost:2015',
 #   }
 #
-define caddy::vhost(
+define caddy::vhost (
   Optional[Stdlib::Filesource] $source  = undef,
   Optional[String]             $content = undef,
 ) {
-
   include caddy
   file { "/etc/caddy/config/${title}.conf":
     ensure  => file,

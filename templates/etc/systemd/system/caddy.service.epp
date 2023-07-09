@@ -26,8 +26,9 @@ Environment=HOME=<%= $caddy_home %>
 Environment=CADDYPATH=<%= $caddy_ssl_dir %>
 
 ; Always set "-root" to something safe in case it gets forgotten in the Caddyfile.
-ExecStart=<%= $install_path %>/caddy -log <%= $caddy_log_dir %>/caddy.log -agree=true -conf=/etc/caddy/Caddyfile -root=/var/tmp -http-port=<%= $caddy_http_port %> -https-port=<%= $caddy_https_port %>
+ExecStart=<%= $install_path %>/caddy run --config=/etc/caddy/Caddyfile
 ExecReload=/bin/kill -USR1 $MAINPID
+StandardOutput=append:<%= $caddy_log_dir %>/caddy.log
 
 ; Use graceful shutdown with a reasonable timeout
 KillMode=mixed

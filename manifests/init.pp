@@ -11,7 +11,7 @@
 #
 # @example Install specific version of Caddy
 #   class { 'caddy':
-#     version        => '1.0.3',
+#     version        => '2.0.0',
 #     install_method => 'github',
 #   }
 #
@@ -54,12 +54,6 @@
 # @param caddy_features
 #   A list of features the Caddy binary should support.
 #
-# @param caddy_http_port
-#   Which port for HTTP is used.
-#
-# @param caddy_https_port
-#   Which port for HTTPS is used.
-#
 # @param caddy_architecture
 #    A temporary variable, required for the download URL.
 #
@@ -85,7 +79,7 @@
 #   Whether the process and all its children can gain new privileges through execve().
 #
 class caddy (
-  String[1]                      $version                         = '1.0.4',
+  String[1]                      $version                         = '2.0.0',
   Optional[Enum['github']]       $install_method                  = undef,
   Stdlib::Absolutepath           $install_path                    = '/opt/caddy',
   String[1]                      $caddy_user                      = 'caddy',
@@ -98,8 +92,6 @@ class caddy (
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
   Enum['on','off']               $caddy_telemetry                 = 'off',
   String[1]                      $caddy_features                  = 'http.git,http.filter,http.ipfilter',
-  Stdlib::Port                   $caddy_http_port                 = 80,
-  Stdlib::Port                   $caddy_https_port                = 443,
   String[1]                      $caddy_architecture              = $facts['os']['architecture'],
   Optional[String[1]]            $caddy_account_id                = undef,
   Optional[String[1]]            $caddy_api_key                   = undef,
@@ -110,7 +102,7 @@ class caddy (
   Optional[Boolean]              $systemd_no_new_privileges       = undef,
 ) {
   case $caddy_architecture {
-    'x86_64', 'amd64': { $arch = 'amd64'}
+    'x86_64', 'amd64': { $arch = 'amd64' }
     'x86'            : { $arch = '386' }
     default:  {
       $arch = $caddy_architecture

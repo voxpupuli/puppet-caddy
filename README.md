@@ -25,6 +25,9 @@
 This module installs and configures Caddy - The HTTP/2 web server with automatic
 HTTPS.
 
+**Important:** This module only supports the installation of Caddy 2.x. If you
+want to install Caddy 1.x, you should use version v2.0.0 of this module.
+
 ## Setup
 
 ### What Caddy affects
@@ -65,7 +68,7 @@ Install specific version of Caddy
 
 ```puppet
 class { 'caddy':
-  version        => '1.0.3',
+  version        => '2.0.0',
   install_method => 'github',
 }
 ```
@@ -94,8 +97,8 @@ The [reference][1] documentation of this module is generated using [puppetlabs/p
 
 This module has been tested on:
 
-* RedHat 6/7/8
-* CentOS 6/7/8
+* RedHat 7/8
+* CentOS 7/8
 * Debian 8/9/10
 * Ubuntu 16.04/18.04
 

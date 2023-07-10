@@ -149,11 +149,11 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_archive('/tmp/caddy_v2.0.0_linux_amd64.tar.gz').with(
+          expect(subject).to contain_archive('/tmp/caddy_2.0.0_linux_amd64.tar.gz').with(
             'ensure' => 'present',
             'extract' => 'true',
             'extract_path' => '/opt/caddy',
-            'source' => 'https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_v2.0.0_linux_amd64.tar.gz',
+            'source' => 'https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_2.0.0_linux_amd64.tar.gz',
             'user' => 'root',
             'group' => 'root',
             'creates' => '/opt/caddy/caddy',

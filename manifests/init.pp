@@ -36,9 +36,6 @@
 # @param caddy_log_dir
 #   Directory where the log files are stored.
 #
-# @param caddy_tmp_dir
-#   Directory where the Caddy archive is stored.
-#
 # @param caddy_home
 #   Directory where the Caddy data is stored.
 #
@@ -86,7 +83,6 @@ class caddy (
   String[1]                      $caddy_group                     = 'caddy',
   Stdlib::Absolutepath           $caddy_shell                     = '/sbin/nologin',
   Stdlib::Absolutepath           $caddy_log_dir                   = '/var/log/caddy',
-  Stdlib::Absolutepath           $caddy_tmp_dir                   = '/tmp',
   Stdlib::Absolutepath           $caddy_home                      = '/var/lib/caddy',
   Stdlib::Absolutepath           $caddy_ssl_dir                   = '/etc/ssl/caddy',
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',

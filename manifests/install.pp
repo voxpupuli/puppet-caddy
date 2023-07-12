@@ -11,9 +11,9 @@ class caddy::install {
   if $caddy::install_method == 'github' {
     $caddy_url    = 'https://github.com/caddyserver/caddy/releases/download'
     $caddy_dl_url = "${caddy_url}/v${caddy::version}/caddy_${caddy::version}_linux_${caddy::arch}.tar.gz"
-    $caddy_dl_dir = "${caddy::caddy_tmp_dir}/caddy_${caddy::version}_linux_${$caddy::arch}.tar.gz"
+    $caddy_dl_dir = "/var/cache/caddy_${caddy::version}_linux_${$caddy::arch}.tar.gz"
 
-    $extract_path = "${caddy::caddy_tmp_dir}/caddy-${caddy::version}"
+    $extract_path = "/var/cache/caddy-${caddy::version}"
 
     file { $extract_path:
       ensure => directory,
@@ -35,12 +35,12 @@ class caddy::install {
       before       => File[$bin_file],
     }
 
-    $caddy_source = "${caddy::caddy_tmp_dir}/caddy-${caddy::version}/caddy"
+    $caddy_source = "/var/cache/caddy-${caddy::version}/caddy"
   } else {
     $caddy_url    = 'https://caddyserver.com/api/download'
     $caddy_dl_url = "${caddy_url}?os=linux&arch=${caddy::arch}&plugins=${caddy::caddy_features}&license=${caddy::caddy_license}&telemetry=${caddy::caddy_telemetry}"
 
-    $caddy_source = "${caddy::caddy_tmp_dir}/caddy-latest"
+    $caddy_source = '/var/cache/caddy-latest'
 
     file { $caddy_source:
       ensure  => file,

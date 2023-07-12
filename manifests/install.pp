@@ -24,7 +24,6 @@ class caddy::install {
       group        => 'root',
       creates      => $bin_file,
       cleanup      => true,
-      notify       => File_capability[$bin_file],
       require      => File[$caddy::install_path],
     }
   } else {
@@ -38,7 +37,6 @@ class caddy::install {
       mode    => '0755',
       source  => $caddy_dl_url,
       replace => false, # Don't download the file on every run
-      notify  => File_capability[$bin_file],
     }
   }
 
@@ -47,11 +45,5 @@ class caddy::install {
     owner  => $caddy::caddy_user,
     group  => $caddy::caddy_group,
     mode   => '0755',
-  }
-
-  include file_capability
-  file_capability { $bin_file:
-    ensure     => present,
-    capability => 'cap_net_bind_service=ep',
   }
 }

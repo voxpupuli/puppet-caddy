@@ -231,11 +231,11 @@ Default value: `undef`
 
 ##### <a name="-caddy--systemd_ambient_capabilities"></a>`systemd_ambient_capabilities`
 
-Data type: `Optional[String[1]]`
+Data type: `String[1]`
 
 Controls which capabilities to include in the ambient capability set for the executed process.
 
-Default value: `undef`
+Default value: `'CAP_NET_BIND_SERVICE'`
 
 ##### <a name="-caddy--systemd_no_new_privileges"></a>`systemd_no_new_privileges`
 

@@ -57,15 +57,7 @@ describe 'caddy' do
             with_mode('0755').
             with_source('https://caddyserver.com/api/download?os=linux&arch=amd64&plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off').
             with_replace(false).
-            that_notifies('File_capability[/opt/caddy/caddy]').
             that_requires('File[/opt/caddy]')
-        end
-
-        it do
-          expect(subject).to contain_file_capability('/opt/caddy/caddy').with(
-            'ensure' => 'present',
-            'capability' => 'cap_net_bind_service=ep'
-          ).that_subscribes_to('File[/opt/caddy/caddy]')
         end
 
         it do
@@ -159,8 +151,7 @@ describe 'caddy' do
             'creates' => '/opt/caddy/caddy',
             'cleanup' => 'true'
           ).
-            that_requires('File[/opt/caddy]').
-            that_notifies('File_capability[/opt/caddy/caddy]')
+            that_requires('File[/opt/caddy]')
         end
       end
     end

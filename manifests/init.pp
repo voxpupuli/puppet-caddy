@@ -98,7 +98,7 @@ class caddy (
   Integer[0]                     $systemd_limit_processes         = 64,
   Boolean                        $systemd_private_devices         = true,
   Optional[String[1]]            $systemd_capability_bounding_set = undef,
-  Optional[String[1]]            $systemd_ambient_capabilities    = undef,
+  String[1]                      $systemd_ambient_capabilities    = 'CAP_NET_BIND_SERVICE',
   Optional[Boolean]              $systemd_no_new_privileges       = undef,
 ) {
   case $caddy_architecture {

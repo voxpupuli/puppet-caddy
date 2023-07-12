@@ -50,13 +50,22 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/opt/caddy/caddy').
+          expect(subject).to contain_file('/tmp/caddy-latest').
             with_ensure('file').
             with_owner('root').
             with_group('root').
             with_mode('0755').
             with_source('https://caddyserver.com/api/download?os=linux&arch=amd64&plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off').
-            with_replace(false).
+            with_replace(false)
+        end
+
+        it do
+          expect(subject).to contain_file('/opt/caddy/caddy').
+            with_ensure('file').
+            with_owner('root').
+            with_group('root').
+            with_mode('0755').
+            with_source('/tmp/caddy-latest').
             that_requires('File[/opt/caddy]')
         end
 
@@ -144,13 +153,20 @@ describe 'caddy' do
           expect(subject).to contain_archive('/tmp/caddy_2.0.0_linux_amd64.tar.gz').with(
             'ensure' => 'present',
             'extract' => 'true',
-            'extract_path' => '/opt/caddy',
+            'extract_path' => '/tmp/caddy-2.0.0',
             'source' => 'https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_2.0.0_linux_amd64.tar.gz',
             'user' => 'root',
-            'group' => 'root',
-            'creates' => '/opt/caddy/caddy',
-            'cleanup' => 'true'
-          ).
+            'group' => 'root'
+          )
+        end
+
+        it do
+          expect(subject).to contain_file('/opt/caddy/caddy').
+            with_ensure('file').
+            with_owner('root').
+            with_group('root').
+            with_mode('0755').
+            with_source('/tmp/caddy-2.0.0/caddy').
             that_requires('File[/opt/caddy]')
         end
       end

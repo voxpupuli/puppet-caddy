@@ -1,6 +1,5 @@
 fixtures:
   repositories:
     archive: https://github.com/voxpupuli/puppet-archive.git
-    file_capability: https://github.com/smoeding/puppet-file_capability.git
     stdlib: https://github.com/puppetlabs/puppetlabs-stdlib.git
     systemd: https://github.com/voxpupuli/puppet-systemd.git

@@ -62,7 +62,6 @@ The following parameters are available in the `caddy` class:
 * [`caddy_group`](#-caddy--caddy_group)
 * [`caddy_shell`](#-caddy--caddy_shell)
 * [`caddy_log_dir`](#-caddy--caddy_log_dir)
-* [`caddy_tmp_dir`](#-caddy--caddy_tmp_dir)
 * [`caddy_home`](#-caddy--caddy_home)
 * [`caddy_ssl_dir`](#-caddy--caddy_ssl_dir)
 * [`caddy_license`](#-caddy--caddy_license)
@@ -132,14 +131,6 @@ Data type: `Stdlib::Absolutepath`
 Directory where the log files are stored.
 
 Default value: `'/var/log/caddy'`
-
-##### <a name="-caddy--caddy_tmp_dir"></a>`caddy_tmp_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-Directory where the Caddy archive is stored.
-
-Default value: `'/tmp'`
 
 ##### <a name="-caddy--caddy_home"></a>`caddy_home`
 
@@ -231,11 +222,11 @@ Default value: `undef`
 
 ##### <a name="-caddy--systemd_ambient_capabilities"></a>`systemd_ambient_capabilities`
 
-Data type: `Optional[String[1]]`
+Data type: `String[1]`
 
 Controls which capabilities to include in the ambient capability set for the executed process.
 
-Default value: `undef`
+Default value: `'CAP_NET_BIND_SERVICE'`
 
 ##### <a name="-caddy--systemd_no_new_privileges"></a>`systemd_no_new_privileges`
 

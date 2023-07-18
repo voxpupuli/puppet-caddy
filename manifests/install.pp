@@ -9,6 +9,10 @@ class caddy::install {
   $bin_file = "${caddy::install_path}/caddy"
 
   if $caddy::install_method == 'github' {
+    if !$caddy::version {
+      fail('caddy::version must be set when caddy::install_method is github')
+    }
+
     $caddy_url    = 'https://github.com/caddyserver/caddy/releases/download'
     $caddy_dl_url = "${caddy_url}/v${caddy::version}/caddy_${caddy::version}_linux_${caddy::arch}.tar.gz"
     $caddy_dl_dir = "/var/cache/caddy_${caddy::version}_linux_${$caddy::arch}.tar.gz"
@@ -37,6 +41,10 @@ class caddy::install {
 
     $caddy_source = "/var/cache/caddy-${caddy::version}/caddy"
   } else {
+    if $caddy::version {
+      fail('caddy::version can only be set when caddy::install_method is github')
+    }
+
     $caddy_url    = 'https://caddyserver.com/api/download'
     $caddy_dl_url = "${caddy_url}?os=linux&arch=${caddy::arch}&plugins=${caddy::caddy_features}&license=${caddy::caddy_license}&telemetry=${caddy::caddy_telemetry}"
 

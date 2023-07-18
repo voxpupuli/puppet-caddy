@@ -16,7 +16,7 @@
 #   }
 #
 # @param version
-#   Which version is used.
+#   Which version of caddy to install when install_method is github.
 #
 # @param install_method
 #   Which source is used.
@@ -76,7 +76,7 @@
 #   Whether the process and all its children can gain new privileges through execve().
 #
 class caddy (
-  String[1]                      $version                         = '2.0.0',
+  Optional[String[1]]            $version                         = undef,
   Optional[Enum['github']]       $install_method                  = undef,
   Stdlib::Absolutepath           $install_path                    = '/opt/caddy',
   String[1]                      $caddy_user                      = 'caddy',

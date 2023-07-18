@@ -78,11 +78,11 @@ The following parameters are available in the `caddy` class:
 
 ##### <a name="-caddy--version"></a>`version`
 
-Data type: `String[1]`
+Data type: `Optional[String[1]]`
 
-Which version is used.
+Which version of caddy to install when install_method is github.
 
-Default value: `'2.0.0'`
+Default value: `undef`
 
 ##### <a name="-caddy--install_method"></a>`install_method`
 

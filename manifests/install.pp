@@ -9,8 +9,16 @@ class caddy::install {
   $bin_file = "${caddy::install_path}/caddy"
 
   case $caddy::install_method {
-    'repo': { contain caddy::install::repo }
+    'repo': {
+      if $caddy::version {
+        fail('caddy::version can only be set when caddy::install_method is github')
+      }
+      contain caddy::install::repo
+    }
     'github': {
+      if !$caddy::version {
+        fail('caddy::version must be set when caddy::install_method is github')
+      }
       $caddy_url    = 'https://github.com/caddyserver/caddy/releases/download'
       $caddy_dl_url = "${caddy_url}/v${caddy::version}/caddy_${caddy::version}_linux_${caddy::arch}.tar.gz"
       $caddy_dl_dir = "/var/cache/caddy_${caddy::version}_linux_${$caddy::arch}.tar.gz"

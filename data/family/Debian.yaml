@@ -1,2 +1,11 @@
 ---
 caddy::caddy_shell: '/usr/sbin/nologin'
+
+caddy::repo_settings:
+  location: https://dl.cloudsmith.io/public/caddy/stable/deb/debian
+  release: any-version
+  repos: main
+  key:
+    name: caddy-archive-keyring.asc
+    source: https://dl.cloudsmith.io/public/caddy/stable/gpg.key
+    checksum_value: 5791c2fb6b6e82feb5a69834dd2131f4bcc30af0faec37783b2dc1c5c224a82a

@@ -11,9 +11,14 @@ describe 'caddy' do
 
       case facts[:os]['family']
       when 'Debian'
-        caddy_shell   = '/usr/sbin/nologin'
+        caddy_shell = '/usr/sbin/nologin'
+        has_repo = true
       when 'RedHat'
-        caddy_shell   = '/sbin/nologin'
+        caddy_shell = '/sbin/nologin'
+        has_repo = true
+      else
+        caddy_shell = '/sbin/nologin'
+        has_repo = false
       end
 
       context 'with defaults for all parameters' do
@@ -168,6 +173,92 @@ describe 'caddy' do
             with_mode('0755').
             with_source('/var/cache/caddy-2.0.0/caddy').
             that_requires('File[/opt/caddy]')
+        end
+      end
+
+      context 'with install_method => repo' do
+        let(:params) { { install_method: 'repo' } }
+
+        case facts[:os]['family']
+        when 'Debian'
+          context 'on Debian family' do
+            it { is_expected.to contain_class('apt') }
+
+            # it do
+            #   is_expected.to contain_apt__source('caddy').
+            #     with_location('https://dl.cloudsmith.io/public/caddy/stable/deb/debian').
+            #     with_key(
+            #       'name' => 'caddy-archive-keyring.asc',
+            #       'source' => 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key'
+            #     ).that_comes_before('Package[caddy]')
+            # end
+
+            it do
+              is_expected.to contain_file('/etc/apt/keyrings/caddy-archive-keyring.asc').
+                with_ensure('file').
+                with_source('https://dl.cloudsmith.io/public/caddy/stable/gpg.key').
+                with_checksum('sha256').
+                with_checksum_value('5791c2fb6b6e82feb5a69834dd2131f4bcc30af0faec37783b2dc1c5c224a82a').
+                that_comes_before('Apt::Source[caddy]')
+            end
+
+            it do
+              is_expected.to contain_apt__source('caddy').
+                with_location('https://dl.cloudsmith.io/public/caddy/stable/deb/debian').
+                with_keyring('/etc/apt/keyrings/caddy-archive-keyring.asc').
+                without_key.
+                that_comes_before('Package[caddy]')
+            end
+
+            it { is_expected.to contain_package('caddy').with_ensure('2.0.0') }
+
+            context 'with manage_repo => false' do
+              let(:params) { super().merge(manage_repo: false) }
+
+              it { is_expected.not_to contain_apt__source('caddy') }
+            end
+          end
+        when 'RedHat'
+          context 'on RedHat family' do
+            it { is_expected.to contain_class('yum') }
+
+            it do
+              is_expected.to contain_yum__copr('caddy').
+                with_copr_repo('@caddy/caddy').
+                with_ensure('enabled').
+                that_comes_before('Package[caddy]')
+            end
+
+            it { is_expected.to contain_package('caddy').with_ensure('2.0.0') }
+
+            context 'with manage_repo => false' do
+              let(:params) { super().merge(manage_repo: false) }
+
+              it { is_expected.not_to contain_yum__copr('@caddy/caddy') }
+            end
+          end
+        else
+          it { is_expected.to raise_error(%r{has no support for 'repo' install method}) }
+        end
+
+        context 'without repo_settings' do
+          let(:params) { super().merge(repo_settings: {}) }
+
+          it { is_expected.to raise_error(%r{'repo_settings' parameter should be set}) }
+        end
+
+        if has_repo
+          context 'with package_name => test' do
+            let(:params) { super().merge(package_name: 'test') }
+
+            it { is_expected.to contain_package('test').with_ensure('2.0.0') }
+          end
+
+          context 'with package_ensure => 2.3.4' do
+            let(:params) { super().merge(package_ensure: '2.3.4') }
+
+            it { is_expected.to contain_package('caddy').with_ensure('2.3.4') }
+          end
         end
       end
 

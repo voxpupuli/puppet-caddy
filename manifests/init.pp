@@ -19,10 +19,13 @@
 #   Which version is used.
 #
 # @param install_method
-#   Which source is used.
+#   Which source to use for the Caddy installation. See https://caddyserver.com/docs/install.
+#   * `undef` (default) - download from the official Caddy site
+#   * `github` - download from Github releases
+#   * `repo` - install from an OS repository
 #
 # @param install_path
-#   Directory where the Caddy binary is stored.
+#   Directory where the Caddy binary is stored. Not used when $install_method is 'repo'.
 #
 # @param manage_user
 #   Whether or not the module should create the user.
@@ -88,17 +91,29 @@
 #   Whether or not the module should manage the service.
 #
 # @param service_name
-#   Customise the name of the system service
+#   Customise the name of the system service.
 #
 # @param service_ensure
-#   Whether the service should be running or stopped
+#   Whether the service should be running or stopped.
 #
 # @param service_enable
-#   Whether the service should be enabled or disabled
+#   Whether the service should be enabled or disabled.
+#
+# @param manage_repo
+#   Whether the APT/YUM(COPR) repository should be installed. Only relevant when $install_method is 'repo'.
+#
+# @param repo_settings
+#   Distro-specific repository settings.
+#
+# @param package_name
+#   Name of the caddy package to use. Only relevant when $install_method is 'repo'.
+#
+# @param package_ensure
+#   Whether to install or remove the caddy package. Only relevant when $install_method is 'repo'.
 #
 class caddy (
   String[1]                      $version                         = '2.0.0',
-  Optional[Enum['github']]       $install_method                  = undef,
+  Optional[Enum['github','repo']] $install_method                 = undef,
   Stdlib::Absolutepath           $install_path                    = '/opt/caddy',
   Boolean                        $manage_user                     = true,
   String[1]                      $caddy_user                      = 'caddy',
@@ -124,6 +139,10 @@ class caddy (
   String[1]                      $service_name                    = 'caddy',
   Stdlib::Ensure::Service        $service_ensure                  = 'running',
   Boolean                        $service_enable                  = true,
+  Boolean                        $manage_repo                     = true,
+  Hash[String[1],Any]            $repo_settings                   = {},
+  String[1]                      $package_name                    = 'caddy',
+  String[1]                      $package_ensure                  = $version,
 ) {
   case $caddy_architecture {
     'x86_64', 'amd64': { $arch = 'amd64' }

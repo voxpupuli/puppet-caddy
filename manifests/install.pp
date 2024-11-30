@@ -9,6 +9,7 @@ class caddy::install {
   $bin_file = "${caddy::install_path}/caddy"
 
   case $caddy::install_method {
+    'repo': { contain caddy::install::repo }
     'github': {
       $caddy_url    = 'https://github.com/caddyserver/caddy/releases/download'
       $caddy_dl_url = "${caddy_url}/v${caddy::version}/caddy_${caddy::version}_linux_${caddy::arch}.tar.gz"
@@ -38,6 +39,21 @@ class caddy::install {
       }
 
       $caddy_source = "/var/cache/caddy-${caddy::version}/caddy"
+
+      file { $caddy::install_path:
+        ensure => directory,
+        owner  => $caddy::caddy_user,
+        group  => $caddy::caddy_group,
+        mode   => '0755',
+      }
+
+      file { $bin_file:
+        ensure => file,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+        source => $caddy_source,
+      }
     }
     default: {
       $caddy_url    = 'https://caddyserver.com/api/download'
@@ -61,21 +77,21 @@ class caddy::install {
         source  => $caddy_dl_url,
         replace => false, # Don't download the file on every run
       }
+
+      file { $caddy::install_path:
+        ensure => directory,
+        owner  => $caddy::caddy_user,
+        group  => $caddy::caddy_group,
+        mode   => '0755',
+      }
+
+      file { $bin_file:
+        ensure => file,
+        owner  => 'root',
+        group  => 'root',
+        mode   => '0755',
+        source => $caddy_source,
+      }
     }
-  }
-
-  file { $caddy::install_path:
-    ensure => directory,
-    owner  => $caddy::caddy_user,
-    group  => $caddy::caddy_group,
-    mode   => '0755',
-  }
-
-  file { $bin_file:
-    ensure => file,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0755',
-    source => $caddy_source,
   }
 }

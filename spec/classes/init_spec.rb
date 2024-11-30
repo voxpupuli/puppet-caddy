@@ -130,12 +130,12 @@ describe 'caddy' do
         it do
           is_expected.to contain_systemd__unit_file('caddy.service').with(
             'content' => %r{User=caddy}
-          )
+          ).that_notifies('Service[caddy]')
         end
 
         it do
-          is_expected.to contain_service('caddy.service').with(
-            'ensure' => true,
+          is_expected.to contain_service('caddy').with(
+            'ensure' => 'running',
             'enable' => true
           )
         end
@@ -194,6 +194,39 @@ describe 'caddy' do
 
         it { is_expected.not_to contain_group('caddy') }
         it { is_expected.to contain_user('caddy').that_requires(nil) }
+      end
+
+      context 'with manage_systemd_unit => false' do
+        let(:params) { { manage_systemd_unit: false } }
+
+        it { is_expected.not_to contain_systemd__unit_file('caddy.service') }
+        it { is_expected.to contain_service('caddy').that_subscribes_to(nil) }
+      end
+
+      context 'with manage_service => false' do
+        let(:params) { { manage_service: false } }
+
+        it { is_expected.to contain_systemd__unit_file('caddy.service').that_notifies(nil) }
+        it { is_expected.not_to contain_service('caddy') }
+      end
+
+      context 'with service_name => custom' do
+        let(:params) { { service_name: 'custom' } }
+
+        it { is_expected.to contain_systemd__unit_file('custom.service') }
+        it { is_expected.to contain_service('custom') }
+      end
+
+      context 'with service_ensure => stopped' do
+        let(:params) { { service_ensure: 'stopped' } }
+
+        it { is_expected.to contain_service('caddy').with_ensure('stopped') }
+      end
+
+      context 'with service_enable => false' do
+        let(:params) { { service_enable: false } }
+
+        it { is_expected.to contain_service('caddy').with_enable(false) }
       end
     end
   end

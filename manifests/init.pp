@@ -66,6 +66,9 @@
 # @param caddy_api_key
 #   The API key, required for the commercial license.
 #
+# @param manage_systemd_unit
+#   Whether or not the module should create the systemd unit file.
+#
 # @param systemd_limit_processes
 #   The number of processes.
 #
@@ -80,6 +83,18 @@
 #
 # @param systemd_no_new_privileges
 #   Whether the process and all its children can gain new privileges through execve().
+#
+# @param manage_service
+#   Whether or not the module should manage the service.
+#
+# @param service_name
+#   Customise the name of the system service
+#
+# @param service_ensure
+#   Whether the service should be running or stopped
+#
+# @param service_enable
+#   Whether the service should be enabled or disabled
 #
 class caddy (
   String[1]                      $version                         = '2.0.0',
@@ -99,11 +114,16 @@ class caddy (
   String[1]                      $caddy_architecture              = $facts['os']['architecture'],
   Optional[String[1]]            $caddy_account_id                = undef,
   Optional[String[1]]            $caddy_api_key                   = undef,
+  Boolean                        $manage_systemd_unit             = true,
   Integer[0]                     $systemd_limit_processes         = 64,
   Boolean                        $systemd_private_devices         = true,
   Optional[String[1]]            $systemd_capability_bounding_set = undef,
   String[1]                      $systemd_ambient_capabilities    = 'CAP_NET_BIND_SERVICE',
   Optional[Boolean]              $systemd_no_new_privileges       = undef,
+  Boolean                        $manage_service                  = true,
+  String[1]                      $service_name                    = 'caddy',
+  Stdlib::Ensure::Service        $service_ensure                  = 'running',
+  Boolean                        $service_enable                  = true,
 ) {
   case $caddy_architecture {
     'x86_64', 'amd64': { $arch = 'amd64' }

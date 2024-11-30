@@ -58,7 +58,9 @@ The following parameters are available in the `caddy` class:
 * [`version`](#-caddy--version)
 * [`install_method`](#-caddy--install_method)
 * [`install_path`](#-caddy--install_path)
+* [`manage_user`](#-caddy--manage_user)
 * [`caddy_user`](#-caddy--caddy_user)
+* [`manage_group`](#-caddy--manage_group)
 * [`caddy_group`](#-caddy--caddy_group)
 * [`caddy_shell`](#-caddy--caddy_shell)
 * [`caddy_log_dir`](#-caddy--caddy_log_dir)
@@ -70,11 +72,16 @@ The following parameters are available in the `caddy` class:
 * [`caddy_architecture`](#-caddy--caddy_architecture)
 * [`caddy_account_id`](#-caddy--caddy_account_id)
 * [`caddy_api_key`](#-caddy--caddy_api_key)
+* [`manage_systemd_unit`](#-caddy--manage_systemd_unit)
 * [`systemd_limit_processes`](#-caddy--systemd_limit_processes)
 * [`systemd_private_devices`](#-caddy--systemd_private_devices)
 * [`systemd_capability_bounding_set`](#-caddy--systemd_capability_bounding_set)
 * [`systemd_ambient_capabilities`](#-caddy--systemd_ambient_capabilities)
 * [`systemd_no_new_privileges`](#-caddy--systemd_no_new_privileges)
+* [`manage_service`](#-caddy--manage_service)
+* [`service_name`](#-caddy--service_name)
+* [`service_ensure`](#-caddy--service_ensure)
+* [`service_enable`](#-caddy--service_enable)
 
 ##### <a name="-caddy--version"></a>`version`
 
@@ -100,6 +107,14 @@ Directory where the Caddy binary is stored.
 
 Default value: `'/opt/caddy'`
 
+##### <a name="-caddy--manage_user"></a>`manage_user`
+
+Data type: `Boolean`
+
+Whether or not the module should create the user.
+
+Default value: `true`
+
 ##### <a name="-caddy--caddy_user"></a>`caddy_user`
 
 Data type: `String[1]`
@@ -107,6 +122,14 @@ Data type: `String[1]`
 The user used by the Caddy process.
 
 Default value: `'caddy'`
+
+##### <a name="-caddy--manage_group"></a>`manage_group`
+
+Data type: `Boolean`
+
+Whether or not the module should create the group.
+
+Default value: `true`
 
 ##### <a name="-caddy--caddy_group"></a>`caddy_group`
 
@@ -196,6 +219,14 @@ The API key, required for the commercial license.
 
 Default value: `undef`
 
+##### <a name="-caddy--manage_systemd_unit"></a>`manage_systemd_unit`
+
+Data type: `Boolean`
+
+Whether or not the module should create the systemd unit file.
+
+Default value: `true`
+
 ##### <a name="-caddy--systemd_limit_processes"></a>`systemd_limit_processes`
 
 Data type: `Integer[0]`
@@ -235,6 +266,38 @@ Data type: `Optional[Boolean]`
 Whether the process and all its children can gain new privileges through execve().
 
 Default value: `undef`
+
+##### <a name="-caddy--manage_service"></a>`manage_service`
+
+Data type: `Boolean`
+
+Whether or not the module should manage the service.
+
+Default value: `true`
+
+##### <a name="-caddy--service_name"></a>`service_name`
+
+Data type: `String[1]`
+
+Customise the name of the system service
+
+Default value: `'caddy'`
+
+##### <a name="-caddy--service_ensure"></a>`service_ensure`
+
+Data type: `Stdlib::Ensure::Service`
+
+Whether the service should be running or stopped
+
+Default value: `'running'`
+
+##### <a name="-caddy--service_enable"></a>`service_enable`
+
+Data type: `Boolean`
+
+Whether the service should be enabled or disabled
+
+Default value: `true`
 
 ## Defined types
 

@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe 'caddy' do
   on_supported_os.each do |os, facts|
-    context "on #{os}" do
+    context "on #{os} with Facter #{facts[:facterversion]} and Puppet #{facts[:puppetversion]}" do
       let(:facts) do
         facts
       end
@@ -24,24 +24,24 @@ describe 'caddy' do
         it { is_expected.to contain_class('caddy::service') }
 
         it do
-          expect(subject).to contain_group('caddy').with(
+          is_expected.to contain_group('caddy').with(
             'ensure' => 'present',
             'system' => 'true'
           )
         end
 
         it do
-          expect(subject).to contain_user('caddy').with(
+          is_expected.to contain_user('caddy').with(
             'ensure' => 'present',
             'shell' => caddy_shell,
             'gid' => 'caddy',
             'system' => 'true',
             'home' => '/var/lib/caddy'
-          )
+          ).that_requires('Group[caddy]')
         end
 
         it do
-          expect(subject).to contain_file('/opt/caddy').with(
+          is_expected.to contain_file('/opt/caddy').with(
             'ensure' => 'directory',
             'owner' => 'caddy',
             'group' => 'caddy',
@@ -50,7 +50,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/var/cache/caddy-latest').
+          is_expected.to contain_file('/var/cache/caddy-latest').
             with_ensure('file').
             with_owner('root').
             with_group('root').
@@ -60,7 +60,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/opt/caddy/caddy').
+          is_expected.to contain_file('/opt/caddy/caddy').
             with_ensure('file').
             with_owner('root').
             with_group('root').
@@ -70,7 +70,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/var/lib/caddy').with(
+          is_expected.to contain_file('/var/lib/caddy').with(
             'ensure' => 'directory',
             'owner' => 'caddy',
             'group' => 'caddy',
@@ -79,7 +79,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/etc/ssl/caddy').with(
+          is_expected.to contain_file('/etc/ssl/caddy').with(
             'ensure' => 'directory',
             'owner' => 'caddy',
             'group' => 'caddy',
@@ -88,7 +88,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/var/log/caddy').with(
+          is_expected.to contain_file('/var/log/caddy').with(
             'ensure' => 'directory',
             'owner' => 'caddy',
             'group' => 'caddy',
@@ -97,7 +97,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/etc/caddy').with(
+          is_expected.to contain_file('/etc/caddy').with(
             'ensure' => 'directory',
             'owner' => 'root',
             'group' => 'root',
@@ -106,7 +106,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/etc/caddy/Caddyfile').with(
+          is_expected.to contain_file('/etc/caddy/Caddyfile').with(
             'ensure' => 'file',
             'owner' => 'caddy',
             'group' => 'caddy',
@@ -117,7 +117,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/etc/caddy/config').with(
+          is_expected.to contain_file('/etc/caddy/config').with(
             'ensure' => 'directory',
             'purge' => 'true',
             'recurse' => 'true',
@@ -128,13 +128,13 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_systemd__unit_file('caddy.service').with(
+          is_expected.to contain_systemd__unit_file('caddy.service').with(
             'content' => %r{User=caddy}
           )
         end
 
         it do
-          expect(subject).to contain_service('caddy.service').with(
+          is_expected.to contain_service('caddy.service').with(
             'ensure' => true,
             'enable' => true
           )
@@ -150,7 +150,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_archive('/var/cache/caddy_2.0.0_linux_amd64.tar.gz').with(
+          is_expected.to contain_archive('/var/cache/caddy_2.0.0_linux_amd64.tar.gz').with(
             'ensure' => 'present',
             'extract' => 'true',
             'extract_path' => '/var/cache/caddy-2.0.0',
@@ -161,7 +161,7 @@ describe 'caddy' do
         end
 
         it do
-          expect(subject).to contain_file('/opt/caddy/caddy').
+          is_expected.to contain_file('/opt/caddy/caddy').
             with_ensure('file').
             with_owner('root').
             with_group('root').
@@ -169,6 +169,31 @@ describe 'caddy' do
             with_source('/var/cache/caddy-2.0.0/caddy').
             that_requires('File[/opt/caddy]')
         end
+      end
+
+      context 'with caddy_user => test_user' do
+        let(:params) { { caddy_user: 'test_user' } }
+
+        it { is_expected.to contain_user('test_user') }
+      end
+
+      context 'with caddy_group => test_group' do
+        let(:params) { { caddy_user: 'test_group' } }
+
+        it { is_expected.to contain_user('test_group') }
+      end
+
+      context 'with manage_user => false' do
+        let(:params) { { manage_user: false } }
+
+        it { is_expected.not_to contain_user('caddy') }
+      end
+
+      context 'with manage_group => false' do
+        let(:params) { { manage_group: false } }
+
+        it { is_expected.not_to contain_group('caddy') }
+        it { is_expected.to contain_user('caddy').that_requires(nil) }
       end
     end
   end

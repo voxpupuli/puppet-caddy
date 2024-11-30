@@ -58,7 +58,9 @@ The following parameters are available in the `caddy` class:
 * [`version`](#-caddy--version)
 * [`install_method`](#-caddy--install_method)
 * [`install_path`](#-caddy--install_path)
+* [`manage_user`](#-caddy--manage_user)
 * [`caddy_user`](#-caddy--caddy_user)
+* [`manage_group`](#-caddy--manage_group)
 * [`caddy_group`](#-caddy--caddy_group)
 * [`caddy_shell`](#-caddy--caddy_shell)
 * [`caddy_log_dir`](#-caddy--caddy_log_dir)
@@ -100,6 +102,14 @@ Directory where the Caddy binary is stored.
 
 Default value: `'/opt/caddy'`
 
+##### <a name="-caddy--manage_user"></a>`manage_user`
+
+Data type: `Boolean`
+
+Whether or not the module should create the user.
+
+Default value: `true`
+
 ##### <a name="-caddy--caddy_user"></a>`caddy_user`
 
 Data type: `String[1]`
@@ -107,6 +117,14 @@ Data type: `String[1]`
 The user used by the Caddy process.
 
 Default value: `'caddy'`
+
+##### <a name="-caddy--manage_group"></a>`manage_group`
+
+Data type: `Boolean`
+
+Whether or not the module should create the group.
+
+Default value: `true`
 
 ##### <a name="-caddy--caddy_group"></a>`caddy_group`
 

@@ -8,9 +8,9 @@ require 'voxpupuli/acceptance/spec_helper_acceptance'
 configure_beaker(modules: :metadata) do |host|
   case fact_on(host, 'os.family')
   when 'Debian'
-    install_puppet_module_via_pmt_on(host, 'puppetlabs-apt')
+    install_puppet_module_via_pmt_on(host, 'puppetlabs-apt', '>=9.2.0')
   when 'RedHat'
-    install_puppet_module_via_pmt_on(host, 'puppet-yum')
+    install_puppet_module_via_pmt_on(host, 'puppet-yum', '>=7.1.0')
   end
 end
 

@@ -147,6 +147,7 @@ class caddy (
   case $caddy_architecture {
     'x86_64', 'amd64': { $arch = 'amd64' }
     'x86'            : { $arch = '386' }
+    'aarch64'        : { $arch = 'arm64' }
     default:  {
       $arch = $caddy_architecture
       warning("arch ${arch} may not be supported.")

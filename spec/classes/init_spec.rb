@@ -11,9 +11,14 @@ describe 'caddy' do
 
       case facts[:os]['family']
       when 'Debian'
-        caddy_shell   = '/usr/sbin/nologin'
+        caddy_shell = '/usr/sbin/nologin'
+        has_repo = true
       when 'RedHat'
-        caddy_shell   = '/sbin/nologin'
+        caddy_shell = '/sbin/nologin'
+        has_repo = true
+      else
+        caddy_shell = '/sbin/nologin'
+        has_repo = false
       end
 
       context 'with defaults for all parameters' do
@@ -168,6 +173,74 @@ describe 'caddy' do
             with_mode('0755').
             with_source('/var/cache/caddy-2.0.0/caddy').
             that_requires('File[/opt/caddy]')
+        end
+      end
+
+      context 'with install_method => repo' do
+        let(:params) { { install_method: 'repo' } }
+
+        case facts[:os]['family']
+        when 'Debian'
+          context 'on Debian family' do
+            it { is_expected.to contain_class('apt') }
+
+            it do
+              is_expected.to contain_apt__source('caddy').
+                with_location(%r{stable}).
+                with_key(
+                  'name' => %r{stable},
+                  'source' => %r{stable}
+                ).that_comes_before('Package[caddy]')
+            end
+
+            it { is_expected.to contain_package('caddy').with_ensure('2.0.0') }
+
+            context 'with manage_repo => false' do
+              let(:params) { super().merge(manage_repo: false) }
+
+              it { is_expected.not_to contain_apt__source('caddy') }
+            end
+
+            context 'with distribution_channel => testing' do
+              let(:params) { super().merge(distribution_channel: 'testing') }
+
+              it do
+                is_expected.to contain_apt__source('caddy').
+                  with_location(%r{testing}).
+                  with_key(
+                    'name' => %r{testing},
+                    'source' => %r{testing}
+                  ).that_comes_before('Package[caddy]')
+              end
+            end
+          end
+        when 'RedHat'
+          context 'on RedHat family' do
+            it { is_expected.to contain_class('yum') }
+            it { is_expected.to contain_package('caddy').with_ensure('2.0.0') }
+
+            context 'with manage_repo => false' do
+              let(:params) { super().merge(manage_repo: false) }
+
+              it { is_expected.not_to contain_yum__copr('@caddy/caddy').with_ensure('enabled').that_comes_before('Package[caddy]') }
+            end
+          end
+        else
+          it { is_expected.to raise_error(%r{has no support for 'repo' install method}) }
+        end
+
+        if has_repo
+          context 'with package_name => test' do
+            let(:params) { super().merge(package_name: 'test') }
+
+            it { is_expected.to contain_package('test').with_ensure('2.0.0') }
+          end
+
+          context 'with package_ensure => 2.3.4' do
+            let(:params) { super().merge(package_ensure: '2.3.4') }
+
+            it { is_expected.to contain_package('caddy').with_ensure('2.3.4') }
+          end
         end
       end
 

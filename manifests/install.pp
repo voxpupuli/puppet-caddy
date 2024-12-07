@@ -31,6 +31,7 @@ class caddy::install {
       password     => $caddy::caddy_api_key,
       user         => 'root',
       group        => 'root',
+      creates      => "${extract_path}/caddy",
       require      => File[$extract_path],
       before       => File[$bin_file],
     }

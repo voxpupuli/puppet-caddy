@@ -16,7 +16,7 @@
 #   }
 #
 # @param version
-#   Which version is used.
+#   Which version of caddy to install when install_method is github.
 #
 # @param install_method
 #   Which source is used.
@@ -97,7 +97,7 @@
 #   Whether the service should be enabled or disabled
 #
 class caddy (
-  String[1]                      $version                         = '2.0.0',
+  Optional[String[1]]            $version                         = undef,
   Optional[Enum['github']]       $install_method                  = undef,
   Stdlib::Absolutepath           $install_path                    = '/opt/caddy',
   Boolean                        $manage_user                     = true,

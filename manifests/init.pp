@@ -126,6 +126,9 @@
 # @param purge_config_dir
 #  Whether to purge Caddy config directory.
 #
+# @param vhosts
+#   List of virtual hosts to create.
+#
 class caddy (
   String[1]                      $version                         = '2.0.0',
   Optional[Enum['github','repo']] $install_method                 = undef,
@@ -163,6 +166,7 @@ class caddy (
   Optional[Stdlib::Filesource]   $caddyfile_source                = undef,
   Optional[String[1]]            $caddyfile_content               = undef,
   Boolean                        $purge_config_dir                = true,
+  Hash[String[1], Caddy::VirtualHost] $vhosts                     = {},
 ) {
   case $caddy_architecture {
     'x86_64', 'amd64': { $arch = 'amd64' }
@@ -198,6 +202,12 @@ class caddy (
   contain caddy::install
   contain caddy::config
   contain caddy::service
+
+  $vhosts.each |String[1] $name, Caddy::VirtualHost $vhost| {
+    caddy::vhost { $name:
+      * => $vhost,
+    }
+  }
 
   Class['caddy::install']
   -> Class['caddy::config']

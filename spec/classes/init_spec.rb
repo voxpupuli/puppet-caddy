@@ -351,6 +351,28 @@ describe 'caddy' do
           is_expected.to contain_file('/etc/caddy/Caddyfile').with_source('http://example.com/Caddyfile').with_content(nil)
         end
       end
+
+      context 'with vhosts set' do
+        let(:params) do
+          {
+            vhosts: {
+              'h1.example.com': {
+                source: 'http://example.com/test-example-com.conf',
+              },
+              'h2.example.com': {
+                content: "localhost:1234{\n  file_server\n}\n",
+              },
+              'h3.example.com': {
+                ensure: 'absent',
+              }
+            }
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/caddy/config/h1.example.com.conf').with_source('http://example.com/test-example-com.conf') }
+        it { is_expected.to contain_file('/etc/caddy/config/h2.example.com.conf').with_content("localhost:1234{\n  file_server\n}\n") }
+        it { is_expected.to contain_file('/etc/caddy/config/h3.example.com.conf').with_ensure('absent') }
+      end
     end
   end
 end

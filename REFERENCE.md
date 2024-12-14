@@ -21,6 +21,10 @@
 
 * [`caddy::vhost`](#caddy--vhost): This defined type handles the Caddy virtual hosts.
 
+### Data types
+
+* [`Caddy::VirtualHost`](#Caddy--VirtualHost): Caddy virtual host type
+
 ## Classes
 
 ### <a name="caddy"></a>`caddy`
@@ -92,6 +96,7 @@ The following parameters are available in the `caddy` class:
 * [`caddyfile_content`](#-caddy--caddyfile_content)
 * [`config_dir`](#-caddy--config_dir)
 * [`purge_config_dir`](#-caddy--purge_config_dir)
+* [`vhosts`](#-caddy--vhosts)
 
 ##### <a name="-caddy--version"></a>`version`
 
@@ -384,6 +389,14 @@ Whether to purge Caddy config directory.
 
 Default value: `true`
 
+##### <a name="-caddy--vhosts"></a>`vhosts`
+
+Data type: `Hash[String[1], Caddy::VirtualHost]`
+
+List of virtual hosts to create.
+
+Default value: `{}`
+
 ## Defined types
 
 ### <a name="caddy--vhost"></a>`caddy::vhost`
@@ -448,4 +461,20 @@ Data type: `Stdlib::Absolutepath`
 Where to store the vhost config file
 
 Default value: `$caddy::config_dir`
+
+## Data types
+
+### <a name="Caddy--VirtualHost"></a>`Caddy::VirtualHost`
+
+Caddy virtual host type
+
+Alias of
+
+```puppet
+Struct[{
+    ensure => Optional[Enum['absent', 'present']],
+    source => Optional[Stdlib::Filesource],
+    content => Optional[String[1]],
+}]
+```
 

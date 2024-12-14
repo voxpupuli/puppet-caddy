@@ -120,6 +120,12 @@
 # @param caddyfile_content
 #   Caddyfile content. Always preferred over caddyfile_source.
 #
+# @param config_dir
+#  Where to store Caddy configs
+#
+# @param purge_config_dir
+#  Whether to purge Caddy config directory.
+#
 class caddy (
   String[1]                      $version                         = '2.0.0',
   Optional[Enum['github','repo']] $install_method                 = undef,
@@ -132,6 +138,7 @@ class caddy (
   Stdlib::Absolutepath           $caddy_log_dir                   = '/var/log/caddy',
   Stdlib::Absolutepath           $caddy_home                      = '/var/lib/caddy',
   Stdlib::Absolutepath           $caddy_ssl_dir                   = '/etc/ssl/caddy',
+  Stdlib::Absolutepath           $config_dir                      = '/etc/caddy/config',
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
   Enum['on','off']               $caddy_telemetry                 = 'off',
   String[1]                      $caddy_features                  = 'http.git,http.filter,http.ipfilter',
@@ -155,6 +162,7 @@ class caddy (
   Boolean                        $manage_caddyfile                = true,
   Stdlib::Filesource             $caddyfile_source                = 'puppet:///modules/caddy/etc/caddy/Caddyfile',
   Optional[String[1]]            $caddyfile_content               = undef,
+  Boolean                        $purge_config_dir                = true,
 ) {
   case $caddy_architecture {
     'x86_64', 'amd64': { $arch = 'amd64' }

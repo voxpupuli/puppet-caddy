@@ -90,6 +90,8 @@ The following parameters are available in the `caddy` class:
 * [`manage_caddyfile`](#-caddy--manage_caddyfile)
 * [`caddyfile_source`](#-caddy--caddyfile_source)
 * [`caddyfile_content`](#-caddy--caddyfile_content)
+* [`config_dir`](#-caddy--config_dir)
+* [`purge_config_dir`](#-caddy--purge_config_dir)
 
 ##### <a name="-caddy--version"></a>`version`
 
@@ -366,6 +368,22 @@ Caddyfile content. Always preferred over caddyfile_source.
 
 Default value: `undef`
 
+##### <a name="-caddy--config_dir"></a>`config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Where to store Caddy configs
+
+Default value: `'/etc/caddy/config'`
+
+##### <a name="-caddy--purge_config_dir"></a>`purge_config_dir`
+
+Data type: `Boolean`
+
+Whether to purge Caddy config directory.
+
+Default value: `true`
+
 ## Defined types
 
 ### <a name="caddy--vhost"></a>`caddy::vhost`
@@ -397,6 +415,7 @@ The following parameters are available in the `caddy::vhost` defined type:
 * [`ensure`](#-caddy--vhost--ensure)
 * [`source`](#-caddy--vhost--source)
 * [`content`](#-caddy--vhost--content)
+* [`config_dir`](#-caddy--vhost--config_dir)
 
 ##### <a name="-caddy--vhost--ensure"></a>`ensure`
 
@@ -421,4 +440,12 @@ Data type: `Optional[String]`
 String with the caddy vhost configuration
 
 Default value: `undef`
+
+##### <a name="-caddy--vhost--config_dir"></a>`config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Where to store the vhost config file
+
+Default value: `$caddy::config_dir`
 

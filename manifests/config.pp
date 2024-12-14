@@ -22,8 +22,8 @@ class caddy::config {
       owner => 'root',
       group => 'root',
       ;
-    ['/etc/caddy/config']:
-      purge   => true,
+    $caddy::config_dir:
+      purge   => $caddy::purge_config_dir,
       recurse => true,
       ;
   }

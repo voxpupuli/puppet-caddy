@@ -13,9 +13,9 @@
 
 1. [Description](#description)
 1. [Setup - The basics of getting started with Caddy](#setup)
-    * [What Caddy affects](#what-Caddy-affects)
+    * [What Caddy affects](#what-caddy-affects)
     * [Setup requirements](#setup-requirements)
-    * [Beginning with Caddy](#beginning-with-Caddy)
+    * [Beginning with Caddy](#beginning-with-caddy)
 1. [Usage - Configuration options and additional functionality](#usage)
 1. [Limitations - OS compatibility, etc.](#limitations)
 1. [Development - Guide for contributing to the module](#development)
@@ -41,10 +41,14 @@ want to install Caddy 1.x, you should use version v2.0.0 of this module.
 
 This module has the following dependencies:
 
-* [camptocamp/systemd](https://github.com/camptocamp/puppet-systemd)
+* [puppet/systemd](https://github.com/voxpupuli/puppet-systemd)
 * [puppet/archive](https://github.com/voxpupuli/puppet-archive)
 * [puppetlabs/stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
-* [stm/file_capability](https://github.com/smoeding/puppet-file_capability)
+
+When `install_method` is set to 'repo', this module implicitly requires either
+[puppetlabs-apt](https://github.com/puppetlabs/puppetlabs-apt) module for
+Debian distro family, or [puppet-yum](https://github.com/voxpupuli/puppet-yum)
+module for RedHat distro family.
 
 ### Beginning with Caddy
 
@@ -56,7 +60,7 @@ include caddy
 
 ## Usage
 
-Install customised version of Caddy
+Install customized version of Caddy
 
 ```puppet
 class { 'caddy':
@@ -97,10 +101,15 @@ The [reference][1] documentation of this module is generated using [puppetlabs/p
 
 This module has been tested on:
 
-* RedHat 7/8
-* CentOS 7/8
-* Debian 8/9/10
-* Ubuntu 16.04/18.04
+* AlmaLinux 8/9
+* CentOS 9
+* Debian 11/12
+* OracleLinux 8/9
+* RedHat 8/9
+* Rocky 8/9
+* Ubuntu 20.04/22.04/24.04
+
+For the official list of all tested distributions, please take a look at the [metadata.json](https://github.com/voxpupuli/puppet-caddy/blob/master/metadata.json#L24)
 
 ## Development
 

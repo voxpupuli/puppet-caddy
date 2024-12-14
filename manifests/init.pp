@@ -118,7 +118,7 @@
 #   Caddyfile source.
 #
 # @param caddyfile_content
-#   Caddyfile content. Always preferred over caddyfile_source.
+#   Caddyfile content.
 #
 # @param config_dir
 #  Where to store Caddy configs
@@ -160,7 +160,7 @@ class caddy (
   String[1]                      $package_name                    = 'caddy',
   String[1]                      $package_ensure                  = $version,
   Boolean                        $manage_caddyfile                = true,
-  Stdlib::Filesource             $caddyfile_source                = 'puppet:///modules/caddy/etc/caddy/Caddyfile',
+  Optional[Stdlib::Filesource]   $caddyfile_source                = undef,
   Optional[String[1]]            $caddyfile_content               = undef,
   Boolean                        $purge_config_dir                = true,
 ) {

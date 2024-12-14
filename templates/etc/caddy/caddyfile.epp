@@ -1,0 +1,8 @@
+<%- |
+  String[1] $config_dir,
+| -%>
+#
+# THIS FILE IS MANAGED BY PUPPET
+#
+
+import <%= $config_dir %>/*.conf

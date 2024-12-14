@@ -29,14 +29,24 @@ class caddy::config {
   }
 
   if $caddy::manage_caddyfile {
-    # caddyfile_content is always preferred over caddyfile_source when set
+    # Prefer source over content if both are defined
+    # Fallback to the bundled template if both are unset
+    $real_source  = $caddy::caddyfile_source
+    $real_content = if $caddy::caddyfile_source { undef } else {
+      $caddy::caddyfile_content.lest || {
+        epp('caddy/etc/caddy/caddyfile.epp',
+          config_dir => $caddy::config_dir,
+        )
+      }
+    }
+
     file { '/etc/caddy/Caddyfile':
       ensure  => file,
       mode    => '0444',
       owner   => $caddy::caddy_user,
       group   => $caddy::caddy_group,
-      source  => if $caddy::caddyfile_content { undef } else { $caddy::caddyfile_source },
-      content => $caddy::caddyfile_content,
+      source  => $real_source,
+      content => $real_content,
     }
   }
 }

@@ -354,17 +354,17 @@ Default value: `true`
 
 ##### <a name="-caddy--caddyfile_source"></a>`caddyfile_source`
 
-Data type: `Stdlib::Filesource`
+Data type: `Optional[Stdlib::Filesource]`
 
 Caddyfile source.
 
-Default value: `'puppet:///modules/caddy/etc/caddy/Caddyfile'`
+Default value: `undef`
 
 ##### <a name="-caddy--caddyfile_content"></a>`caddyfile_content`
 
 Data type: `Optional[String[1]]`
 
-Caddyfile content. Always preferred over caddyfile_source.
+Caddyfile content.
 
 Default value: `undef`
 

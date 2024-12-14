@@ -116,7 +116,8 @@ describe 'caddy' do
             'owner' => 'caddy',
             'group' => 'caddy',
             'mode' => '0444',
-            'source' => 'puppet:///modules/caddy/etc/caddy/Caddyfile'
+            'source' => nil,
+            'content' => %r{^import /etc/caddy/config/\*\.conf$}
           ).
             that_requires('File[/etc/caddy]')
         end
@@ -336,6 +337,19 @@ describe 'caddy' do
         let(:params) { { caddyfile_content: "localhost\nfile_server\n" } }
 
         it { is_expected.to contain_file('/etc/caddy/Caddyfile').with_source(nil).with_content("localhost\nfile_server\n") }
+      end
+
+      context 'with both caddyfile_source and caddyfile_content set' do
+        let(:params) do
+          {
+            caddyfile_source: 'http://example.com/Caddyfile',
+            caddyfile_content: "localhost\nfile_server\n",
+          }
+        end
+
+        it 'prefers source over content' do
+          is_expected.to contain_file('/etc/caddy/Caddyfile').with_source('http://example.com/Caddyfile').with_content(nil)
+        end
       end
     end
   end

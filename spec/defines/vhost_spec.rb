@@ -11,11 +11,7 @@ describe 'caddy::vhost', type: :define do
 
       context 'with source' do
         let(:title) { 'example1' }
-        let(:params) do
-          {
-            source: 'puppet:///modules/caddy/etc/caddy/config/example1.conf'
-          }
-        end
+        let(:params) { { source: 'puppet:///modules/caddy/etc/caddy/config/example1.conf' } }
 
         it do
           expect(subject).to contain_file('/etc/caddy/config/example1.conf').with(
@@ -30,11 +26,7 @@ describe 'caddy::vhost', type: :define do
 
       context 'with content' do
         let(:title) { 'example2' }
-        let(:params) do
-          {
-            content: 'localhost:2015'
-          }
-        end
+        let(:params) { { content: 'localhost:2015' } }
 
         it do
           expect(subject).to contain_file('/etc/caddy/config/example2.conf').with(
@@ -45,6 +37,13 @@ describe 'caddy::vhost', type: :define do
             'notify' => 'Class[Caddy::Service]'
           )
         end
+      end
+
+      context 'with ensure => absent' do
+        let(:title) { 'example3' }
+        let(:params) { { ensure: 'absent' } }
+
+        it { expect(subject).to contain_file('/etc/caddy/config/example3.conf').with_ensure('absent') }
       end
     end
   end

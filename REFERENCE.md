@@ -394,14 +394,23 @@ caddy::vhost { 'example2:
 
 The following parameters are available in the `caddy::vhost` defined type:
 
+* [`ensure`](#-caddy--vhost--ensure)
 * [`source`](#-caddy--vhost--source)
 * [`content`](#-caddy--vhost--content)
+
+##### <a name="-caddy--vhost--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Make the vhost either present or absent
+
+Default value: `'present'`
 
 ##### <a name="-caddy--vhost--source"></a>`source`
 
 Data type: `Optional[Stdlib::Filesource]`
 
-source (path) for the caddy vhost configuration
+Source (path) for the caddy vhost configuration
 
 Default value: `undef`
 
@@ -409,7 +418,7 @@ Default value: `undef`
 
 Data type: `Optional[String]`
 
-string with the caddy vhost configuration
+String with the caddy vhost configuration
 
 Default value: `undef`
 

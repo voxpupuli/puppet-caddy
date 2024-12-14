@@ -111,6 +111,15 @@
 # @param package_ensure
 #   Whether to install or remove the caddy package. Only relevant when $install_method is 'repo'.
 #
+# @param manage_caddyfile
+#   Whether to manage Caddyfile.
+#
+# @param caddyfile_source
+#   Caddyfile source.
+#
+# @param caddyfile_content
+#   Caddyfile content. Always preferred over caddyfile_source.
+#
 class caddy (
   String[1]                      $version                         = '2.0.0',
   Optional[Enum['github','repo']] $install_method                 = undef,
@@ -143,6 +152,9 @@ class caddy (
   Hash[String[1],Any]            $repo_settings                   = {},
   String[1]                      $package_name                    = 'caddy',
   String[1]                      $package_ensure                  = $version,
+  Boolean                        $manage_caddyfile                = true,
+  Stdlib::Filesource             $caddyfile_source                = 'puppet:///modules/caddy/etc/caddy/Caddyfile',
+  Optional[String[1]]            $caddyfile_content               = undef,
 ) {
   case $caddy_architecture {
     'x86_64', 'amd64': { $arch = 'amd64' }

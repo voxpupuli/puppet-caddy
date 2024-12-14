@@ -319,6 +319,24 @@ describe 'caddy' do
 
         it { is_expected.to contain_service('caddy').with_enable(false) }
       end
+
+      context 'with manage_caddyfile => false' do
+        let(:params) { { manage_caddyfile: false } }
+
+        it { is_expected.not_to contain_file('/etc/caddy/Caddyfile') }
+      end
+
+      context 'with caddyfile_source set' do
+        let(:params) { { caddyfile_source: 'http://example.com/Caddyfile' } }
+
+        it { is_expected.to contain_file('/etc/caddy/Caddyfile').with_source('http://example.com/Caddyfile').with_content(nil) }
+      end
+
+      context 'with caddyfile_content set' do
+        let(:params) { { caddyfile_content: "localhost\nfile_server\n" } }
+
+        it { is_expected.to contain_file('/etc/caddy/Caddyfile').with_source(nil).with_content("localhost\nfile_server\n") }
+      end
     end
   end
 end

@@ -22,17 +22,21 @@ class caddy::config {
       owner => 'root',
       group => 'root',
       ;
-
-    ['/etc/caddy/Caddyfile']:
-      ensure  => file,
-      mode    => '0444',
-      source  => 'puppet:///modules/caddy/etc/caddy/Caddyfile',
-      require => File['/etc/caddy'],
-      ;
-
     ['/etc/caddy/config']:
       purge   => true,
       recurse => true,
       ;
+  }
+
+  if $caddy::manage_caddyfile {
+    # caddyfile_content is always preferred over caddyfile_source when set
+    file { '/etc/caddy/Caddyfile':
+      ensure  => file,
+      mode    => '0444',
+      owner   => $caddy::caddy_user,
+      group   => $caddy::caddy_group,
+      source  => if $caddy::caddyfile_content { undef } else { $caddy::caddyfile_source },
+      content => $caddy::caddyfile_content,
+    }
   }
 }

@@ -87,6 +87,9 @@ The following parameters are available in the `caddy` class:
 * [`repo_settings`](#-caddy--repo_settings)
 * [`package_name`](#-caddy--package_name)
 * [`package_ensure`](#-caddy--package_ensure)
+* [`manage_caddyfile`](#-caddy--manage_caddyfile)
+* [`caddyfile_source`](#-caddy--caddyfile_source)
+* [`caddyfile_content`](#-caddy--caddyfile_content)
 
 ##### <a name="-caddy--version"></a>`version`
 
@@ -338,6 +341,30 @@ Data type: `String[1]`
 Whether to install or remove the caddy package. Only relevant when $install_method is 'repo'.
 
 Default value: `$version`
+
+##### <a name="-caddy--manage_caddyfile"></a>`manage_caddyfile`
+
+Data type: `Boolean`
+
+Whether to manage Caddyfile.
+
+Default value: `true`
+
+##### <a name="-caddy--caddyfile_source"></a>`caddyfile_source`
+
+Data type: `Stdlib::Filesource`
+
+Caddyfile source.
+
+Default value: `'puppet:///modules/caddy/etc/caddy/Caddyfile'`
+
+##### <a name="-caddy--caddyfile_content"></a>`caddyfile_content`
+
+Data type: `Optional[String[1]]`
+
+Caddyfile content. Always preferred over caddyfile_source.
+
+Default value: `undef`
 
 ## Defined types
 

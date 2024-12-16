@@ -1,0 +1,3 @@
+---
+caddy::repo_settings:
+  copr_repo: '@caddy/caddy'

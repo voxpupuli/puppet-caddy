@@ -56,6 +56,35 @@ describe 'class caddy:' do
     end
   end
 
+  context 'when installing from repo' do
+    # Debian repo has multiple versions
+    # RedHat repo has just the latest version at the moment
+    let(:use_version) do
+      case fact('os.family')
+      when 'Debian'
+        '2.8.3'
+      else
+        latest_release.sub(%r{\Av}, '')
+      end
+    end
+
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<~PUPPET
+          class { 'caddy':
+            install_method => 'repo',
+            version        => '#{use_version}',
+          }
+        PUPPET
+      end
+    end
+
+    describe command('caddy version') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to start_with "v#{use_version}" }
+    end
+  end
+
   context 'with vhosts' do
     it_behaves_like 'an idempotent resource' do
       let(:manifest) do

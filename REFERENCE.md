@@ -14,6 +14,7 @@
 
 * `caddy::config`: This class handles the Caddy config.
 * `caddy::install`: This class handles the Caddy archive.
+* `caddy::install::repo`: This class handles Caddy installation from a package repository
 * `caddy::service`: This class handles the Caddy service.
 
 ### Defined types
@@ -82,6 +83,10 @@ The following parameters are available in the `caddy` class:
 * [`service_name`](#-caddy--service_name)
 * [`service_ensure`](#-caddy--service_ensure)
 * [`service_enable`](#-caddy--service_enable)
+* [`manage_repo`](#-caddy--manage_repo)
+* [`repo_settings`](#-caddy--repo_settings)
+* [`package_name`](#-caddy--package_name)
+* [`package_ensure`](#-caddy--package_ensure)
 
 ##### <a name="-caddy--version"></a>`version`
 
@@ -93,9 +98,12 @@ Default value: `'2.0.0'`
 
 ##### <a name="-caddy--install_method"></a>`install_method`
 
-Data type: `Optional[Enum['github']]`
+Data type: `Optional[Enum['github','repo']]`
 
-Which source is used.
+Which source to use for the Caddy installation. See https://caddyserver.com/docs/install.
+* `undef` (default) - download from the official Caddy site
+* `github` - download from Github releases
+* `repo` - install from an OS repository
 
 Default value: `undef`
 
@@ -103,7 +111,7 @@ Default value: `undef`
 
 Data type: `Stdlib::Absolutepath`
 
-Directory where the Caddy binary is stored.
+Directory where the Caddy binary is stored. Not used when $install_method is 'repo'.
 
 Default value: `'/opt/caddy'`
 
@@ -279,7 +287,7 @@ Default value: `true`
 
 Data type: `String[1]`
 
-Customise the name of the system service
+Customise the name of the system service.
 
 Default value: `'caddy'`
 
@@ -287,7 +295,7 @@ Default value: `'caddy'`
 
 Data type: `Stdlib::Ensure::Service`
 
-Whether the service should be running or stopped
+Whether the service should be running or stopped.
 
 Default value: `'running'`
 
@@ -295,9 +303,41 @@ Default value: `'running'`
 
 Data type: `Boolean`
 
-Whether the service should be enabled or disabled
+Whether the service should be enabled or disabled.
 
 Default value: `true`
+
+##### <a name="-caddy--manage_repo"></a>`manage_repo`
+
+Data type: `Boolean`
+
+Whether the APT/YUM(COPR) repository should be installed. Only relevant when $install_method is 'repo'.
+
+Default value: `true`
+
+##### <a name="-caddy--repo_settings"></a>`repo_settings`
+
+Data type: `Hash[String[1],Any]`
+
+Distro-specific repository settings.
+
+Default value: `{}`
+
+##### <a name="-caddy--package_name"></a>`package_name`
+
+Data type: `String[1]`
+
+Name of the caddy package to use. Only relevant when $install_method is 'repo'.
+
+Default value: `'caddy'`
+
+##### <a name="-caddy--package_ensure"></a>`package_ensure`
+
+Data type: `String[1]`
+
+Whether to install or remove the caddy package. Only relevant when $install_method is 'repo'.
+
+Default value: `$version`
 
 ## Defined types
 

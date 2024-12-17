@@ -93,7 +93,7 @@ describe 'class caddy:' do
           }
 
           caddy::vhost {'example1':
-            source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
+            content => "localhost:3000 {\n  respond \\'example1\\'\n}\n"
           }
 
           caddy::vhost {'example2':

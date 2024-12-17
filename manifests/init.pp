@@ -111,6 +111,24 @@
 # @param package_ensure
 #   Whether to install or remove the caddy package. Only relevant when $install_method is 'repo'.
 #
+# @param manage_caddyfile
+#   Whether to manage Caddyfile.
+#
+# @param caddyfile_source
+#   Caddyfile source.
+#
+# @param caddyfile_content
+#   Caddyfile content.
+#
+# @param config_dir
+#  Where to store Caddy configs
+#
+# @param purge_config_dir
+#  Whether to purge Caddy config directory.
+#
+# @param vhosts
+#   List of virtual hosts to create.
+#
 class caddy (
   String[1]                      $version                         = '2.0.0',
   Optional[Enum['github','repo']] $install_method                 = undef,
@@ -123,6 +141,7 @@ class caddy (
   Stdlib::Absolutepath           $caddy_log_dir                   = '/var/log/caddy',
   Stdlib::Absolutepath           $caddy_home                      = '/var/lib/caddy',
   Stdlib::Absolutepath           $caddy_ssl_dir                   = '/etc/ssl/caddy',
+  Stdlib::Absolutepath           $config_dir                      = '/etc/caddy/config',
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
   Enum['on','off']               $caddy_telemetry                 = 'off',
   String[1]                      $caddy_features                  = 'http.git,http.filter,http.ipfilter',
@@ -143,6 +162,11 @@ class caddy (
   Hash[String[1],Any]            $repo_settings                   = {},
   String[1]                      $package_name                    = 'caddy',
   String[1]                      $package_ensure                  = $version,
+  Boolean                        $manage_caddyfile                = true,
+  Optional[Stdlib::Filesource]   $caddyfile_source                = undef,
+  Optional[String[1]]            $caddyfile_content               = undef,
+  Boolean                        $purge_config_dir                = true,
+  Hash[String[1], Caddy::VirtualHost] $vhosts                     = {},
 ) {
   case $caddy_architecture {
     'x86_64', 'amd64': { $arch = 'amd64' }
@@ -178,6 +202,12 @@ class caddy (
   contain caddy::install
   contain caddy::config
   contain caddy::service
+
+  $vhosts.each |String[1] $name, Caddy::VirtualHost $vhost| {
+    caddy::vhost { $name:
+      * => $vhost,
+    }
+  }
 
   Class['caddy::install']
   -> Class['caddy::config']

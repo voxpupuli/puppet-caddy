@@ -21,6 +21,10 @@
 
 * [`caddy::vhost`](#caddy--vhost): This defined type handles the Caddy virtual hosts.
 
+### Data types
+
+* [`Caddy::VirtualHost`](#Caddy--VirtualHost): Caddy virtual host type
+
 ## Classes
 
 ### <a name="caddy"></a>`caddy`
@@ -87,6 +91,12 @@ The following parameters are available in the `caddy` class:
 * [`repo_settings`](#-caddy--repo_settings)
 * [`package_name`](#-caddy--package_name)
 * [`package_ensure`](#-caddy--package_ensure)
+* [`manage_caddyfile`](#-caddy--manage_caddyfile)
+* [`caddyfile_source`](#-caddy--caddyfile_source)
+* [`caddyfile_content`](#-caddy--caddyfile_content)
+* [`config_dir`](#-caddy--config_dir)
+* [`purge_config_dir`](#-caddy--purge_config_dir)
+* [`vhosts`](#-caddy--vhosts)
 
 ##### <a name="-caddy--version"></a>`version`
 
@@ -339,6 +349,54 @@ Whether to install or remove the caddy package. Only relevant when $install_meth
 
 Default value: `$version`
 
+##### <a name="-caddy--manage_caddyfile"></a>`manage_caddyfile`
+
+Data type: `Boolean`
+
+Whether to manage Caddyfile.
+
+Default value: `true`
+
+##### <a name="-caddy--caddyfile_source"></a>`caddyfile_source`
+
+Data type: `Optional[Stdlib::Filesource]`
+
+Caddyfile source.
+
+Default value: `undef`
+
+##### <a name="-caddy--caddyfile_content"></a>`caddyfile_content`
+
+Data type: `Optional[String[1]]`
+
+Caddyfile content.
+
+Default value: `undef`
+
+##### <a name="-caddy--config_dir"></a>`config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Where to store Caddy configs
+
+Default value: `'/etc/caddy/config'`
+
+##### <a name="-caddy--purge_config_dir"></a>`purge_config_dir`
+
+Data type: `Boolean`
+
+Whether to purge Caddy config directory.
+
+Default value: `true`
+
+##### <a name="-caddy--vhosts"></a>`vhosts`
+
+Data type: `Hash[String[1], Caddy::VirtualHost]`
+
+List of virtual hosts to create.
+
+Default value: `{}`
+
 ## Defined types
 
 ### <a name="caddy--vhost"></a>`caddy::vhost`
@@ -367,14 +425,24 @@ caddy::vhost { 'example2:
 
 The following parameters are available in the `caddy::vhost` defined type:
 
+* [`ensure`](#-caddy--vhost--ensure)
 * [`source`](#-caddy--vhost--source)
 * [`content`](#-caddy--vhost--content)
+* [`config_dir`](#-caddy--vhost--config_dir)
+
+##### <a name="-caddy--vhost--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Make the vhost either present or absent
+
+Default value: `'present'`
 
 ##### <a name="-caddy--vhost--source"></a>`source`
 
 Data type: `Optional[Stdlib::Filesource]`
 
-source (path) for the caddy vhost configuration
+Source (path) for the caddy vhost configuration
 
 Default value: `undef`
 
@@ -382,7 +450,31 @@ Default value: `undef`
 
 Data type: `Optional[String]`
 
-string with the caddy vhost configuration
+String with the caddy vhost configuration
 
 Default value: `undef`
+
+##### <a name="-caddy--vhost--config_dir"></a>`config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Where to store the vhost config file
+
+Default value: `$caddy::config_dir`
+
+## Data types
+
+### <a name="Caddy--VirtualHost"></a>`Caddy::VirtualHost`
+
+Caddy virtual host type
+
+Alias of
+
+```puppet
+Struct[{
+    ensure => Optional[Enum['absent', 'present']],
+    source => Optional[Stdlib::Filesource],
+    content => Optional[String[1]],
+}]
+```
 

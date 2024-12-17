@@ -116,7 +116,8 @@ describe 'caddy' do
             'owner' => 'caddy',
             'group' => 'caddy',
             'mode' => '0444',
-            'source' => 'puppet:///modules/caddy/etc/caddy/Caddyfile'
+            'source' => nil,
+            'content' => %r{^import /etc/caddy/config/\*\.conf$}
           ).
             that_requires('File[/etc/caddy]')
         end
@@ -318,6 +319,59 @@ describe 'caddy' do
         let(:params) { { service_enable: false } }
 
         it { is_expected.to contain_service('caddy').with_enable(false) }
+      end
+
+      context 'with manage_caddyfile => false' do
+        let(:params) { { manage_caddyfile: false } }
+
+        it { is_expected.not_to contain_file('/etc/caddy/Caddyfile') }
+      end
+
+      context 'with caddyfile_source set' do
+        let(:params) { { caddyfile_source: 'http://example.com/Caddyfile' } }
+
+        it { is_expected.to contain_file('/etc/caddy/Caddyfile').with_source('http://example.com/Caddyfile').with_content(nil) }
+      end
+
+      context 'with caddyfile_content set' do
+        let(:params) { { caddyfile_content: "localhost\nfile_server\n" } }
+
+        it { is_expected.to contain_file('/etc/caddy/Caddyfile').with_source(nil).with_content("localhost\nfile_server\n") }
+      end
+
+      context 'with both caddyfile_source and caddyfile_content set' do
+        let(:params) do
+          {
+            caddyfile_source: 'http://example.com/Caddyfile',
+            caddyfile_content: "localhost\nfile_server\n",
+          }
+        end
+
+        it 'prefers source over content' do
+          is_expected.to contain_file('/etc/caddy/Caddyfile').with_source('http://example.com/Caddyfile').with_content(nil)
+        end
+      end
+
+      context 'with vhosts set' do
+        let(:params) do
+          {
+            vhosts: {
+              'h1.example.com': {
+                source: 'http://example.com/test-example-com.conf',
+              },
+              'h2.example.com': {
+                content: "localhost:1234{\n  file_server\n}\n",
+              },
+              'h3.example.com': {
+                ensure: 'absent',
+              }
+            }
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/caddy/config/h1.example.com.conf').with_source('http://example.com/test-example-com.conf') }
+        it { is_expected.to contain_file('/etc/caddy/config/h2.example.com.conf').with_content("localhost:1234{\n  file_server\n}\n") }
+        it { is_expected.to contain_file('/etc/caddy/config/h3.example.com.conf').with_ensure('absent') }
       end
     end
   end

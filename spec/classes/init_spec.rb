@@ -352,6 +352,140 @@ describe 'caddy' do
         end
       end
 
+      context 'with config_dir set' do
+        let(:params) { { config_dir: '/etc/caddy/conf.d' } }
+
+        it do
+          is_expected.to contain_file('/etc/caddy/conf.d').
+            with_ensure('directory').
+            with_owner('caddy').
+            with_group('caddy').
+            with_mode('0755').
+            with_purge(true).
+            with_recurse(true)
+        end
+
+        it do
+          is_expected.to contain_file('/etc/caddy/Caddyfile').
+            with_content(%r{^import /etc/caddy/conf.d/\*\.conf$})
+        end
+      end
+
+      context 'with purge_config_dir => false' do
+        let(:params) { { purge_config_dir: false } }
+
+        it do
+          is_expected.to contain_file('/etc/caddy/config').
+            with_ensure('directory').
+            with_purge(false).
+            with_recurse(nil)
+        end
+      end
+
+      context 'with vhost_dir set' do
+        let(:params) { { vhost_dir: '/etc/caddy/vhost.d' } }
+
+        it { is_expected.to contain_file('/etc/caddy/config').with_ensure('directory') }
+
+        it do
+          is_expected.to contain_file('/etc/caddy/vhost.d').
+            with_ensure('directory').
+            with_owner('caddy').
+            with_group('caddy').
+            with_mode('0755').
+            with_purge(true).
+            with_recurse(true)
+        end
+
+        it do
+          is_expected.to contain_file('/etc/caddy/Caddyfile').
+            with_content(%r{^import /etc/caddy/config/\*\.conf$}).
+            with_content(%r{^import /etc/caddy/vhost.d/\*\.conf$})
+        end
+
+        context 'with purge_vhost_dir => false' do
+          let(:params) { super().merge(purge_vhost_dir: false) }
+
+          it do
+            is_expected.to contain_file('/etc/caddy/vhost.d').
+              with_ensure('directory').
+              with_purge(false).
+              with_recurse(nil)
+          end
+        end
+      end
+
+      context 'with vhost_enable_dir set' do
+        let(:params) { { vhost_enable_dir: '/etc/caddy/sites-enabled' } }
+
+        it do
+          is_expected.to contain_file('/etc/caddy/sites-enabled').
+            with_ensure('directory').
+            with_owner('caddy').
+            with_group('caddy').
+            with_mode('0755').
+            with_purge(true).
+            with_recurse(true)
+        end
+
+        it do
+          is_expected.to contain_file('/etc/caddy/Caddyfile').
+            with_content(%r{^import /etc/caddy/config/\*\.conf$}).
+            with_content(%r{^import /etc/caddy/sites-enabled/\*\.conf$})
+        end
+
+        context 'with purge_vhost_enable_dir => false' do
+          let(:params) { super().merge(purge_vhost_enable_dir: false) }
+
+          it do
+            is_expected.to contain_file('/etc/caddy/sites-enabled').
+              with_ensure('directory').
+              with_purge(false).
+              with_recurse(nil)
+          end
+        end
+      end
+
+      context 'with both vhost_dir and vhost_enable_dir set' do
+        let(:params) do
+          {
+            vhost_dir: '/etc/caddy/sites-available',
+            vhost_enable_dir: '/etc/caddy/sites-enabled',
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/caddy/sites-available') }
+        it { is_expected.to contain_file('/etc/caddy/sites-enabled') }
+
+        it do
+          is_expected.to contain_file('/etc/caddy/Caddyfile').
+            with_content(%r{^import /etc/caddy/config/\*\.conf$}).
+            with_content(%r{^import /etc/caddy/sites-enabled/\*\.conf$})
+        end
+      end
+
+      context 'with configs set' do
+        let(:params) do
+          {
+            config_files: {
+              example1: {
+                source: 'puppet:///profiles/caddy/example1.conf',
+              },
+              example2: {
+                content: "foo\nbar\n",
+              },
+              example3: {
+                ensure: 'absent',
+              }
+            }
+          }
+        end
+
+        it { is_expected.to contain_caddy__configfile('example1').with_ensure('present').with_source('puppet:///profiles/caddy/example1.conf') }
+        it { is_expected.to contain_caddy__configfile('example2').with_ensure('present').with_content("foo\nbar\n") }
+        it { is_expected.to contain_caddy__configfile('example3').with_ensure('absent') }
+      end
+
       context 'with vhosts set' do
         let(:params) do
           {
@@ -360,6 +494,7 @@ describe 'caddy' do
                 source: 'http://example.com/test-example-com.conf',
               },
               'h2.example.com': {
+                ensure: 'disabled',
                 content: "localhost:1234{\n  file_server\n}\n",
               },
               'h3.example.com': {
@@ -369,9 +504,9 @@ describe 'caddy' do
           }
         end
 
-        it { is_expected.to contain_file('/etc/caddy/config/h1.example.com.conf').with_source('http://example.com/test-example-com.conf') }
-        it { is_expected.to contain_file('/etc/caddy/config/h2.example.com.conf').with_content("localhost:1234{\n  file_server\n}\n") }
-        it { is_expected.to contain_file('/etc/caddy/config/h3.example.com.conf').with_ensure('absent') }
+        it { is_expected.to contain_caddy__vhost('h1.example.com').with_ensure('enabled').with_source('http://example.com/test-example-com.conf') }
+        it { is_expected.to contain_caddy__vhost('h2.example.com').with_ensure('disabled').with_content("localhost:1234{\n  file_server\n}\n") }
+        it { is_expected.to contain_caddy__vhost('h3.example.com').with_ensure('absent') }
       end
     end
   end

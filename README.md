@@ -93,6 +93,56 @@ caddy::vhost { 'example2':
 }
 ```
 
+Use `conf.d` + `sites-available` + `sites-enabled` layout with `config_files` and `vhosts` parameters set:
+
+```puppet
+class { 'caddy':
+  config_dir => '/etc/caddy/conf.d',
+  vhost_dir => '/etc/caddy/sites-available',
+  vhost_enable_dir => '/etc/caddy/sites-enabled',
+  config_files => {
+    admin_port_2020 => {
+      content => "{\n  admin localhost:2020\n}\n",
+    },
+  },
+  vhosts => {
+    port_3000 => {
+      content => "http://localhost:3000 {\n  respond \\"port 3000\\"\n}\n",
+    },
+    port_3001 => {
+      ensure => 'disabled',
+      content => "http://localhost:3001 {\n  respond \\"port 3001\\"\n}\n",
+    }
+  }
+}
+```
+
+Same as above but configured in Hiera:
+
+```yaml
+caddy::config_dir: /etc/caddy/conf.d
+caddy::vhost_dir: /etc/caddy/sites-available
+caddy::vhost_enable_dir: /etc/caddy/sites-enabled
+caddy::config_files:
+  admin_port_2020:
+    content: |
+      {
+        admin localhost:2020
+      }
+caddy::vhosts:
+  port_3000:
+    content: |
+      http://localhost:3000 {
+        respond "port 3000"
+      }
+  port_3001:
+    ensure: disabled
+    content: |
+      http://localhost:3001 {
+        respond "port 3001"
+      }
+```
+
 ## Reference
 
 The [reference][1] documentation of this module is generated using [puppetlabs/puppetlabs-strings][2].

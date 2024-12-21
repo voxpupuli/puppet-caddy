@@ -103,5 +103,47 @@ describe 'class caddy:' do
       end
     end
   end
+
+  context 'with apache-like layout' do
+    it_behaves_like 'an idempotent resource' do
+      let(:manifest) do
+        <<~PUPPET
+          class { 'caddy':
+            config_dir => '/etc/caddy/conf.d',
+            vhost_dir => '/etc/caddy/sites-available',
+            vhost_enable_dir => '/etc/caddy/sites-enabled',
+            config_files => {
+              admin => {
+                content => "{\n  admin localhost:2020\n}\n",
+              },
+            },
+            vhosts => {
+              port_3000 => {
+                content => "http://localhost:3000 {\n  respond \\"port 3000 ok\\"\n}\n",
+              },
+              port_3001 => {
+                ensure => 'disabled',
+                content => "http://localhost:3001 {\n  respond \\"port 3001 disabled\\"\n}\n",
+              }
+            }
+          }
+        PUPPET
+      end
+    end
+
+    describe command('curl -v http://localhost:2020/config/admin') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to eq "{\"listen\":\"localhost:2020\"}\n" }
+    end
+
+    describe command('curl -v http://localhost:3000/') do
+      its(:exit_status) { is_expected.to eq 0 }
+      its(:stdout) { is_expected.to eq 'port 3000 ok' }
+    end
+
+    describe port(3001) do
+      it { is_expected.not_to be_listening }
+    end
+  end
 end
 # rubocop:enable RSpec/RepeatedExampleGroupDescription

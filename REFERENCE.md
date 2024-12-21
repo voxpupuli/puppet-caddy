@@ -19,10 +19,12 @@
 
 ### Defined types
 
-* [`caddy::vhost`](#caddy--vhost): This defined type handles the Caddy virtual hosts.
+* [`caddy::configfile`](#caddy--configfile): This defined type handles a Caddy config file
+* [`caddy::vhost`](#caddy--vhost): This defined type handles a Caddy virtual host
 
 ### Data types
 
+* [`Caddy::Config`](#Caddy--Config): Caddy config file type
 * [`Caddy::VirtualHost`](#Caddy--VirtualHost): Caddy virtual host type
 
 ## Classes
@@ -96,6 +98,11 @@ The following parameters are available in the `caddy` class:
 * [`caddyfile_content`](#-caddy--caddyfile_content)
 * [`config_dir`](#-caddy--config_dir)
 * [`purge_config_dir`](#-caddy--purge_config_dir)
+* [`config_files`](#-caddy--config_files)
+* [`vhost_dir`](#-caddy--vhost_dir)
+* [`purge_vhost_dir`](#-caddy--purge_vhost_dir)
+* [`vhost_enable_dir`](#-caddy--vhost_enable_dir)
+* [`purge_vhost_enable_dir`](#-caddy--purge_vhost_enable_dir)
 * [`vhosts`](#-caddy--vhosts)
 
 ##### <a name="-caddy--version"></a>`version`
@@ -389,19 +396,136 @@ Whether to purge Caddy config directory.
 
 Default value: `true`
 
+##### <a name="-caddy--config_files"></a>`config_files`
+
+Data type: `Hash[String[1], Caddy::Config]`
+
+Hash of config files to create.
+
+Default value: `{}`
+
+##### <a name="-caddy--vhost_dir"></a>`vhost_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Where to store Caddy available virtual host configs. Set this to
+/etc/caddy/vhost.d if you'd prefer to keep virtual hosts separated from
+configs.
+Set this to /etc/caddy/sites-available to simulate nginx/apache behavior
+(see vhost_enable_dir also).
+
+Default value: `'/etc/caddy/config'`
+
+##### <a name="-caddy--purge_vhost_dir"></a>`purge_vhost_dir`
+
+Data type: `Boolean`
+
+Whether to purge Caddy available virtual host directory.
+
+Default value: `$purge_config_dir`
+
+##### <a name="-caddy--vhost_enable_dir"></a>`vhost_enable_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Where to load Caddy virtual host configs from. Set this parameter to /etc/caddy/sites-enabled
+to simulate nginx/apache behavior.
+
+Default value: `undef`
+
+##### <a name="-caddy--purge_vhost_enable_dir"></a>`purge_vhost_enable_dir`
+
+Data type: `Boolean`
+
+Whether to purge Caddy enabled virtual host directory.
+
+Default value: `$purge_vhost_dir`
+
 ##### <a name="-caddy--vhosts"></a>`vhosts`
 
 Data type: `Hash[String[1], Caddy::VirtualHost]`
 
-List of virtual hosts to create.
+Hash of virtual hosts to create.
 
 Default value: `{}`
 
 ## Defined types
 
+### <a name="caddy--configfile"></a>`caddy::configfile`
+
+This defined type handles a Caddy config file
+
+#### Examples
+
+##### Configure Caddy logging
+
+```puppet
+caddy::configfile { 'subdomain-log':
+  source => 'puppet:///modules/caddy/etc/caddy/config/logging.conf',
+}
+```
+
+##### Same as above but using content
+
+```puppet
+$log_config = @(SUBDOMAIN_LOG)
+  (subdomain-log) {
+    log {
+      hostnames {args[0]}
+      output file /var/log/caddy/{args[0]}.log
+    }
+  }
+  | SUBDOMAIN_LOG
+
+caddy::configfile { 'subdomain-log':
+  content => $log_config,
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `caddy::configfile` defined type:
+
+* [`ensure`](#-caddy--configfile--ensure)
+* [`source`](#-caddy--configfile--source)
+* [`content`](#-caddy--configfile--content)
+* [`config_dir`](#-caddy--configfile--config_dir)
+
+##### <a name="-caddy--configfile--ensure"></a>`ensure`
+
+Data type: `Enum['present','absent']`
+
+Make the config file either present or absent.
+
+Default value: `'present'`
+
+##### <a name="-caddy--configfile--source"></a>`source`
+
+Data type: `Optional[Stdlib::Filesource]`
+
+Source (path) for the caddy config file.
+
+Default value: `undef`
+
+##### <a name="-caddy--configfile--content"></a>`content`
+
+Data type: `Optional[String]`
+
+String with the caddy config file.
+
+Default value: `undef`
+
+##### <a name="-caddy--configfile--config_dir"></a>`config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Where to store the config file.
+
+Default value: `$caddy::config_dir`
+
 ### <a name="caddy--vhost"></a>`caddy::vhost`
 
-This defined type handles the Caddy virtual hosts.
+This defined type handles a Caddy virtual host
 
 #### Examples
 
@@ -429,20 +553,21 @@ The following parameters are available in the `caddy::vhost` defined type:
 * [`source`](#-caddy--vhost--source)
 * [`content`](#-caddy--vhost--content)
 * [`config_dir`](#-caddy--vhost--config_dir)
+* [`enable_dir`](#-caddy--vhost--enable_dir)
 
 ##### <a name="-caddy--vhost--ensure"></a>`ensure`
 
-Data type: `Enum['present','absent']`
+Data type: `Enum['present','enabled','disabled','absent']`
 
-Make the vhost either present or absent
+Make the vhost either present (same as disabled), enabled, disabled or absent.
 
-Default value: `'present'`
+Default value: `'enabled'`
 
 ##### <a name="-caddy--vhost--source"></a>`source`
 
 Data type: `Optional[Stdlib::Filesource]`
 
-Source (path) for the caddy vhost configuration
+Source (path) for the caddy vhost configuration.
 
 Default value: `undef`
 
@@ -450,7 +575,7 @@ Default value: `undef`
 
 Data type: `Optional[String]`
 
-String with the caddy vhost configuration
+String with the caddy vhost configuration.
 
 Default value: `undef`
 
@@ -458,11 +583,33 @@ Default value: `undef`
 
 Data type: `Stdlib::Absolutepath`
 
-Where to store the vhost config file
+Where to store the vhost config file.
 
-Default value: `$caddy::config_dir`
+Default value: `$caddy::vhost_dir`
+
+##### <a name="-caddy--vhost--enable_dir"></a>`enable_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Directory to symlink the vhost config file into (sites-enabled e.g.) if any.
+
+Default value: `$caddy::vhost_enable_dir`
 
 ## Data types
+
+### <a name="Caddy--Config"></a>`Caddy::Config`
+
+Caddy config file type
+
+Alias of
+
+```puppet
+Struct[{
+    ensure => Optional[Enum['absent', 'present']],
+    source => Optional[Stdlib::Filesource],
+    content => Optional[String[1]],
+}]
+```
 
 ### <a name="Caddy--VirtualHost"></a>`Caddy::VirtualHost`
 
@@ -472,7 +619,7 @@ Alias of
 
 ```puppet
 Struct[{
-    ensure => Optional[Enum['absent', 'present']],
+    ensure => Optional[Enum['present','enabled','disabled','absent']],
     source => Optional[Stdlib::Filesource],
     content => Optional[String[1]],
 }]

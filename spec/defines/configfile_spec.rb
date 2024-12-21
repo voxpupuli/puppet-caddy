@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe 'caddy::vhost', type: :define do
+describe 'caddy::configfile', type: :define do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) do
@@ -25,37 +25,9 @@ describe 'caddy::vhost', type: :define do
         end
 
         context 'with config_dir set' do
-          let(:params) { super().merge(config_dir: '/etc/caddy/sites-available') }
+          let(:params) { super().merge(config_dir: '/etc/caddy/conf.d') }
 
-          it { is_expected.to contain_file('/etc/caddy/sites-available/example.conf').with_ensure('file') }
-        end
-
-        context 'with enable_dir set' do
-          let(:params) { super().merge(enable_dir: '/etc/caddy/sites-enabled') }
-
-          it { is_expected.to contain_file('/etc/caddy/config/example.conf').with_ensure('file') }
-
-          it do
-            is_expected.to contain_file('/etc/caddy/sites-enabled/example.conf').
-              with_ensure('link').
-              with_target('/etc/caddy/config/example.conf')
-          end
-
-          %w[present disabled].each do |ens|
-            context "with ensure => #{ens}" do
-              let(:params) { super().merge(ensure: ens) }
-
-              it { is_expected.to contain_file('/etc/caddy/config/example.conf').with_ensure('file') }
-              it { is_expected.to contain_file('/etc/caddy/sites-enabled/example.conf').with_ensure('absent') }
-            end
-          end
-
-          context 'with ensure => absent' do
-            let(:params) { super().merge(ensure: 'absent') }
-
-            it { is_expected.to contain_file('/etc/caddy/config/example.conf').with_ensure('absent') }
-            it { is_expected.to contain_file('/etc/caddy/sites-enabled/example.conf').with_ensure('absent') }
-          end
+          it { is_expected.to contain_file('/etc/caddy/conf.d/example.conf') }
         end
 
         context 'with ensure => absent' do

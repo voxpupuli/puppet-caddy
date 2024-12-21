@@ -24,8 +24,32 @@ class caddy::config {
       ;
     $caddy::config_dir:
       purge   => $caddy::purge_config_dir,
-      recurse => true,
+      recurse => if $caddy::purge_config_dir { true } else { undef },
       ;
+  }
+
+  # Manage vhost_dir if not the same as config dir
+  unless $caddy::vhost_dir == $caddy::config_dir {
+    file { $caddy::vhost_dir:
+      ensure  => directory,
+      owner   => $caddy::caddy_user,
+      group   => $caddy::caddy_group,
+      mode    => '0755',
+      purge   => $caddy::purge_vhost_dir,
+      recurse => if $caddy::purge_vhost_dir { true } else { undef },
+    }
+  }
+
+  # Manage vhost_enable_dir if defined
+  if $caddy::vhost_enable_dir {
+    file { $caddy::vhost_enable_dir:
+      ensure  => directory,
+      owner   => $caddy::caddy_user,
+      group   => $caddy::caddy_group,
+      mode    => '0755',
+      purge   => $caddy::purge_vhost_enable_dir,
+      recurse => if $caddy::purge_vhost_enable_dir { true } else { undef },
+    }
   }
 
   if $caddy::manage_caddyfile {
@@ -35,7 +59,7 @@ class caddy::config {
     $real_content = if $caddy::caddyfile_source { undef } else {
       $caddy::caddyfile_content.lest || {
         epp('caddy/etc/caddy/caddyfile.epp',
-          config_dir => $caddy::config_dir,
+          include_dirs => unique([$caddy::config_dir] + [$caddy::vhost_enable_dir.lest || { $caddy::vhost_dir }])
         )
       }
     }

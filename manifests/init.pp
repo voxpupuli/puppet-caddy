@@ -126,8 +126,28 @@
 # @param purge_config_dir
 #  Whether to purge Caddy config directory.
 #
+# @param config_files
+#   Hash of config files to create.
+#
+# @param vhost_dir
+#  Where to store Caddy available virtual host configs. Set this to
+#  /etc/caddy/vhost.d if you'd prefer to keep virtual hosts separated from
+#  configs.
+#  Set this to /etc/caddy/sites-available to simulate nginx/apache behavior
+#  (see vhost_enable_dir also).
+#
+# @param purge_vhost_dir
+#  Whether to purge Caddy available virtual host directory.
+#
+# @param vhost_enable_dir
+#  Where to load Caddy virtual host configs from. Set this parameter to /etc/caddy/sites-enabled
+#  to simulate nginx/apache behavior.
+#
+# @param purge_vhost_enable_dir
+#  Whether to purge Caddy enabled virtual host directory.
+#
 # @param vhosts
-#   List of virtual hosts to create.
+#   Hash of virtual hosts to create.
 #
 class caddy (
   String[1]                      $version                         = '2.0.0',
@@ -142,6 +162,8 @@ class caddy (
   Stdlib::Absolutepath           $caddy_home                      = '/var/lib/caddy',
   Stdlib::Absolutepath           $caddy_ssl_dir                   = '/etc/ssl/caddy',
   Stdlib::Absolutepath           $config_dir                      = '/etc/caddy/config',
+  Stdlib::Absolutepath           $vhost_dir                       = '/etc/caddy/config',
+  Optional[Stdlib::Absolutepath] $vhost_enable_dir                = undef,
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
   Enum['on','off']               $caddy_telemetry                 = 'off',
   String[1]                      $caddy_features                  = 'http.git,http.filter,http.ipfilter',
@@ -166,6 +188,9 @@ class caddy (
   Optional[Stdlib::Filesource]   $caddyfile_source                = undef,
   Optional[String[1]]            $caddyfile_content               = undef,
   Boolean                        $purge_config_dir                = true,
+  Boolean                        $purge_vhost_dir                 = $purge_config_dir,
+  Boolean                        $purge_vhost_enable_dir          = $purge_vhost_dir,
+  Hash[String[1], Caddy::Config]      $config_files               = {},
   Hash[String[1], Caddy::VirtualHost] $vhosts                     = {},
 ) {
   case $caddy_architecture {
@@ -202,6 +227,12 @@ class caddy (
   contain caddy::install
   contain caddy::config
   contain caddy::service
+
+  $config_files.each |String[1] $name, Caddy::Config $cfg| {
+    caddy::configfile { $name:
+      * => $cfg,
+    }
+  }
 
   $vhosts.each |String[1] $name, Caddy::VirtualHost $vhost| {
     caddy::vhost { $name:

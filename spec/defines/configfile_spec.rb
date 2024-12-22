@@ -64,6 +64,12 @@ describe 'caddy::configfile', type: :define do
           it { is_expected.to contain_file('/etc/caddy/config/example.conf').with_ensure('absent') }
         end
 
+        context 'with file_extension set' do
+          let(:params) { super().merge(file_extension: '.caddyfile') }
+
+          it { is_expected.to contain_file('/etc/caddy/config/example.caddyfile').with_ensure('file') }
+        end
+
         context 'with custom title' do
           let(:title) { 'test' }
 

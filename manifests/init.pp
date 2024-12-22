@@ -120,6 +120,9 @@
 # @param caddyfile_content
 #   Caddyfile content.
 #
+# @param config_file_extension
+#   Default extension for config and virtual host files (must include leading `.`)
+#
 # @param config_dir
 #  Where to store Caddy configs.
 #  Set this to /etc/caddy/conf-available to simulate nginx/apache behavior
@@ -201,6 +204,7 @@ class caddy (
   Boolean                        $purge_config_enable_dir         = $purge_config_dir,
   Boolean                        $purge_vhost_dir                 = $purge_config_dir,
   Boolean                        $purge_vhost_enable_dir          = $purge_vhost_dir,
+  Variant[Enum[''], Pattern[/^\./]]   $config_file_extension      = '.conf',
   Hash[String[1], Caddy::Config]      $config_files               = {},
   Hash[String[1], Caddy::VirtualHost] $vhosts                     = {},
 ) {

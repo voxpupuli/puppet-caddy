@@ -15,6 +15,9 @@
 # @param enable_dir
 #   Directory to symlink the config config file into (conf-enabled e.g.) if any.
 #
+# @param file_extension
+#   Default extension for the config file (must include leading `.`)
+#
 # @example Configure Caddy logging
 #   caddy::configfile { 'subdomain-log':
 #     source => 'puppet:///modules/caddy/etc/caddy/config/logging.conf',
@@ -40,6 +43,7 @@ define caddy::configfile (
   Optional[String] $content = undef,
   Stdlib::Absolutepath $config_dir = $caddy::config_dir,
   Optional[Stdlib::Absolutepath] $enable_dir = $caddy::config_enable_dir,
+  Variant[Enum[''], Pattern[/^\./]] $file_extension = $caddy::config_file_extension,
 ) {
   include caddy
 
@@ -52,7 +56,9 @@ define caddy::configfile (
     default  => 'file',
   }
 
-  file { "${config_dir}/${title}.conf":
+  $filename = "${title}${file_extension}"
+
+  file { "${config_dir}/${filename}":
     ensure  => $file_ensure,
     content => $content,
     source  => $source,
@@ -67,9 +73,9 @@ define caddy::configfile (
       default   => 'absent',
     }
 
-    file { "${enable_dir}/${title}.conf":
+    file { "${enable_dir}/${filename}":
       ensure  => $symlink_ensure,
-      target  => "${config_dir}/${title}.conf",
+      target  => "${config_dir}/${filename}",
       require => Class['caddy::config'],
       notify  => Class['caddy::service'],
     }

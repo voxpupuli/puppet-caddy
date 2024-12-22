@@ -113,6 +113,7 @@ describe 'class caddy:' do
             config_enable_dir => '/etc/caddy/conf-enabled',
             vhost_dir => '/etc/caddy/sites-available',
             vhost_enable_dir => '/etc/caddy/sites-enabled',
+            config_file_extension => '.caddyfile',
             config_files => {
               admin_2020 => {
                 content => "{\n  admin localhost:2020\n}\n",

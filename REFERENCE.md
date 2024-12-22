@@ -96,6 +96,7 @@ The following parameters are available in the `caddy` class:
 * [`manage_caddyfile`](#-caddy--manage_caddyfile)
 * [`caddyfile_source`](#-caddy--caddyfile_source)
 * [`caddyfile_content`](#-caddy--caddyfile_content)
+* [`config_file_extension`](#-caddy--config_file_extension)
 * [`config_dir`](#-caddy--config_dir)
 * [`purge_config_dir`](#-caddy--purge_config_dir)
 * [`config_enable_dir`](#-caddy--config_enable_dir)
@@ -382,6 +383,14 @@ Caddyfile content.
 
 Default value: `undef`
 
+##### <a name="-caddy--config_file_extension"></a>`config_file_extension`
+
+Data type: `Variant[Enum[''], Pattern[/^\./]]`
+
+Default extension for config and virtual host files (must include leading `.`)
+
+Default value: `'.conf'`
+
 ##### <a name="-caddy--config_dir"></a>`config_dir`
 
 Data type: `Stdlib::Absolutepath`
@@ -512,6 +521,7 @@ The following parameters are available in the `caddy::configfile` defined type:
 * [`content`](#-caddy--configfile--content)
 * [`config_dir`](#-caddy--configfile--config_dir)
 * [`enable_dir`](#-caddy--configfile--enable_dir)
+* [`file_extension`](#-caddy--configfile--file_extension)
 
 ##### <a name="-caddy--configfile--ensure"></a>`ensure`
 
@@ -553,6 +563,14 @@ Directory to symlink the config config file into (conf-enabled e.g.) if any.
 
 Default value: `$caddy::config_enable_dir`
 
+##### <a name="-caddy--configfile--file_extension"></a>`file_extension`
+
+Data type: `Variant[Enum[''], Pattern[/^\./]]`
+
+Default extension for the config file (must include leading `.`)
+
+Default value: `$caddy::config_file_extension`
+
 ### <a name="caddy--vhost"></a>`caddy::vhost`
 
 This defined type handles a Caddy virtual host
@@ -584,6 +602,7 @@ The following parameters are available in the `caddy::vhost` defined type:
 * [`content`](#-caddy--vhost--content)
 * [`config_dir`](#-caddy--vhost--config_dir)
 * [`enable_dir`](#-caddy--vhost--enable_dir)
+* [`file_extension`](#-caddy--vhost--file_extension)
 
 ##### <a name="-caddy--vhost--ensure"></a>`ensure`
 
@@ -624,6 +643,14 @@ Data type: `Optional[Stdlib::Absolutepath]`
 Directory to symlink the vhost config file into (sites-enabled e.g.) if any.
 
 Default value: `$caddy::vhost_enable_dir`
+
+##### <a name="-caddy--vhost--file_extension"></a>`file_extension`
+
+Data type: `Variant[Enum[''], Pattern[/^\./]]`
+
+Default extension for the vhost config file (must include leading `.`)
+
+Default value: `$caddy::config_file_extension`
 
 ## Data types
 

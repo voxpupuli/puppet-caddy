@@ -121,10 +121,19 @@
 #   Caddyfile content.
 #
 # @param config_dir
-#  Where to store Caddy configs
+#  Where to store Caddy configs.
+#  Set this to /etc/caddy/conf-available to simulate nginx/apache behavior
+#  (see config_enable_dir also).
 #
 # @param purge_config_dir
 #  Whether to purge Caddy config directory.
+#
+# @param config_enable_dir
+#  Where to load Caddy configs from. Set this parameter to /etc/caddy/conf-enabled
+#  to simulate nginx/apache behavior.
+#
+# @param purge_config_enable_dir
+#  Whether to purge Caddy enabled config directory.
 #
 # @param config_files
 #   Hash of config files to create.
@@ -162,6 +171,7 @@ class caddy (
   Stdlib::Absolutepath           $caddy_home                      = '/var/lib/caddy',
   Stdlib::Absolutepath           $caddy_ssl_dir                   = '/etc/ssl/caddy',
   Stdlib::Absolutepath           $config_dir                      = '/etc/caddy/config',
+  Optional[Stdlib::Absolutepath] $config_enable_dir               = undef,
   Stdlib::Absolutepath           $vhost_dir                       = '/etc/caddy/config',
   Optional[Stdlib::Absolutepath] $vhost_enable_dir                = undef,
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
@@ -188,6 +198,7 @@ class caddy (
   Optional[Stdlib::Filesource]   $caddyfile_source                = undef,
   Optional[String[1]]            $caddyfile_content               = undef,
   Boolean                        $purge_config_dir                = true,
+  Boolean                        $purge_config_enable_dir         = $purge_config_dir,
   Boolean                        $purge_vhost_dir                 = $purge_config_dir,
   Boolean                        $purge_vhost_enable_dir          = $purge_vhost_dir,
   Hash[String[1], Caddy::Config]      $config_files               = {},

@@ -93,11 +93,12 @@ caddy::vhost { 'example2':
 }
 ```
 
-Use `conf.d` + `sites-available` + `sites-enabled` layout with `config_files` and `vhosts` parameters set:
+Use apache-like configuration files layout:
 
 ```puppet
 class { 'caddy':
-  config_dir => '/etc/caddy/conf.d',
+  config_dir => '/etc/caddy/conf-available',
+  config_enabled_dir => '/etc/caddy/conf-enabled',
   vhost_dir => '/etc/caddy/sites-available',
   vhost_enable_dir => '/etc/caddy/sites-enabled',
   config_files => {
@@ -120,7 +121,8 @@ class { 'caddy':
 Same as above but configured in Hiera:
 
 ```yaml
-caddy::config_dir: /etc/caddy/conf.d
+caddy::config_dir: /etc/caddy/conf-available
+caddy::config_enable_dir: /etc/caddy/conf-enabled
 caddy::vhost_dir: /etc/caddy/sites-available
 caddy::vhost_enable_dir: /etc/caddy/sites-enabled
 caddy::config_files:
@@ -141,6 +143,14 @@ caddy::vhosts:
       http://localhost:3001 {
         respond "port 3001"
       }
+```
+
+You may consider setting following parameters also. This allows
+enabling/disabling config files and virtual hosts manually.
+
+```yaml
+caddy::purge_config_enable_dir: false
+caddy::purge_vhost_enable_dir: false
 ```
 
 ## Reference

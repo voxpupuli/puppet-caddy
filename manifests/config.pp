@@ -40,6 +40,17 @@ class caddy::config {
     }
   }
 
+  # Manage config_enable_dir if defined
+  if $caddy::config_enable_dir {
+    file { $caddy::config_enable_dir:
+      ensure  => directory,
+      owner   => $caddy::caddy_user,
+      group   => $caddy::caddy_group,
+      mode    => '0755',
+      purge   => $caddy::purge_config_enable_dir,
+      recurse => if $caddy::purge_config_enable_dir { true } else { undef },
+    }
+  }
   # Manage vhost_enable_dir if defined
   if $caddy::vhost_enable_dir {
     file { $caddy::vhost_enable_dir:
@@ -58,8 +69,10 @@ class caddy::config {
     $real_source  = $caddy::caddyfile_source
     $real_content = if $caddy::caddyfile_source { undef } else {
       $caddy::caddyfile_content.lest || {
+        $config_dir = $caddy::config_enable_dir.lest || { $caddy::config_dir }
+        $vhost_dir = $caddy::vhost_enable_dir.lest || { $caddy::vhost_dir }
         epp('caddy/etc/caddy/caddyfile.epp',
-          include_dirs => unique([$caddy::config_dir] + [$caddy::vhost_enable_dir.lest || { $caddy::vhost_dir }])
+          include_dirs => unique([$config_dir, $vhost_dir])
         )
       }
     }

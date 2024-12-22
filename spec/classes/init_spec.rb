@@ -382,6 +382,53 @@ describe 'caddy' do
         end
       end
 
+      context 'with config_enable_dir set' do
+        let(:params) { { config_enable_dir: '/etc/caddy/conf-enabled' } }
+
+        it do
+          is_expected.to contain_file('/etc/caddy/conf-enabled').
+            with_ensure('directory').
+            with_owner('caddy').
+            with_group('caddy').
+            with_mode('0755').
+            with_purge(true).
+            with_recurse(true)
+        end
+
+        it do
+          is_expected.to contain_file('/etc/caddy/Caddyfile').
+            with_content(%r{^import /etc/caddy/conf-enabled/\*\.conf$})
+        end
+
+        context 'with purge_config_enable_dir => false' do
+          let(:params) { super().merge(purge_config_enable_dir: false) }
+
+          it do
+            is_expected.to contain_file('/etc/caddy/conf-enabled').
+              with_ensure('directory').
+              with_purge(false).
+              with_recurse(nil)
+          end
+        end
+      end
+
+      context 'with both config_dir and config_enable_dir set' do
+        let(:params) do
+          {
+            config_dir: '/etc/caddy/conf-available',
+            config_enable_dir: '/etc/caddy/conf-enabled',
+          }
+        end
+
+        it { is_expected.to contain_file('/etc/caddy/conf-available') }
+        it { is_expected.to contain_file('/etc/caddy/conf-enabled') }
+
+        it do
+          is_expected.to contain_file('/etc/caddy/Caddyfile').
+            with_content(%r{^import /etc/caddy/conf-enabled/\*\.conf$})
+        end
+      end
+
       context 'with vhost_dir set' do
         let(:params) { { vhost_dir: '/etc/caddy/vhost.d' } }
 
@@ -472,6 +519,7 @@ describe 'caddy' do
                 source: 'puppet:///profiles/caddy/example1.conf',
               },
               example2: {
+                ensure: 'disabled',
                 content: "foo\nbar\n",
               },
               example3: {
@@ -481,8 +529,8 @@ describe 'caddy' do
           }
         end
 
-        it { is_expected.to contain_caddy__configfile('example1').with_ensure('present').with_source('puppet:///profiles/caddy/example1.conf') }
-        it { is_expected.to contain_caddy__configfile('example2').with_ensure('present').with_content("foo\nbar\n") }
+        it { is_expected.to contain_caddy__configfile('example1').with_ensure('enabled').with_source('puppet:///profiles/caddy/example1.conf') }
+        it { is_expected.to contain_caddy__configfile('example2').with_ensure('disabled').with_content("foo\nbar\n") }
         it { is_expected.to contain_caddy__configfile('example3').with_ensure('absent') }
       end
 

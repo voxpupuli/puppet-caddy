@@ -30,6 +30,34 @@ describe 'caddy::configfile', type: :define do
           it { is_expected.to contain_file('/etc/caddy/conf.d/example.conf') }
         end
 
+        context 'with enable_dir set' do
+          let(:params) { super().merge(enable_dir: '/etc/caddy/conf-enabled') }
+
+          it { is_expected.to contain_file('/etc/caddy/config/example.conf').with_ensure('file') }
+
+          it do
+            is_expected.to contain_file('/etc/caddy/conf-enabled/example.conf').
+              with_ensure('link').
+              with_target('/etc/caddy/config/example.conf')
+          end
+
+          %w[present disabled].each do |ens|
+            context "with ensure => #{ens}" do
+              let(:params) { super().merge(ensure: ens) }
+
+              it { is_expected.to contain_file('/etc/caddy/config/example.conf').with_ensure('file') }
+              it { is_expected.to contain_file('/etc/caddy/conf-enabled/example.conf').with_ensure('absent') }
+            end
+          end
+
+          context 'with ensure => absent' do
+            let(:params) { super().merge(ensure: 'absent') }
+
+            it { is_expected.to contain_file('/etc/caddy/config/example.conf').with_ensure('absent') }
+            it { is_expected.to contain_file('/etc/caddy/conf-enabled/example.conf').with_ensure('absent') }
+          end
+        end
+
         context 'with ensure => absent' do
           let(:params) { super().merge(ensure: 'absent') }
 

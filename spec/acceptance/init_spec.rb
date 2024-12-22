@@ -109,12 +109,17 @@ describe 'class caddy:' do
       let(:manifest) do
         <<~PUPPET
           class { 'caddy':
-            config_dir => '/etc/caddy/conf.d',
+            config_dir => '/etc/caddy/conf-available',
+            config_enable_dir => '/etc/caddy/conf-enabled',
             vhost_dir => '/etc/caddy/sites-available',
             vhost_enable_dir => '/etc/caddy/sites-enabled',
             config_files => {
-              admin => {
+              admin_2020 => {
                 content => "{\n  admin localhost:2020\n}\n",
+              },
+              admin_2021 => {
+                ensure => 'disabled',
+                content => "{\n  admin localhost:2021\n}\n",
               },
             },
             vhosts => {
@@ -136,12 +141,16 @@ describe 'class caddy:' do
       its(:stdout) { is_expected.to eq "{\"listen\":\"localhost:2020\"}\n" }
     end
 
+    describe port(2021) do # rubocop:disable RSpec/RepeatedExampleGroupBody
+      it { is_expected.not_to be_listening }
+    end
+
     describe command('curl -v http://localhost:3000/') do
       its(:exit_status) { is_expected.to eq 0 }
       its(:stdout) { is_expected.to eq 'port 3000 ok' }
     end
 
-    describe port(3001) do
+    describe port(3001) do # rubocop:disable RSpec/RepeatedExampleGroupBody
       it { is_expected.not_to be_listening }
     end
   end

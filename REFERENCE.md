@@ -98,6 +98,8 @@ The following parameters are available in the `caddy` class:
 * [`caddyfile_content`](#-caddy--caddyfile_content)
 * [`config_dir`](#-caddy--config_dir)
 * [`purge_config_dir`](#-caddy--purge_config_dir)
+* [`config_enable_dir`](#-caddy--config_enable_dir)
+* [`purge_config_enable_dir`](#-caddy--purge_config_enable_dir)
 * [`config_files`](#-caddy--config_files)
 * [`vhost_dir`](#-caddy--vhost_dir)
 * [`purge_vhost_dir`](#-caddy--purge_vhost_dir)
@@ -384,7 +386,9 @@ Default value: `undef`
 
 Data type: `Stdlib::Absolutepath`
 
-Where to store Caddy configs
+Where to store Caddy configs.
+Set this to /etc/caddy/conf-available to simulate nginx/apache behavior
+(see config_enable_dir also).
 
 Default value: `'/etc/caddy/config'`
 
@@ -395,6 +399,23 @@ Data type: `Boolean`
 Whether to purge Caddy config directory.
 
 Default value: `true`
+
+##### <a name="-caddy--config_enable_dir"></a>`config_enable_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Where to load Caddy configs from. Set this parameter to /etc/caddy/conf-enabled
+to simulate nginx/apache behavior.
+
+Default value: `undef`
+
+##### <a name="-caddy--purge_config_enable_dir"></a>`purge_config_enable_dir`
+
+Data type: `Boolean`
+
+Whether to purge Caddy enabled config directory.
+
+Default value: `$purge_config_dir`
 
 ##### <a name="-caddy--config_files"></a>`config_files`
 
@@ -490,14 +511,15 @@ The following parameters are available in the `caddy::configfile` defined type:
 * [`source`](#-caddy--configfile--source)
 * [`content`](#-caddy--configfile--content)
 * [`config_dir`](#-caddy--configfile--config_dir)
+* [`enable_dir`](#-caddy--configfile--enable_dir)
 
 ##### <a name="-caddy--configfile--ensure"></a>`ensure`
 
-Data type: `Enum['present','absent']`
+Data type: `Enum['present','enabled','disabled','absent']`
 
-Make the config file either present or absent.
+Make the config file either present (same as disabled), enabled, disabled or absent.
 
-Default value: `'present'`
+Default value: `'enabled'`
 
 ##### <a name="-caddy--configfile--source"></a>`source`
 
@@ -522,6 +544,14 @@ Data type: `Stdlib::Absolutepath`
 Where to store the config file.
 
 Default value: `$caddy::config_dir`
+
+##### <a name="-caddy--configfile--enable_dir"></a>`enable_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Directory to symlink the config config file into (conf-enabled e.g.) if any.
+
+Default value: `$caddy::config_enable_dir`
 
 ### <a name="caddy--vhost"></a>`caddy::vhost`
 
@@ -605,7 +635,7 @@ Alias of
 
 ```puppet
 Struct[{
-    ensure => Optional[Enum['absent', 'present']],
+    ensure => Optional[Enum['present','enabled','disabled','absent']],
     source => Optional[Stdlib::Filesource],
     content => Optional[String[1]],
 }]

@@ -1,7 +1,7 @@
 # @summary This defined type handles a Caddy config file
 #
 # @param ensure
-#   Make the config file either present or absent.
+#   Make the config file either present (same as disabled), enabled, disabled or absent.
 #
 # @param source
 #   Source (path) for the caddy config file.
@@ -11,6 +11,9 @@
 #
 # @param config_dir
 #   Where to store the config file.
+#
+# @param enable_dir
+#   Directory to symlink the config config file into (conf-enabled e.g.) if any.
 #
 # @example Configure Caddy logging
 #   caddy::configfile { 'subdomain-log':
@@ -32,23 +35,43 @@
 #   }
 #
 define caddy::configfile (
-  Enum['present','absent'] $ensure = 'present',
+  Enum['present','enabled','disabled','absent'] $ensure = 'enabled',
   Optional[Stdlib::Filesource] $source = undef,
   Optional[String] $content = undef,
   Stdlib::Absolutepath $config_dir = $caddy::config_dir,
+  Optional[Stdlib::Absolutepath] $enable_dir = $caddy::config_enable_dir,
 ) {
   include caddy
 
-  if ($ensure == 'present') and !($source or $content) {
+  if ($ensure != 'absent') and !($source or $content) {
     fail('Either $source or $content must be specified when $ensure is "present"')
   }
 
+  $file_ensure = $ensure ? {
+    'absent' => 'absent',
+    default  => 'file',
+  }
+
   file { "${config_dir}/${title}.conf":
-    ensure  => stdlib::ensure($ensure, 'file'),
+    ensure  => $file_ensure,
     content => $content,
     source  => $source,
     mode    => '0444',
     require => Class['caddy::config'],
     notify  => Class['caddy::service'],
+  }
+
+  if $enable_dir {
+    $symlink_ensure = $ensure ? {
+      'enabled' => 'link',
+      default   => 'absent',
+    }
+
+    file { "${enable_dir}/${title}.conf":
+      ensure  => $symlink_ensure,
+      target  => "${config_dir}/${title}.conf",
+      require => Class['caddy::config'],
+      notify  => Class['caddy::service'],
+    }
   }
 }

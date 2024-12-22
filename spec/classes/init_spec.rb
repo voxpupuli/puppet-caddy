@@ -511,6 +511,18 @@ describe 'caddy' do
         end
       end
 
+      context 'with config_file_extension set' do
+        let(:params) { { config_file_extension: '.caddyfile' } }
+
+        it { is_expected.to contain_file('/etc/caddy/Caddyfile').with_content(%r{^import /etc/caddy/config/\*\.caddyfile$}) }
+      end
+
+      context 'with config_file_extension set to an empty string' do
+        let(:params) { { config_file_extension: '' } }
+
+        it { is_expected.to contain_file('/etc/caddy/Caddyfile').with_content(%r{^import /etc/caddy/config/\*$}) }
+      end
+
       context 'with configs set' do
         let(:params) do
           {

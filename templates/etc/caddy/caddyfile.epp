@@ -1,10 +1,11 @@
 <%- |
   Array[String[1]] $include_dirs,
+  String $file_extension,
 | -%>
 #
 # THIS FILE IS MANAGED BY PUPPET
 #
 
 <%- $include_dirs.each |$dir| { -%>
-import <%= $dir %>/*.conf
+import <%= $dir %>/*<%= $file_extension %>
 <%- } -%>

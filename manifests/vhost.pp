@@ -15,6 +15,9 @@
 # @param enable_dir
 #   Directory to symlink the vhost config file into (sites-enabled e.g.) if any.
 #
+# @param file_extension
+#   Default extension for the vhost config file (must include leading `.`)
+#
 # @example Configure virtual host, based on source
 #   caddy::vhost { 'example1':
 #     source => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
@@ -31,6 +34,7 @@ define caddy::vhost (
   Optional[String] $content = undef,
   Stdlib::Absolutepath $config_dir = $caddy::vhost_dir,
   Optional[Stdlib::Absolutepath] $enable_dir = $caddy::vhost_enable_dir,
+  Variant[Enum[''], Pattern[/^\./]] $file_extension = $caddy::config_file_extension,
 ) {
   include caddy
 
@@ -43,7 +47,9 @@ define caddy::vhost (
     default  => 'file',
   }
 
-  file { "${config_dir}/${title}.conf":
+  $filename = "${title}${file_extension}"
+
+  file { "${config_dir}/${filename}":
     ensure  => $file_ensure,
     content => $content,
     source  => $source,
@@ -58,9 +64,9 @@ define caddy::vhost (
       default   => 'absent',
     }
 
-    file { "${enable_dir}/${title}.conf":
+    file { "${enable_dir}/${filename}":
       ensure  => $symlink_ensure,
-      target  => "${config_dir}/${title}.conf",
+      target  => "${config_dir}/${filename}",
       require => Class['caddy::config'],
       notify  => Class['caddy::service'],
     }

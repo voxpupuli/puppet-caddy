@@ -72,7 +72,8 @@ class caddy::config {
         $config_dir = $caddy::config_enable_dir.lest || { $caddy::config_dir }
         $vhost_dir = $caddy::vhost_enable_dir.lest || { $caddy::vhost_dir }
         epp('caddy/etc/caddy/caddyfile.epp',
-          include_dirs => unique([$config_dir, $vhost_dir])
+          include_dirs   => unique([$config_dir, $vhost_dir]),
+          file_extension => $caddy::config_file_extension,
         )
       }
     }

@@ -73,7 +73,7 @@ describe 'class caddy:' do
         <<~PUPPET
           class { 'caddy':
             install_method => 'repo',
-            version        => '#{use_version}',
+            package_ensure => '#{use_version}',
           }
         PUPPET
       end

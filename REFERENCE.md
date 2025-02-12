@@ -110,11 +110,11 @@ The following parameters are available in the `caddy` class:
 
 ##### <a name="-caddy--version"></a>`version`
 
-Data type: `String[1]`
+Data type: `Optional[String[1]]`
 
-Which version is used.
+Which version of caddy to install when install_method is github.
 
-Default value: `'2.0.0'`
+Default value: `undef`
 
 ##### <a name="-caddy--install_method"></a>`install_method`
 
@@ -353,11 +353,11 @@ Default value: `'caddy'`
 
 ##### <a name="-caddy--package_ensure"></a>`package_ensure`
 
-Data type: `String[1]`
+Data type: `Optional[String[1]]`
 
 Whether to install or remove the caddy package. Only relevant when $install_method is 'repo'.
 
-Default value: `$version`
+Default value: `undef`
 
 ##### <a name="-caddy--manage_caddyfile"></a>`manage_caddyfile`
 

@@ -3,13 +3,13 @@
 require 'spec_helper'
 
 describe 'caddy' do
-  on_supported_os.each do |os, facts|
-    context "on #{os} with Facter #{facts[:facterversion]} and Puppet #{facts[:puppetversion]}" do
+  on_supported_os.each do |os, os_facts|
+    context "on #{os} with Facter #{os_facts[:facterversion]} and Puppet #{os_facts[:puppetversion]}" do
       let(:facts) do
-        facts
+        os_facts
       end
 
-      case facts[:os]['family']
+      case os_facts[:os]['family']
       when 'Debian'
         caddy_shell = '/usr/sbin/nologin'
         has_repo = true
@@ -180,7 +180,7 @@ describe 'caddy' do
       context 'with install_method => repo' do
         let(:params) { { install_method: 'repo' } }
 
-        case facts[:os]['family']
+        case os_facts[:os]['family']
         when 'Debian'
           context 'on Debian family' do
             it { is_expected.to contain_class('apt') }
@@ -211,7 +211,7 @@ describe 'caddy' do
                 that_comes_before('Package[caddy]')
             end
 
-            it { is_expected.to contain_package('caddy').with_ensure('2.0.0') }
+            it { is_expected.to contain_package('caddy').with_ensure('installed') }
 
             context 'with manage_repo => false' do
               let(:params) { super().merge(manage_repo: false) }
@@ -230,7 +230,7 @@ describe 'caddy' do
                 that_comes_before('Package[caddy]')
             end
 
-            it { is_expected.to contain_package('caddy').with_ensure('2.0.0') }
+            it { is_expected.to contain_package('caddy').with_ensure('installed') }
 
             context 'with manage_repo => false' do
               let(:params) { super().merge(manage_repo: false) }
@@ -252,7 +252,7 @@ describe 'caddy' do
           context 'with package_name => test' do
             let(:params) { super().merge(package_name: 'test') }
 
-            it { is_expected.to contain_package('test').with_ensure('2.0.0') }
+            it { is_expected.to contain_package('test').with_ensure('installed') }
           end
 
           context 'with package_ensure => 2.3.4' do

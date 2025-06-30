@@ -16,7 +16,7 @@
 #   }
 #
 # @param version
-#   Which version is used.
+#   Which version of caddy to install when install_method is github.
 #
 # @param install_method
 #   Which source to use for the Caddy installation. See https://caddyserver.com/docs/install.
@@ -162,7 +162,8 @@
 #   Hash of virtual hosts to create.
 #
 class caddy (
-  String[1]                      $version                         = '2.0.0',
+  Optional[String[1]]            $package_ensure                  = undef,
+  Optional[String[1]]            $version                         = undef,
   Optional[Enum['github','repo']] $install_method                 = undef,
   Stdlib::Absolutepath           $install_path                    = '/opt/caddy',
   Boolean                        $manage_user                     = true,
@@ -196,7 +197,6 @@ class caddy (
   Boolean                        $manage_repo                     = true,
   Hash[String[1],Any]            $repo_settings                   = {},
   String[1]                      $package_name                    = 'caddy',
-  String[1]                      $package_ensure                  = $version,
   Boolean                        $manage_caddyfile                = true,
   Optional[Stdlib::Filesource]   $caddyfile_source                = undef,
   Optional[String[1]]            $caddyfile_content               = undef,

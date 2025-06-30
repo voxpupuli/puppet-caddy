@@ -9,6 +9,18 @@ latest_release = JSON.parse(URI.open('https://api.github.com/repos/caddyserver/c
 
 # rubocop:disable RSpec/RepeatedExampleGroupDescription
 describe 'class caddy:' do
+  # Guess latest packaged version in the repo by OS facts
+  def repo_version(os_facts, latest_release)
+    case [os_facts['family'], os_facts['release']['major']]
+    when %w[Debian]
+      '2.8.3'
+    when %w[RedHat 8]
+      '2.9.1'
+    else
+      latest_release.sub(%r{\Av}, '')
+    end
+  end
+
   context 'with default settings' do
     it_behaves_like 'an idempotent resource' do
       let(:manifest) do
@@ -25,19 +37,21 @@ describe 'class caddy:' do
   end
 
   context 'when installing from GitHub' do
+    let(:github_version) { '2.9.1' }
+
     it_behaves_like 'an idempotent resource' do
       let(:manifest) do
         <<~PUPPET
           class { 'caddy':
             install_method => 'github',
-            version        => '2.6.0',
+            version        => '#{github_version}',
           }
         PUPPET
       end
     end
 
     describe command('/opt/caddy/caddy version') do
-      its(:stdout) { is_expected.to start_with 'v2.6.0' }
+      its(:stdout) { is_expected.to start_with "v#{github_version}" }
     end
 
     it_behaves_like 'an idempotent resource' do
@@ -59,14 +73,7 @@ describe 'class caddy:' do
   context 'when installing from repo' do
     # Debian repo has multiple versions
     # RedHat repo has just the latest version at the moment
-    let(:use_version) do
-      case fact('os.family')
-      when 'Debian'
-        '2.8.3'
-      else
-        latest_release.sub(%r{\Av}, '')
-      end
-    end
+    let(:use_version) { repo_version(fact('os'), latest_release) }
 
     it_behaves_like 'an idempotent resource' do
       let(:manifest) do

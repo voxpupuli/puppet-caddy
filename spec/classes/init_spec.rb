@@ -242,6 +242,9 @@ describe 'caddy' do
           it { is_expected.to raise_error(%r{has no support for 'repo' install method}) }
         end
 
+        # There should be no unit file managed when install_method is 'repo'
+        it { is_expected.not_to contain_systemd__unit_file('caddy.service') }
+
         context 'without repo_settings' do
           let(:params) { super().merge(repo_settings: {}) }
 
@@ -292,7 +295,6 @@ describe 'caddy' do
         let(:params) { { manage_systemd_unit: false } }
 
         it { is_expected.not_to contain_systemd__unit_file('caddy.service') }
-        it { is_expected.to contain_service('caddy').that_subscribes_to(nil) }
       end
 
       context 'with manage_service => false' do

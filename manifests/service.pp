@@ -6,7 +6,13 @@
 class caddy::service {
   assert_private()
 
-  if $caddy::manage_systemd_unit {
+  # Do not manage unit file if install_method is repo
+  if $caddy::manage_systemd_unit and $caddy::install_method != 'repo' {
+    $notify_service_maybe = $caddy::manage_service ? {
+      true    => Service[$caddy::service_name],
+      default => undef,
+    }
+
     systemd::unit_file { "${caddy::service_name}.service":
       content => epp('caddy/etc/systemd/system/caddy.service.epp',
         {
@@ -23,6 +29,7 @@ class caddy::service {
           systemd_no_new_privileges       => $caddy::systemd_no_new_privileges,
         }
       ),
+      notify  => $notify_service_maybe,
     }
   }
 
@@ -30,10 +37,6 @@ class caddy::service {
     service { $caddy::service_name:
       ensure => $caddy::service_ensure,
       enable => $caddy::service_enable,
-    }
-
-    if $caddy::manage_systemd_unit {
-      Systemd::Unit_file["${caddy::service_name}.service"] ~> Service[$caddy::service_name]
     }
   }
 }

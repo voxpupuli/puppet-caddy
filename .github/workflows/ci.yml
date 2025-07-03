@@ -22,4 +22,6 @@ permissions:
 jobs:
   puppet:
     name: Puppet
-    uses: voxpupuli/gha-puppet/.github/workflows/beaker.yml@v3
+    uses: jay7x/gha-puppet/.github/workflows/beaker.yml@beaker_env
+    with:
+      github_token_exposed: true

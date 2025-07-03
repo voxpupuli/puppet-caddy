@@ -2,13 +2,13 @@
 
 require 'spec_helper_acceptance'
 
-# The default configuration download the latest available release. In order to
-# avoid to maintain the test suite to match each release, query GitHub API to
-# find the last release.
-latest_release = JSON.parse(URI.open('https://api.github.com/repos/caddyserver/caddy/releases/latest').read)['tag_name']
-
 # rubocop:disable RSpec/RepeatedExampleGroupDescription
 describe 'class caddy:' do
+  # The default configuration download the latest available release. In order to
+  # avoid to maintain the test suite to match each release, query GitHub API to
+  # find the last release.
+  let(:latest_release) { GithubHelpers.latest_release('caddyserver/caddy') }
+
   # Guess latest packaged version in the repo by OS facts
   def repo_version(os_facts, latest_release)
     case [os_facts['family'], os_facts['release']['major']]

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "addLabels": [
+    "renovate",
+    "dependencies"
+  ],
+  "automerge": false,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "spec/acceptance/*.rb"
+      ],
+      "matchStrings": [
+        "# renovate: depName=(?<depName>[^\\s]+?)\\s+String\\[1\\]\\s+latest_release\\s+=\\s+['\"]?(?<currentValue>[\\w+\\.]*)"
+      ],
+      "datasourceTemplate": "github-releases"
+    }
+  ]
+}

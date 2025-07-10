@@ -14,7 +14,9 @@
 
 * `caddy::config`: This class handles the Caddy config.
 * `caddy::install`: This class handles the Caddy archive.
+* `caddy::install::github`: This class handles Caddy installation from Github
 * `caddy::install::repo`: This class handles Caddy installation from a package repository
+* `caddy::install::site`: This class handles Caddy installation from the official site
 * `caddy::service`: This class handles the Caddy service.
 
 ### Defined types
@@ -41,7 +43,7 @@ Main class, includes all other classes.
 include caddy
 ```
 
-##### Install customised version of Caddy
+##### Install customized version of Caddy from the official site
 
 ```puppet
 class { 'caddy':
@@ -113,19 +115,20 @@ The following parameters are available in the `caddy` class:
 Data type: `Optional[String[1]]`
 
 Which version of caddy to install when install_method is github.
+Must not be set otherwise.
 
 Default value: `undef`
 
 ##### <a name="-caddy--install_method"></a>`install_method`
 
-Data type: `Optional[Enum['github','repo']]`
+Data type: `Enum['github', 'repo', 'site']`
 
 Which source to use for the Caddy installation. See https://caddyserver.com/docs/install.
-* `undef` (default) - download from the official Caddy site
-* `github` - download from Github releases
+* `github` - download from Github releases (version must be set in this case)
 * `repo` - install from an OS repository
+* `site` (default) - download from the official Caddy site
 
-Default value: `undef`
+Default value: `'site'`
 
 ##### <a name="-caddy--install_path"></a>`install_path`
 
@@ -209,7 +212,7 @@ Default value: `'personal'`
 
 ##### <a name="-caddy--caddy_telemetry"></a>`caddy_telemetry`
 
-Data type: `Enum['on','off']`
+Data type: `Enum['on', 'off']`
 
 Whether telemetry data should be collected.
 
@@ -307,7 +310,7 @@ Default value: `true`
 
 Data type: `String[1]`
 
-Customise the name of the system service.
+Customize the name of the system service.
 
 Default value: `'caddy'`
 

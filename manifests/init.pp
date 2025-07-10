@@ -4,7 +4,7 @@
 # @example Basic usage
 #   include caddy
 #
-# @example Install customised version of Caddy
+# @example Install customized version of Caddy from the official site
 #   class { 'caddy':
 #     caddy_features => 'http.git,http.filter,http.ipfilter',
 #   }
@@ -17,12 +17,13 @@
 #
 # @param version
 #   Which version of caddy to install when install_method is github.
+#   Must not be set otherwise.
 #
 # @param install_method
 #   Which source to use for the Caddy installation. See https://caddyserver.com/docs/install.
-#   * `undef` (default) - download from the official Caddy site
-#   * `github` - download from Github releases
+#   * `github` - download from Github releases (version must be set in this case)
 #   * `repo` - install from an OS repository
+#   * `site` (default) - download from the official Caddy site
 #
 # @param install_path
 #   Directory where the Caddy binary is stored. Not used when $install_method is 'repo'.
@@ -91,7 +92,7 @@
 #   Whether or not the module should manage the service.
 #
 # @param service_name
-#   Customise the name of the system service.
+#   Customize the name of the system service.
 #
 # @param service_ensure
 #   Whether the service should be running or stopped.
@@ -164,7 +165,7 @@
 class caddy (
   Optional[String[1]]            $package_ensure                  = undef,
   Optional[String[1]]            $version                         = undef,
-  Optional[Enum['github','repo']] $install_method                 = undef,
+  Enum['github', 'repo', 'site'] $install_method                  = 'site',
   Stdlib::Absolutepath           $install_path                    = '/opt/caddy',
   Boolean                        $manage_user                     = true,
   String[1]                      $caddy_user                      = 'caddy',
@@ -179,7 +180,7 @@ class caddy (
   Stdlib::Absolutepath           $vhost_dir                       = '/etc/caddy/config',
   Optional[Stdlib::Absolutepath] $vhost_enable_dir                = undef,
   Enum['personal', 'commercial'] $caddy_license                   = 'personal',
-  Enum['on','off']               $caddy_telemetry                 = 'off',
+  Enum['on', 'off']              $caddy_telemetry                 = 'off',
   String[1]                      $caddy_features                  = 'http.git,http.filter,http.ipfilter',
   String[1]                      $caddy_architecture              = $facts['os']['architecture'],
   Optional[String[1]]            $caddy_account_id                = undef,

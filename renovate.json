@@ -11,8 +11,8 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "spec/acceptance/*.rb"
+      "managerFilePatterns": [
+        "/spec/acceptance/*.rb/"
       ],
       "matchStrings": [
         "# renovate: depName=(?<depName>[^\\s]+?)\\s+String\\[1\\]\\s+latest_release\\s+=\\s+['\"]?(?<currentValue>[\\w+\\.]*)"

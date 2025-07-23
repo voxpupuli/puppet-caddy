@@ -5,7 +5,8 @@ require 'spec_helper_acceptance'
 # The default configuration download the latest available release. In order to
 # avoid to maintain the test suite to match each release, query GitHub API to
 # find the last release.
-latest_release = JSON.parse(URI.open('https://api.github.com/repos/caddyserver/caddy/releases/latest').read)['tag_name']
+# renovate: depName=caddyserver/caddy
+latest_release = 'v2.10.0'
 
 # rubocop:disable RSpec/RepeatedExampleGroupDescription
 describe 'class caddy:' do

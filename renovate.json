@@ -15,7 +15,7 @@
         "spec/acceptance/*_spec.rb"
       ],
       "matchStrings": [
-        "# renovate: depName=(?<depName>[^\\s]+?)\\s+String\\[1\\]\\s+latest_release\\s+=\\s+['\"]?(?<currentValue>[\\w+\\.]*)"
+        "# renovate: depName=(?<depName>[^\\s]+?)\\s+latest_release\\s*=\\s*['\"]?(?<currentValue>[^'\"]*)"
       ],
       "datasourceTemplate": "github-releases"
     }

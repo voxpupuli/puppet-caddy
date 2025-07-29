@@ -8,7 +8,9 @@
     "dependencies"
   ],
   "automerge": false,
-  "enabledManagers": ["regex"],
+  "enabledManagers": [
+    "custom.regex"
+  ],
   "customManagers": [
     {
       "customType": "regex",

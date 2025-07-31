@@ -1,6 +1,6 @@
 {
   "name": "puppet-caddy",
-  "version": "2.0.1-rc0",
+  "version": "3.0.0",
   "author": "Vox Pupuli",
   "summary": "Puppet Caddy Module",
   "description": "Puppet Caddy module installs and configures caddy - The HTTP/2 web server with automatic HTTPS.",

@@ -22,5 +22,11 @@
       ],
       "datasourceTemplate": "github-releases"
     }
+  ],
+  "packageRules": [
+    {
+      "matchDepNames": ["caddyserver/caddy"],
+      "labels": ["skip-changelog"]
+    }
   ]
 }

@@ -12,20 +12,20 @@ class caddy::config {
       owner  => $caddy::caddy_user,
       group  => $caddy::caddy_group,
       mode   => '0755',
-      ;
+    ;
     [$caddy::caddy_home,
       $caddy::caddy_ssl_dir,
       $caddy::caddy_log_dir,
     ]:
-      ;
+    ;
     ['/etc/caddy']:
       owner => 'root',
       group => 'root',
-      ;
+    ;
     $caddy::config_dir:
       purge   => $caddy::purge_config_dir,
       recurse => if $caddy::purge_config_dir { true } else { undef },
-      ;
+    ;
   }
 
   # Manage vhost_dir if not the same as config dir

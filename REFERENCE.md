@@ -665,9 +665,9 @@ Alias of
 
 ```puppet
 Struct[{
-    ensure => Optional[Enum['present','enabled','disabled','absent']],
-    source => Optional[Stdlib::Filesource],
-    content => Optional[String[1]],
+  ensure => Optional[Enum['present','enabled','disabled','absent']],
+  source => Optional[Stdlib::Filesource],
+  content => Optional[String[1]],
 }]
 ```
 
@@ -679,9 +679,9 @@ Alias of
 
 ```puppet
 Struct[{
-    ensure => Optional[Enum['present','enabled','disabled','absent']],
-    source => Optional[Stdlib::Filesource],
-    content => Optional[String[1]],
+  ensure => Optional[Enum['present','enabled','disabled','absent']],
+  source => Optional[Stdlib::Filesource],
+  content => Optional[String[1]],
 }]
 ```
 

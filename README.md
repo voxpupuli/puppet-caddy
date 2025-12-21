@@ -1,7 +1,7 @@
 
 # Puppet module for Caddy
 
-[![Build Status](https://travis-ci.org/voxpupuli/puppet-caddy.svg?branch=master)](https://travis-ci.org/voxpupuli/puppet-caddy)
+![Build Status](https://github.com/voxpupuli/puppet-caddy/actions/workflows/ci.yml/badge.svg?branch=master)
 [![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-caddy/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-caddy)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/caddy.svg)](https://forge.puppetlabs.com/puppet/caddy)
 [![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/caddy.svg)](https://forge.puppetlabs.com/puppet/caddy)

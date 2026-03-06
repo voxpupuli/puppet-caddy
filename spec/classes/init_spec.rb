@@ -31,7 +31,7 @@ describe 'caddy' do
         it do
           is_expected.to contain_group('caddy').with(
             'ensure' => 'present',
-            'system' => 'true'
+            'system' => 'true',
           )
         end
 
@@ -41,7 +41,7 @@ describe 'caddy' do
             'shell' => caddy_shell,
             'gid' => 'caddy',
             'system' => 'true',
-            'home' => '/var/lib/caddy'
+            'home' => '/var/lib/caddy',
           ).that_requires('Group[caddy]')
         end
 
@@ -50,28 +50,28 @@ describe 'caddy' do
             'ensure' => 'directory',
             'owner' => 'caddy',
             'group' => 'caddy',
-            'mode' => '0755'
+            'mode' => '0755',
           )
         end
 
         it do
-          is_expected.to contain_file('/var/cache/caddy-latest').
-            with_ensure('file').
-            with_owner('root').
-            with_group('root').
-            with_mode('0755').
-            with_source('https://caddyserver.com/api/download?os=linux&arch=amd64&plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off').
-            with_replace(false)
+          is_expected.to contain_file('/var/cache/caddy-latest')
+            .with_ensure('file')
+            .with_owner('root')
+            .with_group('root')
+            .with_mode('0755')
+            .with_source('https://caddyserver.com/api/download?os=linux&arch=amd64&plugins=http.git,http.filter,http.ipfilter&license=personal&telemetry=off')
+            .with_replace(false)
         end
 
         it do
-          is_expected.to contain_file('/opt/caddy/caddy').
-            with_ensure('file').
-            with_owner('root').
-            with_group('root').
-            with_mode('0755').
-            with_source('/var/cache/caddy-latest').
-            that_requires('File[/opt/caddy]')
+          is_expected.to contain_file('/opt/caddy/caddy')
+            .with_ensure('file')
+            .with_owner('root')
+            .with_group('root')
+            .with_mode('0755')
+            .with_source('/var/cache/caddy-latest')
+            .that_requires('File[/opt/caddy]')
         end
 
         it do
@@ -79,7 +79,7 @@ describe 'caddy' do
             'ensure' => 'directory',
             'owner' => 'caddy',
             'group' => 'caddy',
-            'mode' => '0755'
+            'mode' => '0755',
           )
         end
 
@@ -88,7 +88,7 @@ describe 'caddy' do
             'ensure' => 'directory',
             'owner' => 'caddy',
             'group' => 'caddy',
-            'mode' => '0755'
+            'mode' => '0755',
           )
         end
 
@@ -97,7 +97,7 @@ describe 'caddy' do
             'ensure' => 'directory',
             'owner' => 'caddy',
             'group' => 'caddy',
-            'mode' => '0755'
+            'mode' => '0755',
           )
         end
 
@@ -106,7 +106,7 @@ describe 'caddy' do
             'ensure' => 'directory',
             'owner' => 'root',
             'group' => 'root',
-            'mode' => '0755'
+            'mode' => '0755',
           )
         end
 
@@ -117,9 +117,9 @@ describe 'caddy' do
             'group' => 'caddy',
             'mode' => '0444',
             'source' => nil,
-            'content' => %r{^import /etc/caddy/config/\*\.conf$}
-          ).
-            that_requires('File[/etc/caddy]')
+            'content' => %r{^import /etc/caddy/config/\*\.conf$},
+          )
+                                                             .that_requires('File[/etc/caddy]')
         end
 
         it do
@@ -129,20 +129,20 @@ describe 'caddy' do
             'recurse' => 'true',
             'owner' => 'caddy',
             'group' => 'caddy',
-            'mode' => '0755'
+            'mode' => '0755',
           )
         end
 
         it do
           is_expected.to contain_systemd__unit_file('caddy.service').with(
-            'content' => %r{User=caddy}
+            'content' => %r{User=caddy},
           ).that_notifies('Service[caddy]')
         end
 
         it do
           is_expected.to contain_service('caddy').with(
             'ensure' => 'running',
-            'enable' => true
+            'enable' => true,
           )
         end
       end
@@ -151,7 +151,7 @@ describe 'caddy' do
         let(:params) do
           {
             version: '2.0.0',
-            install_method: 'github'
+            install_method: 'github',
           }
         end
 
@@ -162,18 +162,18 @@ describe 'caddy' do
             'extract_path' => '/var/cache/caddy-2.0.0',
             'source' => 'https://github.com/caddyserver/caddy/releases/download/v2.0.0/caddy_2.0.0_linux_amd64.tar.gz',
             'user' => 'root',
-            'group' => 'root'
+            'group' => 'root',
           )
         end
 
         it do
-          is_expected.to contain_file('/opt/caddy/caddy').
-            with_ensure('file').
-            with_owner('root').
-            with_group('root').
-            with_mode('0755').
-            with_source('/var/cache/caddy-2.0.0/caddy').
-            that_requires('File[/opt/caddy]')
+          is_expected.to contain_file('/opt/caddy/caddy')
+            .with_ensure('file')
+            .with_owner('root')
+            .with_group('root')
+            .with_mode('0755')
+            .with_source('/var/cache/caddy-2.0.0/caddy')
+            .that_requires('File[/opt/caddy]')
         end
       end
 
@@ -195,20 +195,20 @@ describe 'caddy' do
             # end
 
             it do
-              is_expected.to contain_file('/etc/apt/keyrings/caddy-archive-keyring.asc').
-                with_ensure('file').
-                with_source('https://dl.cloudsmith.io/public/caddy/stable/gpg.key').
-                with_checksum('sha256').
-                with_checksum_value('5791c2fb6b6e82feb5a69834dd2131f4bcc30af0faec37783b2dc1c5c224a82a').
-                that_comes_before('Apt::Source[caddy]')
+              is_expected.to contain_file('/etc/apt/keyrings/caddy-archive-keyring.asc')
+                .with_ensure('file')
+                .with_source('https://dl.cloudsmith.io/public/caddy/stable/gpg.key')
+                .with_checksum('sha256')
+                .with_checksum_value('5791c2fb6b6e82feb5a69834dd2131f4bcc30af0faec37783b2dc1c5c224a82a')
+                .that_comes_before('Apt::Source[caddy]')
             end
 
             it do
-              is_expected.to contain_apt__source('caddy').
-                with_location('https://dl.cloudsmith.io/public/caddy/stable/deb/debian').
-                with_keyring('/etc/apt/keyrings/caddy-archive-keyring.asc').
-                without_key.
-                that_comes_before('Package[caddy]')
+              is_expected.to contain_apt__source('caddy')
+                .with_location('https://dl.cloudsmith.io/public/caddy/stable/deb/debian')
+                .with_keyring('/etc/apt/keyrings/caddy-archive-keyring.asc')
+                .without_key
+                .that_comes_before('Package[caddy]')
             end
 
             it { is_expected.to contain_package('caddy').with_ensure('installed') }
@@ -224,10 +224,10 @@ describe 'caddy' do
             it { is_expected.to contain_class('yum') }
 
             it do
-              is_expected.to contain_yum__copr('caddy').
-                with_copr_repo('@caddy/caddy').
-                with_ensure('enabled').
-                that_comes_before('Package[caddy]')
+              is_expected.to contain_yum__copr('caddy')
+                .with_copr_repo('@caddy/caddy')
+                .with_ensure('enabled')
+                .that_comes_before('Package[caddy]')
             end
 
             it { is_expected.to contain_package('caddy').with_ensure('installed') }
@@ -358,18 +358,18 @@ describe 'caddy' do
         let(:params) { { config_dir: '/etc/caddy/conf.d' } }
 
         it do
-          is_expected.to contain_file('/etc/caddy/conf.d').
-            with_ensure('directory').
-            with_owner('caddy').
-            with_group('caddy').
-            with_mode('0755').
-            with_purge(true).
-            with_recurse(true)
+          is_expected.to contain_file('/etc/caddy/conf.d')
+            .with_ensure('directory')
+            .with_owner('caddy')
+            .with_group('caddy')
+            .with_mode('0755')
+            .with_purge(true)
+            .with_recurse(true)
         end
 
         it do
-          is_expected.to contain_file('/etc/caddy/Caddyfile').
-            with_content(%r{^import /etc/caddy/conf.d/\*\.conf$})
+          is_expected.to contain_file('/etc/caddy/Caddyfile')
+            .with_content(%r{^import /etc/caddy/conf.d/\*\.conf$})
         end
       end
 
@@ -377,10 +377,10 @@ describe 'caddy' do
         let(:params) { { purge_config_dir: false } }
 
         it do
-          is_expected.to contain_file('/etc/caddy/config').
-            with_ensure('directory').
-            with_purge(false).
-            with_recurse(nil)
+          is_expected.to contain_file('/etc/caddy/config')
+            .with_ensure('directory')
+            .with_purge(false)
+            .with_recurse(nil)
         end
       end
 
@@ -388,28 +388,28 @@ describe 'caddy' do
         let(:params) { { config_enable_dir: '/etc/caddy/conf-enabled' } }
 
         it do
-          is_expected.to contain_file('/etc/caddy/conf-enabled').
-            with_ensure('directory').
-            with_owner('caddy').
-            with_group('caddy').
-            with_mode('0755').
-            with_purge(true).
-            with_recurse(true)
+          is_expected.to contain_file('/etc/caddy/conf-enabled')
+            .with_ensure('directory')
+            .with_owner('caddy')
+            .with_group('caddy')
+            .with_mode('0755')
+            .with_purge(true)
+            .with_recurse(true)
         end
 
         it do
-          is_expected.to contain_file('/etc/caddy/Caddyfile').
-            with_content(%r{^import /etc/caddy/conf-enabled/\*\.conf$})
+          is_expected.to contain_file('/etc/caddy/Caddyfile')
+            .with_content(%r{^import /etc/caddy/conf-enabled/\*\.conf$})
         end
 
         context 'with purge_config_enable_dir => false' do
           let(:params) { super().merge(purge_config_enable_dir: false) }
 
           it do
-            is_expected.to contain_file('/etc/caddy/conf-enabled').
-              with_ensure('directory').
-              with_purge(false).
-              with_recurse(nil)
+            is_expected.to contain_file('/etc/caddy/conf-enabled')
+              .with_ensure('directory')
+              .with_purge(false)
+              .with_recurse(nil)
           end
         end
       end
@@ -426,8 +426,8 @@ describe 'caddy' do
         it { is_expected.to contain_file('/etc/caddy/conf-enabled') }
 
         it do
-          is_expected.to contain_file('/etc/caddy/Caddyfile').
-            with_content(%r{^import /etc/caddy/conf-enabled/\*\.conf$})
+          is_expected.to contain_file('/etc/caddy/Caddyfile')
+            .with_content(%r{^import /etc/caddy/conf-enabled/\*\.conf$})
         end
       end
 
@@ -437,29 +437,29 @@ describe 'caddy' do
         it { is_expected.to contain_file('/etc/caddy/config').with_ensure('directory') }
 
         it do
-          is_expected.to contain_file('/etc/caddy/vhost.d').
-            with_ensure('directory').
-            with_owner('caddy').
-            with_group('caddy').
-            with_mode('0755').
-            with_purge(true).
-            with_recurse(true)
+          is_expected.to contain_file('/etc/caddy/vhost.d')
+            .with_ensure('directory')
+            .with_owner('caddy')
+            .with_group('caddy')
+            .with_mode('0755')
+            .with_purge(true)
+            .with_recurse(true)
         end
 
         it do
-          is_expected.to contain_file('/etc/caddy/Caddyfile').
-            with_content(%r{^import /etc/caddy/config/\*\.conf$}).
-            with_content(%r{^import /etc/caddy/vhost.d/\*\.conf$})
+          is_expected.to contain_file('/etc/caddy/Caddyfile')
+            .with_content(%r{^import /etc/caddy/config/\*\.conf$})
+            .with_content(%r{^import /etc/caddy/vhost.d/\*\.conf$})
         end
 
         context 'with purge_vhost_dir => false' do
           let(:params) { super().merge(purge_vhost_dir: false) }
 
           it do
-            is_expected.to contain_file('/etc/caddy/vhost.d').
-              with_ensure('directory').
-              with_purge(false).
-              with_recurse(nil)
+            is_expected.to contain_file('/etc/caddy/vhost.d')
+              .with_ensure('directory')
+              .with_purge(false)
+              .with_recurse(nil)
           end
         end
       end
@@ -468,29 +468,29 @@ describe 'caddy' do
         let(:params) { { vhost_enable_dir: '/etc/caddy/sites-enabled' } }
 
         it do
-          is_expected.to contain_file('/etc/caddy/sites-enabled').
-            with_ensure('directory').
-            with_owner('caddy').
-            with_group('caddy').
-            with_mode('0755').
-            with_purge(true).
-            with_recurse(true)
+          is_expected.to contain_file('/etc/caddy/sites-enabled')
+            .with_ensure('directory')
+            .with_owner('caddy')
+            .with_group('caddy')
+            .with_mode('0755')
+            .with_purge(true)
+            .with_recurse(true)
         end
 
         it do
-          is_expected.to contain_file('/etc/caddy/Caddyfile').
-            with_content(%r{^import /etc/caddy/config/\*\.conf$}).
-            with_content(%r{^import /etc/caddy/sites-enabled/\*\.conf$})
+          is_expected.to contain_file('/etc/caddy/Caddyfile')
+            .with_content(%r{^import /etc/caddy/config/\*\.conf$})
+            .with_content(%r{^import /etc/caddy/sites-enabled/\*\.conf$})
         end
 
         context 'with purge_vhost_enable_dir => false' do
           let(:params) { super().merge(purge_vhost_enable_dir: false) }
 
           it do
-            is_expected.to contain_file('/etc/caddy/sites-enabled').
-              with_ensure('directory').
-              with_purge(false).
-              with_recurse(nil)
+            is_expected.to contain_file('/etc/caddy/sites-enabled')
+              .with_ensure('directory')
+              .with_purge(false)
+              .with_recurse(nil)
           end
         end
       end
@@ -507,9 +507,9 @@ describe 'caddy' do
         it { is_expected.to contain_file('/etc/caddy/sites-enabled') }
 
         it do
-          is_expected.to contain_file('/etc/caddy/Caddyfile').
-            with_content(%r{^import /etc/caddy/config/\*\.conf$}).
-            with_content(%r{^import /etc/caddy/sites-enabled/\*\.conf$})
+          is_expected.to contain_file('/etc/caddy/Caddyfile')
+            .with_content(%r{^import /etc/caddy/config/\*\.conf$})
+            .with_content(%r{^import /etc/caddy/sites-enabled/\*\.conf$})
         end
       end
 
@@ -538,8 +538,8 @@ describe 'caddy' do
               },
               example3: {
                 ensure: 'absent',
-              }
-            }
+              },
+            },
           }
         end
 
@@ -561,8 +561,8 @@ describe 'caddy' do
               },
               'h3.example.com': {
                 ensure: 'absent',
-              }
-            }
+              },
+            },
           }
         end
 

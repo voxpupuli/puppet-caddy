@@ -20,7 +20,7 @@ describe 'caddy::vhost', type: :define do
             'source' => 'puppet:///modules/caddy/etc/caddy/config/example1.conf',
             'mode' => '0444',
             'require' => 'Class[Caddy::Config]',
-            'notify' => 'Class[Caddy::Service]'
+            'notify' => 'Class[Caddy::Service]',
           )
         end
 
@@ -36,9 +36,9 @@ describe 'caddy::vhost', type: :define do
           it { is_expected.to contain_file('/etc/caddy/config/example.conf').with_ensure('file') }
 
           it do
-            is_expected.to contain_file('/etc/caddy/sites-enabled/example.conf').
-              with_ensure('link').
-              with_target('/etc/caddy/config/example.conf')
+            is_expected.to contain_file('/etc/caddy/sites-enabled/example.conf')
+              .with_ensure('link')
+              .with_target('/etc/caddy/config/example.conf')
           end
 
           %w[present disabled].each do |ens|
@@ -86,7 +86,7 @@ describe 'caddy::vhost', type: :define do
             'content' => 'localhost:2015',
             'mode' => '0444',
             'require' => 'Class[Caddy::Config]',
-            'notify' => 'Class[Caddy::Service]'
+            'notify' => 'Class[Caddy::Service]',
           )
         end
       end

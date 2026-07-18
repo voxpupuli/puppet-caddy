@@ -6,7 +6,7 @@ require 'spec_helper_acceptance'
 # avoid to maintain the test suite to match each release, query GitHub API to
 # find the last release.
 # renovate: depName=caddyserver/caddy
-latest_release = 'v2.10.2'
+latest_release = 'v2.11.4'
 
 describe 'class caddy:' do
   # ServerSpec's repeating `describe something()` syntax makes rubocop sad.
